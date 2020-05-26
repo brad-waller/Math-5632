@@ -1,23 +1,23 @@
 \documentclass{ximera}
 
-\usepackage{amsmath}	
-\usepackage{imakeidx}
-\usepackage{amsthm}
-\usepackage{hyperref}
-\usepackage{pgfplots}
-\usepackage{tikz}
-\usepackage{float}
-\usepackage{subcaption}
-\usepackage[margin=95pt]{geometry}
+\input{../preamble.tex}
 
+\outcome{Know how to measure the return on an investment.}
 
-\newtheorem{ass}{Assumption}
+\author{Brad Waller}
+
+%Section 1.4
+
+\title{Measuring Returns}
 
 \begin{document}
 
-\chapter{Introduction}
+\begin{abstract}
+Returns are the measuring stick of the investment world. It is importand to be able to compare two assets, and the value of the assets is not always preferred.
+\end{abstract}
 
-\section{Measuring Returns}
+\maketitle
+
 People invest in financially risky assets so that they can yield the reward of higher returns. The objective is to exceed the return that would be received by investing money in a risk-free government bond. To ensure that you exceed the risk-free rate, it is necessary to measure returns. There are three ways that we will measure returns, and they are all beneficial in some way. They are
 
 \begin{enumerate}
@@ -68,54 +68,55 @@ Observe that the quantity of shares in the previous example influences the payof
 
 Payoffs will be {\bf the most important aspect of a derivative} when determining the price of the derivative. A great tool in building our intuition will be payoff and profit diagrams. Suppose that in our previous example, we only purchased one share initially. The 25 we paid initially would be at time 0, and the payoff is at time 2. When we are at time 0, our payoff at time 2 is unknown; the payoff is a variable dependent on the value $S(2)$. In fact, we can write it as a function: $S(2)e^{0.02\cdot 2}$. The profit is similar; it is the payoff shifted down. $S(2)e^{0.02\cdot 2}-25e^{0.06\cdot 2}$. The difference comes from the opportunity cost consideration. The graphs for payoff and profit are given below.
 
-\begin{figure}[H]
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
-		\begin{axis}[
-			xmin=0,
-			xmax=55,
-			xtick={5,10,...,50},
-			ymin=-30,
-			ymax=60,
-			ytick={-20,-10,...,50},
-			%grid=both,
-			axis lines=middle,
-			axis line style={->, >=latex},
-			x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-			xlabel={$S(2)$},
-			ylabel={payoff},
-			style={font=\tiny}]
-			\addplot[black, smooth, domain=0:53, ->, >=latex]{x*1.04081};
-		\end{axis}
-	\end{tikzpicture}
-	\caption{Payoff Diagram}
-	\end{subfigure}
-	\hspace{45pt}
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
-		\begin{axis}[
-			xmin=0,
-			xmax=55,
-			xtick={5,10,...,50},
-			ymin=-30,
-			ymax=60,
-			ytick={-20,-10,...,50},
-			%grid=both,
-			axis lines=middle,
-			axis line style={->, >=latex},
-			x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-			xlabel={$S(2)$},
-			ylabel={profit},
-			style={font=\tiny}]
-			\addplot[black, smooth, domain=0:53, ->, >=latex]{x*1.04081-28.19};
+%\begin{figure}[H]
+%	\begin{subfigure}{.4\linewidth}
+%	\centering
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+	\begin{axis}[
+		xmin=0,
+		xmax=55,
+		xtick={10,20,...,50},
+		ymin=-30,
+		ymax=60,
+		ytick={-20,-10,...,50},
+		%grid=both,
+		axis lines=middle,
+		axis line style={->, >=latex},
+		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
+		xlabel={$S(2)$},
+		ylabel={payoff}]
+		%style={font=\tiny}]
+		\addplot[black, smooth, domain=0:53, ->, >=latex]{x*1.04081};
 	\end{axis}
-	\end{tikzpicture}
-	\caption{Profit Diagram}
-	\end{subfigure}
-	\caption{Payoff and Profit}
-\end{figure}
+	\node at (0.5, -0.2){Payoff Diagram};
+\end{tikzpicture}
+\hspace{10pt}
+\begin{tikzpicture}[scale=0.7]
+	\begin{axis}[
+		xmin=0,
+		xmax=55,
+		xtick={10,20,...,50},
+		ymin=-30,
+		ymax=60,
+		ytick={-20,-10,...,50},
+		%grid=both,
+		axis lines=middle,
+		axis line style={->, >=latex},
+		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
+		xlabel={$S(2)$},
+		ylabel={profit}]
+		%style={font=\tiny}]
+		\addplot[black, smooth, domain=0:53, ->, >=latex]{x*1.04081-28.19};
+	\end{axis}
+	\node at (0.5, -0.2){Profit Diagram};
+\end{tikzpicture}
+%	\caption{Profit Diagram}
+%	\end{subfigure}
+%	\caption{Payoff and Profit}
+%\end{figure}
+
+\end{center}
 
 The picture for profit is the motivation for the term {\bf break-even value}\index{break-even value}. The break-even value of an investment is the value(s) of the underlying asset that would yield a profit of 0. For our diagram, the break-even value for $S(2)$ is approximately 27.08. 
 
