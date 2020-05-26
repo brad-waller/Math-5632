@@ -1,0 +1,90 @@
+\documentclass{ximera}
+
+\usepackage{amsmath}	
+\usepackage{imakeidx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[margin=95pt]{geometry}
+
+
+\newtheorem{ass}{Assumption}
+
+\begin{document}
+
+\chapter{Introduction}
+
+\section{Stock Purchases}
+
+This short section is self contained. The main purposes of this section are to make the reader familiar with terms used in the market and to make the reader more comfortable with computations of payoff, profit, and rate of return. Let's start with a definition related to buying and selling stock.
+\begin{definition}
+When buying or selling stocks there are two values that will be listed by a broker: the {\bf bid price}\index{bid price} and the {\bf ask price}\index{ask price}. The bid price is the amount you would receive when selling the stock, and the ask price is the amount you would pay when buying the stock.
+\end{definition}
+
+\begin{remark}
+The ask price should always greater than or equal to the bid price. Otherwise, there would be an arbitrage opportunity. The {\bf bid-ask spread}\index{bid-ask spread} is the difference of the ask price and the bid price.
+\begin{equation*}
+\text{bid-ask spread}=\text{ask price}-\text{bid price}
+\end{equation*}
+\end{remark}
+
+\begin{example}
+Suppose that you purchased 30 shares of XYZ six months ago. Today you wish to sell all of your shares. The necessary bid and ask prices are given below.
+	\begin{center}
+		\begin{tabular}{c|cc}
+		Time & Bid & Ask\\
+		\hline
+		6 Months Ago & 50 & 51\\
+		Today & 54 & 56
+		\end{tabular}
+	\end{center}
+The risk free rate is 6\% and the dividend rate is 1\%. Additionally, there is a 0.5\% transaction cost for all purchases and sales. Determine the payoff, profit, and rate of return on your investment in XYZ.
+\end{example}
+
+\begin{solution}
+The payoff is the money we walk away with. Today, we can sell the shares for 
+	\begin{equation*}
+	30e^{0.01\cdot 0.5}\cdot 54=1628.12;
+	\end{equation*}
+however, we must pay the transaction fee. Our payoff is $1628.12\cdot 0.995=1619.98$. 
+
+To compute the profit, we need the initial investment. 
+	\begin{align*}
+	\text{initial investment}&=30\cdot 51+\text{transaction cost}\\
+	&=30\cdot51\cdot 1.005\\
+	&=1537.65\\
+	\text{profit}&=1619.98-1537.65e^{0.06\cdot 0.5}\\
+	&=35.50.
+	\end{align*}
+
+The last part is the rate of return. to compute the rate of return, we solve the equation below.
+	\begin{align*}
+	1537.65e^{\alpha\cdot 0.5}&=1619.98\\
+	\alpha&=0.104
+	\end{align*}
+\end{solution}
+
+Fees do not need to be percentages of transactions. In fact, they are often flat fees. Examples of this will be seen in the exercises.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,140 @@
+\documentclass{ximera}
+
+\usepackage{amsmath}	
+\usepackage{imakeidx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[margin=95pt]{geometry}
+
+\newtheorem{ass}{Assumption}
+
+\begin{document}
+
+\chapter{Introduction}
+
+\section{Rates of Growth}
+
+In this textbook, it will be necessary to measure how things grow. The things we are usually measuring are the quantities of shares of some asset or dollars. To measure growth, we will need some terminology and notation. Many of the letters used in this section for quantities are ad hoc and will be replaced with other conventions. 
+
+\begin{definition}
+The {\bf periodic rate of growth} will be denoted by $g$. The growth of $q$ units over one period is the quantity given by the product
+	\begin{equation*}
+		q\cdot(1+g).
+	\end{equation*}
+\end{definition}
+
+\begin{example}
+You are given a monthly periodic rate of growth of 2\% on your deposit to some account. You deposit \$100, and you leave it there for three months. How much will you have after three months? 
+\end{example}
+
+\begin{solution}
+After three months, you will have
+	\begin{equation*}
+		\$100(1+0.02)^3=\$106.12
+	\end{equation*}
+\end{solution}
+
+In the example, we rounded the dollar value to two decimal places. This is a convention we will work with throughout most of the book. The rounding is for display purposes only, so when trying to execute the computations in an example make sure to save decimal places!
+
+Periodic rates of growth are wonderful for computation; however, they don't give people a good intuition for what happens over the course of one year. That is why annual effective rates are used.
+
+\begin{definition}
+Given $m$ equal periods per year, each with a periodic rate of $g$, we have that the {\bf annual effective rate of growth} is the value $i$ such that
+	\begin{equation*}
+		(1+g)^m=1+i
+	\end{equation*}
+holds.
+\end{definition}
+
+\begin{example}
+In the earlier example, our annual effective rate of growth comes from solving
+	\begin{equation*}
+		(1+0.02)^{12}=1+i.
+	\end{equation*}
+\end{example}
+
+\begin{solution}
+	The result is $i=0.2682$. The growth rate is often expressed as a percent; in such a situation, we would write $i=26.82\%$. 
+\end{solution}
+
+Notice that we rounded the annual effective rate to four decimal places in this example. This choice was arbitrary. It did not follow the earlier convention since the final result was not a dollar amount.
+
+Oftentimes, periodic rates of growth are translated into something called a nominal rate of growth. This is useful for having an intuitive grasp for what an investment will do over the course of one year; however, this intuitive benefit fails when dealing with extreme values.
+
+\begin{definition}
+Given $m$ equal periods per year, each with a periodic rate of $g$, we say that the {\bf nominal rate of growth}, denoted $i^{(m)}$, is the value
+	\begin{equation*}
+		i^{(m)}=mg.
+	\end{equation*}
+
+\end{definition}
+
+\begin{example}
+The nominal rate of growth in our previous examples was $i^{(12)}=12\cdot 0.02=0.24$. This is ``close'' to the annual effective rate of growth, and it is much easier to compute. 
+\end{example}
+
+The last type of rate of growth we need will be derived from taking limits of nominal rates of growth. If we allow the nominal rate of growth to be fixed but let the periods increase to infinity over one period, we have the notion of {\bf compounding continuously}. In mathematical terms, we let $i^{(m)}=\kappa$. Then the following holds:
+
+\begin{equation*}
+	\lim_{m\to\infty}\left(1+\frac{i^{(m)}}{m}\right)^m=e^\kappa
+\end{equation*}
+
+To compute growth using this notion is very simple!
+
+\begin{example}
+You invest \$100 in an account that grows at 8\%, compounded continuously.How much will you have after 3.2 years? 
+\end{example}
+
+\begin{solution}
+After 3.2 years, you will have
+	\begin{equation*}
+		100e^{0.08\cdot 3.2}=129.18.
+	\end{equation*}
+\end{solution}
+
+\begin{remark}
+When dealing with the growth of a cash investment, we will use the word interest instead of growth. 
+\end{remark}
+
+\begin{ass}
+Unless otherwise stated, our interest rates will be compounded continuously.
+\end{ass}
+
+\begin{question}
+You deposit \$100 into some savings account that pays an interest rate of 8\%. How many dollars do you have after $\sqrt{2}$ years?
+	\begin{multipleChoice}
+		\choice{100.00}
+		\choice{111.50}
+		\choice[correct]{111.98}
+		\choice{117.35}
+		\choice{None of the above are correct.}
+	\end{multipleChoice}
+\end{question}
+
+\begin{solution}
+The calculation is straight-forward: you will have $100e^{0.08\cdot\sqrt{2}}=111.97$ dollars after $\sqrt{2}$ years. Notice that we are already using continuous compounding in our work!
+\end{solution}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

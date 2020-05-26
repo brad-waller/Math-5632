@@ -1,0 +1,118 @@
+\documentclass{ximera}
+
+\usepackage{amsmath}	
+\usepackage{imakeidx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[margin=95pt]{geometry}
+
+\newtheorem{ass}{Assumption}
+
+\begin{document}
+
+\chapter{Introduction}
+
+\section{Stocks and Dividends}
+
+In much of our future discussions, we will be investing in stocks of some company. One share of a company's stock represents fractional ownership in that company. If a company has 100 outstanding shares of their stock, and you own one share then you own 1\% of that company. As an owner of a company's stock, you are entitled to a share of the company's profits. These profits are often paid back to investors as dividends or stock buybacks. Such payments are usually periodic without too much variability. 
+
+There are several different models that can be used to determine the price of one share of a company's stock. Such models are not of interest to us; however, one approach is given here. It is the dividend discount model. The principle behind this pricing scheme is relatively simple: you compute a present value of all future dividends that the stock will pay in its (possibly infinite) life. 
+
+\begin{example}
+Suppose you own one share of stock in XYZ. You know that the company will pay quarterly dividends of \$3 starting in three months for the next two years. No more dividends will be paid after the eights dividend. The nominal rate of interest is 8\%, compounded quarterly. How much is one share under the dividend discount model?
+
+The value of one share is
+	\begin{equation*}
+		\sum_{j=1}^83\left(1+\frac{0.08}{4}\right)^{-j}=21.98.
+	\end{equation*}
+I could have used an actuarial formula for this as follows:
+	\begin{equation*}
+		3\cdot\frac{1-(1.02)^{-8}}{0.02}=21.98.
+	\end{equation*}
+	\qed
+\end{example}
+
+For the first computation, it is probably good to remember how to apply the geometric sum formula. If you don't remember it, here it is:
+\begin{equation*}
+	\sum_{j=1}^nar^j=ar\frac{1-r^n}{1-r}
+\end{equation*}
+It will give you the actuarial formula after a manipulation or two. Also, when $|r|<1$, you can allow $n\to\infty$.
+\begin{question}
+Suppose you one one share of stock in XYZ. You know that the company will pay quarterly dividends of \$3 starting in three months forever. The nominal rate of interest is 8\%, compounded quarterly. How much is one share under the dividend discount model?
+	\begin{prompt}
+		$\text{The share's value is}=\answer{150}$
+	\end{prompt}	
+\end{question}
+
+\begin{solution}
+We apply the sum formula with $a=3$ and $r=1/1.02$.
+	\begin{equation*}
+		3\cdot 1/1.02\cdot\frac{1-0}{1-1/1.02}=150
+	\end{equation*}
+The alternative is to recall the perpetuity formula for an annuity immediate, and the result is faster.
+	\begin{equation*}
+		3\cdot\frac{1}{0.02}=150
+	\end{equation*}
+\end{solution}
+
+It is possible to use dividends to simply buy more shares of a company's stock. The computations involved are not too complicated, and they are not the topic of this book. As such, we won't be going into that material here. Whenever we speak about dividend reinvestment it will be from the simplifying assumption given below. The assumption will hold unless otherwise stated.
+
+\begin{ass}
+All stocks will pay dividends continuously, and those dividends will be used to purchase more shares of stock. The dividend rate will be denoted by $\delta$ or $\delta_{\text{some subscript}}$.
+\end{ass}
+
+What does this mean? It sounds complicated, but it's really easy. Let's see in an example.
+
+\begin{example}
+You purchase one stock for \$100 today. The dividend rate is 8\%. In $\sqrt{2}$ years, one share of the company's stock is still worth \$100. What is the value of your investment in $\sqrt{2}$ years?
+
+The value of your investment is equal to the number of shares multiplied by the value of each share.
+	\begin{equation*}
+		1\cdot e^{0.08\cdot\sqrt{2}}\cdot 100=111.98
+	\end{equation*} 
+	\qed
+\end{example}
+
+The result should look familiar. The numbers are identical to the ones we used in a question from an earlier section. The growth in the question from the previous section was applied to the number of dollars. Here the growth from the example was applied to the number of shares. 
+
+For this reason, investment in stock can experience two types of growth: share value growth and quantity growth. 
+
+\begin{question}
+You purchase one stock for \$100 today. The dividend rate is 8\%. In $1.5$ years, one share of the company's stock is  worth \$106. What is the value of your investment in $1.5$ years?
+	\begin{prompt}
+		$\text{The value of the investment is}=\answer{119.51}$
+	\end{prompt}
+\end{question}
+
+\begin{solution}
+The computation is similar to the previous example.
+	\begin{equation*}
+		1\cdot e^{0.08\cdot 1.5}\cdot 105=119.51
+	\end{equation*}
+\end{solution}
+
+{\bf Food for thought}: You would like to have one share of a company's stock in one year. Think of (at least) two different ways you could do that. Did one of the ways require you to use dividends? If not, keep thinking!
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,103 @@
+\documentclass{ximera}
+
+\usepackage{amsmath}	
+\usepackage{imakeidx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage[margin=95pt]{geometry}
+
+
+\newtheorem{ass}{Assumption}
+
+
+\begin{document}
+
+\chapter{Introduction}
+
+\section{Futures}
+
+This section deals with derivatives that are called {\bf futures contracts}. Futures have a lot in common with forward contracts; however, there are some distinct differences as well. Some similarities that futures have with forward contracts are that they both have
+\begin{enumerate}
+\item an underlying asset,
+\item a time to expiration,
+\item a buyer and a seller,
+\item and an agreed upon price.
+\end{enumerate} 
+The agreed upon price is called the {\bf futures price} in a futures contract. It is the spot price of the futures contract.
+
+Some of the differences between futures and forward contracts are that futures are
+\begin{enumerate}
+\item regulated by the market (forward contracts are tailored to the buyer and seller),
+\item traded on exchanges (forward contracts don't have exchanges),
+\item and marked to market.
+\end{enumerate}
+One of the regulations that markets require of futures exchanges is that buyers must make a margin deposit for to enter into a position. This is to protect the sellers in the exchange. {\bf Marking to market} is the process where gains and losses to the futures position are credited (debited) to the margin account. The credits and debits are absolute; they are not some proportion of the total value of the contract. Both the buyer and seller must open a margin account to participate in the exchange. Typically, the margin required is small relative to the size of the contract.
+
+A margin account must maintain a certain value to keep all participants in the exchange. This value is called {\bf maintenance margin}. The maintenance margin will typically be given in terms of a percentage of the initial margin account value; however, it is possible to be given the value as a dollar amount. In the event that one of the parties' margin account falls in value below the mintenance margin, a {\bf margin call} is initiated. A margin call requires the party that received the call to deposit an amount of collatera so that the account is back to its initial value. 
+
+A lot has been said, but little has been done in terms of numerics. Let's try an example.
+
+\begin{example}
+You would like to invest in the S\&P 500 index. To do so, you can enter into a futures contract on the same exchange. A typical S\&P 500 futures contract costs 250 times the value of the S\&P 500 index. The initial margin is 25\% of the total contract value. The margin account pays 2\%, and the risk-free rate is 6\%. The index value today is \$3400. On the following days, you observe your investment.
+	\begin{itemize}
+	\item After 1 day, the index rose to \$3340
+	\item After 2 days, the index dropped to \$3210
+	\item After 3 days, the index rose to \$3410
+	\end{itemize}
+You decide to exit your position after 3 days. What is your payoff, profit, and rate of return?
+\end{example}
+
+\begin{solution}
+We begin by determining the margin deposit: $250\cdot 3400\cdot 0.25=212,500$. Now we must compute the chages that occur from marking to market.
+	\begin{align*}
+	212,500e^{0.02\cdot 1/365}+250(3340-3400)&=197,511.64\\
+	197,511.64e^{0.02\cdot 1/365}+250(3210-3340)&=165,022.47\\
+	165,022.47e^{0.02\cdot 1/365}+250(3410-3210)&=215,031.51
+	\end{align*}
+The payoff is the last value listed in the computations, $\$215,031.51$. We arrive at the profit by taking the difference
+	\begin{equation*}
+	215,031.51-212,500e^{0.06\cdot 3/365}=2426.69.
+	\end{equation*}
+We can also compute the rate of return on the futures investment.
+	\begin{align*}
+	212,500e^{\alpha\cdot 3/365}&=215,031.51\\
+	\alpha&=1.441
+	\end{align*}
+\end{solution}
+
+When dealing with futures contract in such a short term, it is almost useless to discuss the rate of return of the investment. It will almost always be exaggerated. Time frames over a couple of weeks will probably be more meaningful. The result of the above should be clear, futures contracts can be a wild ride! We saw our investment almost evaporate after one day of poor performance in the market. The only thing this example didn't cover was a maintenance margin.
+
+\begin{question}
+Suppose you have the same futures arrangement as in the previous example. In addition, there is a maintenance margin of 80\% of the initial margin value. Determine the payoff and profit under this scenario.
+	\begin{prompt}
+
+	$\text{The payoff is }\answer{262511.64}$
+
+	$\text{The profit is }\answer{2421.49}$
+
+	\end{prompt}
+
+\end{question}
+
+\begin{solution}
+Many of the computations are similar. The difference comes after the second day. You must bring a $212,500-165,022.47=47,477.53$ in collateral to your account. The calculation after the third day would be
+	\begin{equation*}
+	212,500e^{0.02\cdot 1/365}+250(3410-3210)=262,511.64
+	\end{equation*}
+It follows that your payoff is $\$262,511.64$. Your profit calculation is a bit messier.
+	\begin{equation*}
+	262,511.64-47,477.53e^{0.06\cdot 1/365}-212,500e^{0.06\cdot 3/365}=2421.49
+	\end{equation*}
+\end{solution}
+
+As it should be expected, the margin call will result in reduced profits.
+
+
+ 
+\end{document}
+
+
