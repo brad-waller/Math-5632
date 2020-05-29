@@ -1,23 +1,22 @@
 \documentclass{ximera}
 
-\usepackage{amsmath}	
-\usepackage{imakeidx}
-\usepackage{amsthm}
-\usepackage{hyperref}
-\usepackage{pgfplots}
-\usepackage{tikz}
-\usepackage{float}
-\usepackage{subcaption}
-\usepackage[margin=95pt]{geometry}
+\input{../preamble.tex}
 
+\outcome{Understand how forward contracts work.}
 
-\newtheorem{ass}{Assumption}
+\author{Brad Waller}
+
+%Section 1.5
+
+\title{Forward Contracts}
 
 \begin{document}
 
-\chapter{Introduction}
+\begin{abstract}
+Forward contracts are our first example of a derivative. The beauty of them is that they happen constantly in business!
+\end{abstract}
 
-\section{Forward Contracts}
+\maketitle
 
 A {\bf forward contract} is one of the most natural examples of a {\bf derivative} that we will see. 
 
@@ -78,11 +77,9 @@ where $q$ is the agreed quantity, $S(T)$ is the price of the underlying asset at
 The statement "the buyer" in the previous paragraph is important. The seller in the forward contract will always have the opposite payoff diagram. Let's compare them below.
 
 
-\begin{figure}[H]
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
-	\begin{axis}[
+\begin{center}
+	\begin{tikzpicture}[scale=0.7]
+		\begin{axis}[
 		xmin=0,
 		xmax=55,
 		%xtick={5,10,...,50},
@@ -93,18 +90,16 @@ The statement "the buyer" in the previous paragraph is important. The seller in 
 		axis lines=middle,
 		axis line style={->, >=latex},
 		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-		xlabel={$S(T)$},
-		ylabel={payoff},
-		style={font=\tiny}]
+		%xlabel={$S(T)$},
+		ylabel={payoff}]
+		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:53, ->, >=latex]{x-25};
-	\end{axis}
+		\end{axis}
+		\node at (3.5, -0.2){\small Buyer Payoff};
+		\node at (6.5, 3){\small $S(T)$};
 	\end{tikzpicture}
-	\caption{Buyer Payoff}
-	\end{subfigure}
-	\hspace{45pt}
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
+	\hspace{10pt}
+	\begin{tikzpicture}[scale=0.7]
 	\begin{axis}[
 		xmin=0,
 		xmax=55,
@@ -116,16 +111,15 @@ The statement "the buyer" in the previous paragraph is important. The seller in 
 		axis lines=middle,
 		axis line style={->, >=latex},
 		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-		xlabel={$S(T)$},
-		ylabel={payoff},
-		style={font=\tiny}]
+		%xlabel={$S(T)$},
+		ylabel={payoff}]
+		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:53, ->, >=latex]{25-x};
 	\end{axis}
+	\node at (3.5, -0.2){\small Seller Payoff};
+	\node at (6.5, 3){\small $S(T)$};
 	\end{tikzpicture}
-	\caption{Seller Payoff}
-	\end{subfigure}
-	\caption{Contrasting Buyer and Seller Payoffs with $K=25$, expiration $T$, and quantity $q$.}\label{Fig10}
-\end{figure}
+\end{center}
 
 Now that we have the payoffs, we can determine the price of a forward contract. We will need two assumptions to proceed, but first we will need a definition.
 
@@ -179,10 +173,8 @@ In the argument to determine the price of a forward contract, we will assume tha
 
 The first position is to enter into a situation where we will end up with one share of the underlying asset at time $T$. The next position is to end up with $-K$ at time $T$. If we borrow money today that is due at time $T$, we will have a negative cash position at time $T$. These two together give us the desired portfolio. Let's use graphs to visualize.
 
-\begin{figure}[H]
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
+\begin{center}
+	\begin{tikzpicture}[scale=0.7]
 	\begin{axis}[
 		xmin=0,
 		xmax=55,
@@ -194,18 +186,16 @@ The first position is to enter into a situation where we will end up with one sh
 		axis lines=middle,
 		axis line style={->, >=latex},
 		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-		xlabel={$S(T)$},
-		ylabel={payoff},
-		style={font=\tiny}]
+		%xlabel={$S(T)$},
+		ylabel={payoff}]
+		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:32, ->, >=latex]{x};
 	\end{axis}
+	\node at (3.5, -0.2){\small Asset Payoff};
+	\node at (6.5, 3){\small $S(T)$};
 	\end{tikzpicture}
-	\caption{Asset Payoff}
-	\end{subfigure}
-	\hspace{45pt}
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
+	\hspace{10pt}
+	\begin{tikzpicture}[scale=0.7]
 	\begin{axis}[
 		xmin=0,
 		xmax=55,
@@ -218,17 +208,16 @@ The first position is to enter into a situation where we will end up with one sh
 		axis line style={->, >=latex},
 		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
 		xlabel={$S(T)$},
-		ylabel={payoff},
-		style={font=\tiny}]
+		ylabel={payoff}]
+		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:53, ->, >=latex]{-25};
 	\end{axis}
+	\node at (3.5, -0.2){\small Loan Payoff};
+	\node at (6.5, 3){\small $S(T)$};
 	\end{tikzpicture}
-	\caption{Loan Payoff}
-	\end{subfigure}
-	\caption{Contrasting Buyer and Seller Payoffs with $K=25$, expiration $T$, and quantity $q$.}\label{Fig11}
-\end{figure}
+\end{center}
 
-The loan payoff in Figure (\ref{Fig11}) is negative since we borrowed money at the beginning. That means money will be leaving us at expiration, so its flow is negative. If these two positions are combined, we get the buyer's payoff from Figure (\ref{Fig10}). Since there are no other fees or taxes to worry about, we can state our theorem.
+The loan payoff in the figure is negative since we borrowed money at the beginning. That means money will be leaving us at expiration, so its flow is negative. If these two positions are combined, we get the buyer's payoff from earlier. Since there are no other fees or taxes to worry about, we can state our theorem.
 
 \begin{theorem}[Forward Contract Price]\label{thm1}
 The time $t$ price of a forward contract to purchase $q$ shares of $S$ for $K$/share that expires at time $T$ is given by the formula
