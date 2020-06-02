@@ -1,23 +1,22 @@
 \documentclass{ximera}
 
-\usepackage{amsmath}	
-\usepackage{imakeidx}
-\usepackage{amsthm}
-\usepackage{hyperref}
-\usepackage{pgfplots}
-\usepackage{tikz}
-\usepackage{float}
-\usepackage{subcaption}
-\usepackage[margin=95pt]{geometry}
+\input{../preamble.tex}
 
+\outcome{Understand how short sales are executed and what it takes to enter into a short sale. Profits of the short sale are explored.}
 
-\newtheorem{ass}{Assumption}
+\author{Brad Waller}
+
+%Section 1.6
+
+\title{Shortselling}
 
 \begin{document}
 
-\chapter{Introduction}
+\begin{abstract}
+This section delves into the unusual trading activity called short selling. In this approach, the investor borrows an asset to immediately sell it. Just imagine if you took such an approach when borrowing a friend's car!
+\end{abstract}
 
-\section{Short Selling}
+\maketitle
 
 In the last section, we ended with a statement regarding {\bf short selling}. The concept of short selling is fairly straight-forward, and a lot of common sense is involved. 
 
@@ -46,12 +45,9 @@ from the collateral in the arrangement. In addition, you would receive your asse
 In the previous example you enhance your initial, passive position of investment; however, this did come at a price. You assumed default risk when you entered into this arrangement. The borrower may not be able to pay you back. 
 
 In almost everything we do going forward, we wlil view a short sale from theshort seller's position. Let's take a look at a diagram that demonstrates the risk of short selling.
-	
-\begin{center}
-\begin{figure}[H]
-	%\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}
+
+\begin{center}	
+\begin{tikzpicture}
 	\begin{axis}[
 		xmin=0,
 		xmax=55,
@@ -63,18 +59,16 @@ In almost everything we do going forward, we wlil view a short sale from theshor
 		axis lines=middle,
 		axis line style={-, >=latex},
 		x label style={at={(1,1)}},
-		y label style={at={(-0.1,0.12)}, rotate=90},
+		y label style={at={(-0.1,0.45)}, rotate=90},
 		%y axis = {label={[node style={fill=blue!20}]{$x^2$}}},
 		%{at={(axis description cs:0.86,0.42)},anchor=north},
 		xlabel={$S(T)$},
-		ylabel={Short Seller's Liability}]
+		ylabel={\small Short Seller's Liability}]
 		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:53, ->, >=latex]{-1*x};
 	\end{axis}
-	\end{tikzpicture}
-	\caption{Infinite Possible Losses!}
-	%\end{subfigure}
-\end{figure}
+	\node at (3.5,-0.2) {\small Infinite Possible Losses!};
+\end{tikzpicture}
 \end{center}
 
 In the event that the asset keeps gaining value, the short seller may find themselves bankrupt! Let's compute the payoff of a short sale under a variety of values $S(T)$.
@@ -122,16 +116,14 @@ Compute the profit for the short sale in each of the three scenarios given above
 \begin{solution}
 The computation used above piggybacks off of the work we did in the earlier example. Simply take the payoffs in each of the cases and subtract the opportunity cost $4000e^{0.07\cdot 1/2}=4142.48$ from each of the three payoffs. Alternatively, use the equation
 	\begin{equation*}
-	q[S(0)e^{rT}+pS(0)e^{mT}-S(T)e^{\delta T}-pS(0)e^{rT}]
+	q[pS(0)e^{mT}+S(0)e^{rT}-S(T)e^{\delta T}-pS(0)e^{rT}]
 	\end{equation*}
 \end{solution}
 
 We can also view both the payoff and profit graphically. See the figure below.
 
-\begin{figure}[H]
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
 	\begin{axis}[
 		xmin=0,
 		xmax=70,
@@ -143,18 +135,15 @@ We can also view both the payoff and profit graphically. See the figure below.
 		axis lines=middle,
 		axis line style={->, >=latex},
 		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-		xlabel={$S(T)$},
+		xlabel={$S(T)$}]
 		%ylabel={payoff},
-		style={font=\tiny}]
+		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:68, ->, >=latex]{9198-101.51*x};
 	\end{axis}
-	\end{tikzpicture}
-	\caption{Short Sale Payoff}
-	\end{subfigure}
-	\hspace{45pt}
-	\begin{subfigure}{.4\linewidth}
-	\centering
-	\begin{tikzpicture}[scale=0.9]
+	\node at (3.5, -1) {\small Short Sale Payoff};
+\end{tikzpicture}
+\hspace{10pt}
+\begin{tikzpicture}[scale=0.7]
 	\begin{axis}[
 		xmin=0,
 		xmax=70,
@@ -166,15 +155,14 @@ We can also view both the payoff and profit graphically. See the figure below.
 		axis lines=middle,
 		axis line style={->, >=latex},
 		x label style={at={(axis description cs:0.86,0.42)},anchor=north},
-		xlabel={$S(T)$},
+		xlabel={$S(T)$}]
 		%ylabel={profit},
-		style={font=\tiny}]
+		%style={font=\tiny}]
 		\addplot[black, smooth, domain=0:68, ->, >=latex]{5056-101.51*x};
 	\end{axis}
-	\end{tikzpicture}
-	\caption{Short Sale Profit}
-	\end{subfigure}
-\end{figure}
+	\node at (3.5, -1) {\small Short Sale Profit};
+\end{tikzpicture}
+\end{center}
 
 These diagrams are meant to illustrate the dangers of short-selling. This is not an activity to enter into lightly. If you find yourself short-selling, you will want to be very knowledgable of the assets you are trading. Alternatively, you may want to try to hedge your position to reduce your loss liability. Derivatives that will be introduced in the next chapter will allow us to protect ourselves from such losses.
 
