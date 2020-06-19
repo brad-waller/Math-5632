@@ -1,0 +1,150 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We learn about a relationship similar to parity.}
+
+\author{Brad Waller}
+
+%Section 2.7
+
+\title{Duality}
+
+\begin{document}
+
+\begin{abstract}
+Parity is not the only relationship between calls and puts. Sometimes, a barter between two different assets can be established. There lies the relationship known as duality.
+\end{abstract}
+
+\maketitle
+
+This section is another divergence from the meat of this chapter; however, it does relate call and put options in an entirely new way. The difficulty here lies in the lack of payoff diagrams to relate the calls and puts in question. In a standard scenario, duality is a reference to two positions in currencies. 
+
+Let's say that the price to buy one of currency 2 today using currency 1 as a payment is $S(0)$. Some authors use $x(0)$, but I think that makes things seem needlessly complicated and different from what we are used to. Each currency has its own risk-free rate, say $r_1$ and $r_2$. Since we are using currency 1 to purchase currency 2, the risk-free rate, $r_1$, will go in position $r$ in any of our formulae. Since currency 2 is acting as an asset, $r_2$ will go in position $\delta$ in any of our formulae. 
+
+We wish to examine the payoffs of two different options at expiration. We will assign values so everything makes more sense.
+
+\begin{example}
+Suppose that the price to purchase one \euro{1} was \$1.10. Similarly, the price to purchase \$1 is \euro{1/1.1}. There are calls and puts available to users of each currency to purchase or sell the other currency. We are going to compare their payoffs under the right circumstances.
+
+Since I live in Ohio, it makes sense for me to be a speculator that spends dollars on their investments. That is to say, if I wanted to get into the currency market, I could buy calls and puts for euros. Let's calculate a couple of payoffs for two options: a call and a put with strike $K=1.05$. The options have the euro as an underlying asset, and they have the same time to expiration.
+
+	\begin{center}
+		\begin{tabular}{lcc}
+		Price at Expiration	&	0.9		&	1.1\\
+		Call Payoff		&	\$0		&	\$0.05\\
+		Put Payoff		&	\$0.15	&	\$0
+		\end{tabular}
+	\end{center}
+
+Now we must ask the question: what would this all look like for a speculator in Europe that wishes to buy calls and puts based on the dollar? Well, since the price is inverted, perhaps we should also invert the strike. We could assign a new letter for this strike or simply write $1/K=1/1.05=0.95238$. Let's see a similar table.
+
+	\begin{center}
+		\begin{tabular}{lcc}
+		Price at Expiration	&	1.11111		&	0.90909\\
+		Call Payoff		&	\euro{0.15873}	&	\euro{0}\\
+		Put Payoff		&	\euro{0}		&	\euro{0.04329}
+		\end{tabular}
+	\end{center}
+
+This doesn't seem like it illustrates anything... Wait! The currencies are different. I can convert one to the other. Once again, I live in Ohio, so I think in dollars. I will convert the second table to dollars. I will also multiply by $K$. That second part doesn't make any sense, but the proof is in the pudding!
+
+	\begin{center}
+		\begin{tabular}{lcc}
+		Price at Expiration	&	1.11111						&	0.90909\\
+		Call Payoff		&	$0.15873\cdot 1/1.11111\cdot 1.05=0.15$	&	0\\
+		Put Payoff		&	0							&	$\frac{0.04329}{0.90909}\cdot 1.05=0.05$
+		\end{tabular}
+	\end{center}
+
+\end{example}
+
+This is really strange. It seems that there is a relationship between the call to buy euros and the put to sell dollars. Similarly, there appears to be a relationship between the put to sell Euros and the call to buy dollars. This is illuastrated via the following equations:
+
+\begin{theorem}[Put-Call Duality] The price to buy currency 2 using currency 1 is $S$, and a strike price of $K$ is written into currency 1-denominated option contracts to buy/sell currency 2. Then
+	\begin{align*}
+	c(S,K)&=SKp(1/S, 1/K)\\
+	p(S,K)&=SKc(1/S, 1/K),
+	\end{align*}
+where the right hand side consists of currency 2 denominated options to buy/sell currency 1. 
+\end{theorem}
+
+The really strange part is that these prices are given in values today! That is because I would have no idea of the valus of $S$ at time $T$.
+
+There is nothing obvious about this relationship. The only information that would even suggest it is the payoff chart we wrote in the example. Fortunately, duality holds under the models we will discuss in this course. A proof of this theorem will be given in the section covering the Black-Scholes model. 
+
+Sometimes, it helps me to keep in mind the conversions I am doing at each step along the way. In the first formula, the call is a payment of currency 1 for currency 2, or $\$_1/\$_2$. $S$ and $K$ are similar. The put on the right hand side is a payment in currency 2 for currency 1, or $\$_2/\$_1$. If you let the units cancel as you would in any science class, you will end up with the appropriate units
+
+Let's apply put-call duality in an example.
+
+\begin{example}
+Let's use the values from our example before. In addition, we will take the position of the American traveler going to visit Europe in six months. The current price of \euro{1} is \$1.1. As a traveler, you would like to ensure that you get a decent conversion rate of dollars to euros. On your trip, you would like to have \euro{2000}, and you would like to buy each euro for at most \$1.05. You use a call to achieve this. The six month call costs you \$255.94. 
+
+How much is a six month euro-denominated put option to sell \$500 with strike $1/1.05$?
+\end{example}
+
+\begin{solution}
+We must use put-call duality; however, we should convert the values to units first. The original call would be
+	\begin{equation*}
+	c(S,K)=\frac{1}{2000}\cdot 255.94=0.12797
+	\end{equation*}
+Now we can use duality.
+	\begin{align*}
+	c(S,K)&=SKp(1/S, 1/K)\\
+	0.12797&=1.1\cdot 1.05\cdot p(1/S, 1/K)\\
+	0.11080&=p(1/S, 1/K) 
+	\end{align*}
+The last step is to scale this number up by 500.
+	\begin{equation*}
+	500p(1/S, 1/K)=55.40
+	\end{equation*}
+That is, the euro-denominated put option costs \euro{55.40}
+\end{solution}
+
+That seemed pretty straight forward; however, the question could have been rephrased a little bit. It could have said that a dollar- denominated European call option to buy \euro{2000} in six months for \$2100 costs \$255.94. How much is a euro-denominated European put option to sell \$500 in six months for \euro{476.19}? The current currency conversion rate would be the same.
+
+This seems to be missing the strike information, but it is given in the statements ``buy \euro{2000} in six months for \$2100'' and ``sell \$500 in six months for \euro{476.19}." You would need to compute the fractions
+\begin{align*}
+K&=\frac{2100}{2000}=1.05\\
+1/K&=\frac{476.19}{500}=1/1.05.
+\end{align*}
+From there, you would still know the correct quantities. With the call, you are buying 2000 of the underlying asset. With the put, you are selling 500 of the underlying asset.
+
+Let's try something related to duality.
+
+\begin{problem}
+In the framework of the previous problem, determine the euro-denominated price of a six month European call option to buy \$500 for \euro{476.19}. The risk-free rate in the US is 6\%, and the euro risk-free rate is 3\%.
+	\[
+	\begin{prompt}
+	\text{The price is=\euro{}}\answer{27.41}
+	\end{prompt}
+	\]
+\end{problem}
+
+\begin{solution}
+For this problem, we actually need put-call parity! That's why the respective risk-free rates were given. Since the quantites of dollars is the same for the call and the put, we have
+	\begin{align*}
+	c-p&=S(0)e^{-\delta T}-Ke^{-rT}\\
+	c-55.4&=500\left(\frac{1}{1.1}e^{-0.06\cdot 0.5}-\frac{1}{1.05}e^{-0.03\cdot 0.5}\right)\\
+	c&=27.41.
+	\end{align*}
+\end{solution}
+
+The difficult part here comes in the correct substitutions. Don't marry yourself to the letters themselves. Remember the meaning. In put-call parity, $S$ refers to the underlying asset, and $\delta$ refers to the asset's ``dividend" rate. In this problem, the asset was dollars. It follows that $S$ was the value of one dollar. That value was $1/1.1$. Similarly, $K$ refers to the agreed upon price of the asset. Here, that was $1/1.05$.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

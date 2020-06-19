@@ -1,0 +1,154 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Knowledge of Asian options will be gained. }
+
+\author{Brad Waller}
+
+%Section 2.6
+
+\title{Asian Options}
+
+\begin{document}
+
+\begin{abstract}
+Here we introduce Asian options. Averages will be discussed, and payoffs will be computed.
+\end{abstract}
+
+\maketitle
+
+This section diverges a bit from our earlier discussion regarding payoff diagrams. The reason this section is so different is that the options we discuss have payoffs that are dependent on the path that the underlying asset takes over time. This averaging can serve as a tool to smooth out the randomness of stock prices. Before we can define the Asian options, we first need to formalize the notions of averaging that we will use.
+
+\begin{definition}
+Let $x_1$, $x_2$, ..., $x_n$ be nonnegative numbers and $n\geq 1$. The {\bf arithmetic average} is the quantity
+	\begin{equation*}
+	\bar{x}=\text{AA}=\frac{1}{n}\sum_{j=1}^n x_j,
+	\end{equation*}
+and the {\bf geometric average (mean)} is the quantity
+	\begin{equation*}
+	\text{GA}=\left(\prod_{j=1}^n x_j\right)^{1/n}.
+	\end{equation*}
+\end{definition}
+
+It is very likely that you have seen the arithmetic average before. It is a little less likely that you have seen the geometric average. The restriction that these numbers be nonnegative is required so we don't end up with undefined or imaginary geometric averages. This assumption makes sense when we are dealing with stock prices, as they are never negative. Let's try an example of some averaging.
+
+\begin{example}
+Let $x_1=3$, $x_2=8$, and $x_3=9$. Compute both averages for these three numbers.
+\end{example}
+
+\begin{solution}
+The averages are
+	\begin{align*}
+	\text{AA}&=\frac{3+8+9}{3}=6.\bar{6}\\
+	\text{GA}&=(3\cdot 8\cdot 9)^{1/3}=6
+	\end{align*}
+\end{solution}
+
+It's a bit of a stretch to generalize after only one example, but it just so happens that the geometric average is always less than or equaly to the arithmetic average. This is known as the AM-GM inequality, or using our letters the AA-GA inequality. It will not be proven here, but we will use it when comparing our Asian options.
+
+\begin{definition}
+An Asian option is an option that pays based on averages. There are 8 varieties that are determined by the three following choices:
+	\begin{itemize}
+	\item call or put,
+	\item average applied to the strike value or the stock price,
+	\item and the average is arithmetic or geometric.
+	\end{itemize}
+\end{definition}
+
+To be explicit, let's give a table describing the payoff of each of the eight Asian options.
+
+\begin{center}
+\begin{tabular}{lll}
+Type of Option			&	&	Payoff\\
+\hline
+Arithmetic average strike call	&	&	$\max\{S(T)-AA, 0\}$\\
+Arithmetic average price call	&	&	$\max\{AA-K,0\}$\\
+Geometric average strike call	&	&	$\max\{S(T)-GA,0\}$\\
+Geometric average price call	&	&	$\max\{GA-K,0\}$\\
+Arithmetic average strike put	&	&	$\max\{AA-S(T), 0\}$\\
+Arithmetic average price put	&	&	$\max\{K-AA,0\}$\\
+Geometric average strike put	&	&	$\max\{GA-S(T),0\}$\\
+Geometric average price put	&	&	$\max\{K-GA,0\}$\\
+\hline
+\end{tabular}
+\end{center}
+
+An Asian option will not always be explicitly stated as such. The indication for these options is usually the phrases ``average strike'' or ``average price.'' Personally, I would not bother memorizing a table like this. It seems like a waste of resources. I would remember that there are three ``switches'' for the Asian options: c/p, K/S, and AA/GA. Let me give an example.
+
+\begin{example}
+Describe the payoff of a one year, geometric average strike put option. 
+\end{example}
+
+\begin{solution}
+Without looking at the table, I might write something like this:
+	\begin{align*}
+	\max\{K-S(T)\}	&=\max\{A-S(T),0\}\\
+				&=\max\{GA-S(T),0\}.
+	\end{align*}
+The left hand side of the first line is recognizing that this is a put option. Put options have payoff $\max\{K-S(T),0\}$. The right hand side of the first line indicates that the average is going in place of the strike. The right hand side of the second line recognizes that the average is geometric.
+\end{solution}
+
+When we are computing payoffs of Asian options, we will use all available information when computing averages except for the underlying asset's initial value.
+
+\begin{example}
+You would like to determine the payoff of a six month, geometric average price call option with strike 45. You are given
+	\begin{center}
+		\begin{tabular}{lccccccc}
+		Time (months)	& 0	& 1	& 2	& 3	& 4	& 5	& 6	\\
+		\hline
+		$S(T)$		& 45	& 48	& 50	& 49	& 52	& 49	& 48
+		\end{tabular}
+	\end{center}
+\end{example}
+
+\begin{solution}
+We first compute the geometric average, and then we will compute the payoff.
+
+	\begin{align*}
+	GA			&=(48\cdot 50\cdot 49\cdot 52\cdot 49\cdot 48)^{1/6}\\
+				&=49.31\\
+	\max\{GA-K,0\}	&=\max\{49.31-45,0\}\\
+				&=4.31
+	\end{align*}
+\end{solution}
+
+Let's try something a little different.
+
+\begin{problem}
+Choose the more valuable more option:
+
+	\begin{prompt}
+		\begin{multipleChoice}
+		\choice[correct]{Arithmetic average strike put option}
+		\choice{Geometric average strike put option}
+		\end{multipleChoice}
+	\end{prompt}
+
+\end{problem}
+
+\begin{solution}
+We stated earlier that the arithmetic average is greater than or equal to the geometric average. This is instrumental.
+	\begin{align*}
+	AA			&\geq	GA\\
+	AA-S(T)		&\geq GA-S(T)\\
+	\max\{AA-S(T),0\}	&\geq \max\{GA-S(T),0\}
+	\end{align*}
+Since the payoffs satisfy this inequality so do the prices.
+\end{solution}
+
+Let's try one more concept before finishing this section.
+
+\begin{example}[Parity?]
+Suppose that I know the payoff of an arithmetic average strike call option. What can I say about the payoff of an arithmetic average strike put option, provided the underlying asset and date of expiration are the same?
+\end{example}
+
+\begin{solution}
+Without more information, all I can say is the following:
+	\begin{align*}
+	\max\{S(T)-AA,0\}-\max\{AA-S(T),0\}	&=S(T)-AA\\
+	\max\{S(T)-AA,0\}-S(T)+AA		&=\max\{AA-S(T)\}.
+	\end{align*}
+This suggests a parity relationship; however, I will never know the arithmetic average at time zero. This makes Asian options more difficult to price than European options. Fortunately, the first pricing models we wil discuss are well equipped to handling these options.
+\end{solution}
+\end{document}
