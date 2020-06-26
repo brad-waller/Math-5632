@@ -1,0 +1,230 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will see the benefit of expanding our simple one period model to several periods.}
+
+\author{Brad Waller}
+
+%Section 3.3
+
+\title{Multiple Periods}
+
+\begin{document}
+
+\begin{abstract}
+Our one-period model was nice and simple; however, it was obviously lacking in reality. The multiple period model makes up for these shortcomings in many ways.
+\end{abstract}
+
+\maketitle
+
+It should have been clear that single period binomial trees are overly simple. The framework, however, is useful. We will make a few assumptions when constructing multiperiod binomial trees. 
+
+\begin{enumerate}
+\item When the asset moves up, it will always be by a common factor of $u$.
+\item When the asset moves down, it will always be by a common factor of $d$. 
+\item Each step will always take the same amount of time $h$.
+\item The risk-free rate and dividend rate will remain constant.
+\end{enumerate}
+
+These rules ensure that $p^*$ does not vary by position. It eases all computations that we will do with these models. Below, you will see a two period binomial tree. By our first and second rules, we have that $S_{ud}=S_{du}$. In other words, the tree recombines.
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=120pt, sibling distance=60pt]
+	\tikzstyle{level 2}=[level distance=120pt, sibling distance=60pt]
+	\tikzstyle{bag} = [text width=70pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$S$}
+			child{
+				node[bag]{$S_d$}
+				child{
+					node[bag]{$S_{dd}$}
+					}
+				child{
+					node[bag, text=white]{$S_{ud}=S_{du}$}
+					}
+				}
+			child{
+				node[bag]{$S_u$}
+				child{
+					node[bag]{$S_{ud}=S_{du}$}
+					}
+				child{
+					node[bag]{$S_{uu}$}
+					}
+				};
+		\node at (4.4, -2.8) {\small Two Period Binomial Tree};	      
+	\end{tikzpicture}
+\end{center}
+
+It is really easy to construct payoff diagrams for European derivatives under this model, and it is slightly more complex than what we did previously. Our guiding principle for pricing  European derivatives is
+
+\begin{equation*}
+\text{Derivative Price}=\mathbb{E}^*[\text{Payoff}]e^{-rT}
+\end{equation*}
+
+The star indicates that we are using the risk-free rate in our computation of $p^*$. $p^*$ will be used to compute the expectation. This concept will need to be modified when we work with American options, as their payoffs can be at a variable point in time.
+
+\begin{example}
+You are given a two period binomial model with the following information: $S(0)=50$, $r=0.08$, $\delta=0.02$. In addition, $u=1.12$ and $d=0.9$. Each step in the model covers three months. Use the model to determine the price of a European call option with strike 50 that expires in six months. 
+\end{example}
+
+\begin{solution}
+We begin by calculating $p^*$. Then we will construct the asset model diagram and the payoff diagram. 
+
+\begin{equation*}
+p^*=\frac{e^{(0.08-0.02)\cdot 0.25}-0.9}{1.12-0.9}=0.52324
+\end{equation*}
+
+Now we will construct the diagrams.
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=120pt, sibling distance=60pt]
+	\tikzstyle{level 2}=[level distance=120pt, sibling distance=60pt]
+	\tikzstyle{bag} = [text width=70pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$50$}
+			child{
+				node[bag]{$45$}
+				child{
+					node[bag]{$40.5$}
+					}
+				child{
+					node[bag, text=white]{$50.4$}
+					}
+				}
+			child{
+				node[bag]{$56$}
+				child{
+					node[bag]{$50.4$}
+					}
+				child{
+					node[bag]{$62.72$}
+					}
+				};	      
+	\end{tikzpicture}
+\end{center}
+
+The payoffs are computed by computing $\max\{S(0.5)-50,0\}$ at the three endpoints of the diagram. 
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=120pt, sibling distance=60pt]
+	\tikzstyle{level 2}=[level distance=120pt, sibling distance=60pt]
+	\tikzstyle{bag} = [text width=70pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$C$}
+			child{
+				node[end]{}
+				child{
+					node[bag]{$0$}
+					}
+				child{
+					node[bag, text=white]{$0.4$}
+					}
+				}
+			child{
+				node[end]{}
+				child{
+					node[bag]{$0.4$}
+					}
+				child{
+					node[bag]{$12.72$}
+					}
+				};	      
+	\end{tikzpicture}
+\end{center}
+
+Now that we have the payoffs, we can compute the price under the model!
+
+\begin{align*}
+\text{Call Price}&=\mathbb{E}^*[\text{Payoff}]e^{-rT}\\
+&=[12.72(p^*)^2+0.4p^*q^*+0.4q^*p^*+0(q^*)^2]e^{-0.08\cdot 0.5}\\
+&=[3.48+0.10+0.10+0]e^{-0.04}\\
+&=[3.68]e^{-0.04}\\
+&=3.54
+\end{align*}
+
+We conclude that the modeled price is $c=3.54$.
+\end{solution}
+
+It is really important to remember that $p^*$ is computed using the step length, and the discounting is computed using the entire term of the contract in question. Also, we could use this model to determine many other things! We could model the price of a variety of calls and puts. If the put had strike 50, we could also use put-call parity. The result would be the same. We could get creative and compute the price of a derivative that pays the square of the stock price at expiration, for example!
+
+\begin{problem}
+Determine the price of the derivative that pays the square of the asset's price in six months under the previous model.
+
+\[
+\text{Derivative Price}=
+	\begin{prompt}
+	\answer{2610.62}
+	\end{prompt}
+\]
+\end{problem}
+
+\begin{solution}
+The model is constructed in a similar way to the call diagram we constructed earlier. The only difference is the payoff!
+
+	\begin{center}
+		\tikzstyle{level 1}=[level distance=120pt, sibling distance=60pt]	
+		\tikzstyle{level 2}=[level distance=120pt, sibling distance=60pt]
+		\tikzstyle{bag} = [text width=70pt, text centered]
+		\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+		\begin{tikzpicture}[grow=right]
+			\node[bag] {$D$}
+				child{
+					node[end]{}
+					child{
+						node[bag]{$1640.25$}
+						}
+					child{
+						node[bag, text=white]{$2540.16$}
+						}
+					}
+				child{
+					node[end]{}
+					child{
+						node[bag]{$2540.16$}
+						}
+					child{
+						node[bag]{$3933.80$}
+						}
+					};	      
+		\end{tikzpicture}
+	\end{center}
+
+Now we compute the price.
+
+	\begin{align*}
+	\text{Price}	&=[3933.80(p^*)^2+2540.16p^*q^*+2540.16q^*p^*+1640.25(q^*)^2]e^{-0.08\cdot 0.5}\\
+			&=[1077.00+633.67+633.67+372.83]e^{-0.04}\\
+			&=2610.62
+	\end{align*}
+
+\end{solution}
+
+There was a little rounding that I did in each calculation, but since it was to the nearest penny I can rest easy knowing that the answer will only be off by at most one penny. If I were multiplying the result by 1,000,000, I would have been a bit more cautious. Also, you might have noticed that we don't need to add the middle terms. We could simply double them since they always appear twice. Our European price formula can now be rewritten as you can see below. 
+
+\begin{align*}
+\text{European Derivative Price}	&=[D_{uu}(p^*)^2+2D_{ud}p^*q^*+D_{dd}]e^{-rT}\\
+					&=\left[\sum_{j=0}^2 \binom{2}{j}Du^jd^{2-j}(p^*)^j(q^*)^{2-j}\right]e^{-rT}
+\end{align*}
+
+The second formula gets a little abusive with notation. It uses $u$ and $d$ as though they are factors; however, they are only there to keep track of position. Also, term before the derivative payoff is called a binomial coefficient. It is a way to count paths in our binomial tree. The value of such a term is given in the equation below. 
+
+\begin{equation*}
+\binom{n}{m}=\frac{n!}{m!(n-m)!}
+\end{equation*}
+
+In the sum we wrote earlier, we had $\binom{2}{0}$, $\binom{2}{1}$, and $\binom{2}{2}$. The values are $1$, $2$, and $1$, respectively.Now that we have our binomial coefficients, we can write a compact formula for larger trees. Let's say that we are dealing with a tree that has $n$ steps. Then the following formula will hold.
+
+\begin{equation*}
+\text{European Derivative Price}=\left[\sum_{j=0}^n \binom{n}{j}Du^jd^{n-j}(p^*)^j(q^*)^{n-j}\right]e^{-rT}
+\end{equation*}
+
+It is likely that you will never need to use this formula beyond three or four steps, so you will become familiar with those particular binomial coefficients. You can also get these coefficients by drawing \href{https://en.wikipedia.org/wiki/Pascal's_triangle}{Pascal's triangle}.
+
+We will have plenty of time to practice this formula in later sections, so don't fret! For now, we need to focus our attention on particular binomial models. You may have noticed in our example that the choice of $u$ and $d$ seemed arbitrary. It was! I just made them up as I was writing. This is probably not a good way to construct models. Our next section will focus on three particular model choices.
+
+\end{document}

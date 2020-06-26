@@ -1,0 +1,335 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Learn how to construct a one period binomial tree and understand how that can be applied to payoffs of derivatives.}
+
+\author{Brad Waller}
+
+%Section 3.1
+
+\title{Single Period}
+
+\begin{document}
+
+\begin{abstract}
+A single period binomial tree is our first example of a model. The models we use for payoffs will be used to help in the construction of payoffs of derivatives. These payoffs lead to the prices of our derivatives. 
+\end{abstract}
+
+\maketitle
+
+Now that we have explored a variety of derivatives, we can finally see the benefit of constructing models to estimate the prices of various derivatives. This chapter's goal is to explore the binomial models. Binomial models are wonderful because they can shed light on price variability in all of the derivatives discussed thus far.
+
+When dealing with a totally new concept, it is good to start with something simple. That is the situation we find ourselves in here. Let's begin with defining a one period binomial model.
+
+\begin{definition}
+A {\bf one-period binomial model} is used to model the price of one asset over a fixed time period. The model assumes that there are two future positions for the asset: one favorable and one unfavorable. These outcomes are denoted $S_u$ and $S_d$, respectively (alternatively,  $S_u(T)$ and $S_d(T)$).
+\end{definition}
+
+This model is very simple. It says that there are only two asset prices available in the future! This structure is easy to draw, as seen below.
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+	\tikzstyle{bag} = [text width=50pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+		\begin{tikzpicture}[grow=right]
+		\node[bag] {$S$}
+			child{
+				node[end, label=right:{$S_d$}]{}
+				edge from parent
+				node[above]{$d$}
+				}
+			child{
+				node[end, label=right:{$S_u$}]{}
+				edge from parent
+				node[above]{$u$}
+				};
+		\node at (2.5, -1.7) {\small Asset Binomial Tree};      
+		\end{tikzpicture}
+\end{center}
+
+It is useful to note that such a model will automatically suggest payments for any derivative on the asset. Such a diagram would look like:
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+	\tikzstyle{bag} = [text width=50pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+		\begin{tikzpicture}[grow=right]
+		\node[bag] {$D$}
+			child{
+				node[end, label=right:{$D_d$}]{}
+				edge from parent
+				node[above]{$d$}
+				}
+			child{
+				node[end, label=right:{$D_u$}]{}
+				edge from parent
+				node[above]{$u$}
+				};
+		\node at (2.5, -1.7) {\small Derivative Binomial Tree};      
+		\end{tikzpicture}
+\end{center}
+
+Let's try an example!
+
+\begin{example}
+You wish to model a strike 32, three month, European call option on some asset $S$. Your model has the price of the asset today, and it assumes that the stock could either increase by 5 or decrease by 5 in value over the three month period. Model the call's payoff.
+\end{example}
+
+\begin{solution}
+The stock model is as follows:
+
+	\begin{center}
+		\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+		\tikzstyle{bag} = [text width=50pt, text centered]
+		\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+			\begin{tikzpicture}[grow=right]
+			\node[bag] {$S=30$}
+				child{
+					node[end, label=right:{$S_d=25$}]{}
+					edge from parent
+					node[above]{$d$}
+					}
+				child{
+					node[end, label=right:{$S_u=35$}]{}
+					edge from parent
+					node[above]{$u$}
+					};	      
+			\end{tikzpicture}
+	\end{center}
+
+This will give a derivative payoff diagram of 
+
+	\begin{center}
+		\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+		\tikzstyle{bag} = [text width=50pt, text centered]
+		\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+			\begin{tikzpicture}[grow=right]
+			\node[bag] {$c$}
+				child{
+					node[end, label=right:{$c_d=\max\{25-32,0\}=0$}]{}
+					edge from parent
+					}
+				child{
+					node[end, label=right:{$c_u=\max\{35-32,0\}=3$}]{}
+					edge from parent
+					};	      
+			\end{tikzpicture}		
+	\end{center}
+
+Our model is complete!
+
+\end{solution}
+
+This is all very nice, but it doesn't model the price of the derivative. We really would like to have a price under the assumed model, or this is all fruitless. The approach is similar to what we did when constructing arbitrage opportunities: we are going to build portfolios that replicate the payoff of the derivative under the model. Since the payoffs will be identical to the derivative's (under the model), the prices of each must be the same.
+
+Such a construction is called a {\bf replicating portfolio}. We will need four components: the underlying asset, its binomial model, the asset's dividend rate, and the risk free rate. We will try to build the payoff of the derivative by combining $\Delta$ shares of the underlying asset with an investment of $B$ in bonds. Let's just piggy-back on the previous example. 
+
+\begin{example}
+In addition to our earlier binomial model, we are given that the dividend rate of the derivative is $\delta=0.03$, and the risk-free rate is $r=0.07$. What is the price of the derivative using a replicating portfolio?
+\end{example}
+
+\begin{solution}
+The replicating portfolio is equated to the derivative's payoff diagram. Adjustments must be made for the portfolio in three months since the stock will pay dividends, and the bond will grow in value.
+	\begin{center}
+		\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+		\tikzstyle{bag} = [text width=80pt, text centered]
+		\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+		\begin{tikzpicture}[grow=right]
+			\node[bag] {$c=\Delta S(0)+B$}
+				child{
+					node[end, label=right:{$0=\Delta S_d e^{\delta\cdot 1/4}+Be^{r\cdot 1/4}$}]{}
+					edge from parent
+					}
+				child{
+					node[end, label=right:{$3=\Delta S_u e^{\delta\cdot 1/4}+Be^{r\cdot 1/4} $}]{}
+					edge from parent
+					};	      
+		\end{tikzpicture}		
+	\end{center}
+
+We solve the two equations in two unknowns. I'll use elimination and subtract the second equation from the first to give the third.
+
+	\begin{align*}
+	3&=\Delta 35e^{0.03/4}+Be^{0.07/4}\\
+	0&=\Delta 25e^{0.03/4}+Be^{0.07/4}\\
+	3&=\Delta 10e^{0.03/4}\\
+	0.3e^{-0.0075}&=\Delta
+	\end{align*}
+
+From there, we can solve for $B$.
+
+	\begin{align*}
+	0&=\Delta 25e^{0.03/4}+Be^{0.07/4}\\
+	-7.5&=Be^{0.07/4}\\
+	-7.5e^{-0.0175}&=B
+	\end{align*}
+
+Now that we have $\Delta$ and $B$, we can compute the modeled price of the derivative. The value is simply the sum of the price of $\Delta$ shares of the underlying asset and the bond $B$.
+
+	\begin{equation*}
+	c=\Delta S(0)+B=1.56
+	\end{equation*}
+
+\end{solution}
+
+This solution makes some intuitive sense. The value of the call should be less than 3. My reasonging is that your maximum payment will be 3, no matter the position. It follows, by our no arbitrage assumptions, that the maximum price will be less than or equal to the present value of 3. 1.56 certainly satisfies that condition.
+
+Replicating portfolios always work like this. You only need the four pieces of information ai listed earlier. The only tricky part could be detrmining the payoff at expiration! 
+
+\begin{problem}
+Use a replicating portfolio to model the price of a strike 32, European put option that expires in three months on the same underlying asset as in our examples.
+
+\[
+p=
+	\begin{prompt}
+	\answer{3.23}
+	\end{prompt}
+\]
+
+\end{problem}
+
+\begin{solution}
+Our equations are slightly different from what we did in the call example.
+
+	\begin{center}
+		\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+		\tikzstyle{bag} = [text width=80pt, text centered]
+		\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+		\begin{tikzpicture}[grow=right]
+			\node[bag] {$p=\Delta S(0)+B$}
+				child{
+					node[end, label=right:{$7=\Delta S_d e^{\delta\cdot 1/4}+Be^{r\cdot 1/4}$}]{}
+					edge from parent
+					}
+				child{
+					node[end, label=right:{$0=\Delta S_u e^{\delta\cdot 1/4}+Be^{r\cdot 1/4} $}]{}
+					edge from parent
+					};	      
+		\end{tikzpicture}		
+	\end{center} 
+
+Thus, we are solving the following equations.
+
+	\begin{align*}
+	0&=\Delta 35e^{0.0075}+Be^{0.0175}\\
+	7&=\Delta 25e^{0.0075}+Be^{0.0175}\\
+	-7&=\Delta 10e^{0.0075}\\
+	-0.7e^{-0.0075}&=\Delta\\
+	0&=-24.5+Be^{0.0175}\\
+	24.5e^{-0.0175}&=B
+	\end{align*}
+
+It follows that the modeled price of the put is
+
+	\begin{equation*}
+	p=\Delta S(0)+B=3.23,
+	\end{equation*}
+as desired.
+\end{solution}
+
+If you put some effort into it, you could come up with a formula for $\Delta$ and $B$. I will give them here for completeness, but I do not think these are things you should memorize. It is my belief that solving two equations in two unknowns should be very natural to you at this time. In fact, I think execution of the following formulae is more difficult than solving two equations in two unknowns.
+
+\begin{align*}
+\Delta&=\frac{D_u-D_d}{S_u-S_d}e^{-\delta h}\\
+B&=\frac{S_d D_u- S_u D_d}{S_d-S_u}e^{-rh}
+\end{align*}
+
+In the event that we treat $u$ and $d$ as factors (which will be usefull very soon), we could cancel the $S$'s out of the formula for $B$ as follows:
+
+\begin{equation*}
+B=\frac{d D_u-u D_d}{d-u}e^{-rh}.
+\end{equation*}
+
+If you are wondering what I meant by treating $u$ and $d$ as factors, check our example. In it, we would have had $u=7/6$ and $d=5/6$. 
+
+Replicating portfolios are very nice, but they don't generalize in any great way to multiple periods. Multiple period binomial models are superior in that they allow for a greater variety of outcomes. Fortunately, there is an alternative. We can use probability! The idea is to assign a probability of an asset to move up and its complememt to the asset moving down, say $p$ and $q$. We could make arbitrary choices, but that's not so great. 
+
+If we make the assumption that money spent on the underlying asset is just as good as money spent on a risk-free investment, we can arrive at something called the {\bf risk-free probability of an up move}. It is denoted $p^*$. It's complement is denoted $q^*$. Let's set this up! Recall our earlier diagram, where I have replaced $u$ and $d$ with $p^*$ and $q^*$, respectively. The diagram only considers stock prices. We must make sure to remember that there may be dividends in play.
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+	\tikzstyle{bag} = [text width=50pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$S$}
+			child{
+				node[end, label=right:{$Sd$}]{}
+				edge from parent
+				node[above]{$q^*$}
+				}
+			child{
+				node[end, label=right:{$Su$}]{}
+				edge from parent
+				node[above]{$p^*$}
+				};	      
+	\end{tikzpicture}
+\end{center}
+
+By spending $S$ today, we arrive at some possible future. Alternatively, we could spend $S$ today and arrive at $Se^{rh}$. This is best treated through expectations. Everything in what follows is a time $h$ value. $P$ denotes the portfolio that is an investment in the stock $S$ and any dividends that may entail. 
+
+\begin{align*}
+Se^{rh}&=\mathbb{E}[P(h)]\\
+Se^{rh}&=Su e^{\delta h}p^*+Sd e^{\delta h}q^*\\
+e^{rh}&=u e^{\delta h}p^*+d e^{\delta h}(1-p^*)\\
+e^{(r-\delta)h}&=up^*+d(1-p^*)\\
+e^{(r-\delta)h}&=(u-d)p^*+d\\
+e^{(r-\delta)h}-d&=(u-d)p^*\\
+\frac{e^{(r-\delta)h}-d}{u-d}&=p^*
+\end{align*}
+
+In case this is not satisfactory, you could always use replicating portfolios to determine $p^*$. I encourage you to see if you can set up the equations correctly! We will try something like this in the next section when we determine $p^*$ under a futures arrangement. For now, let's revisit our first example.
+
+\begin{example}
+We want to determine the price of a three-month, strike 32 European call on $S$ where the following information holds:
+	\begin{itemize}
+	\item $S(0)=30$
+	\item $Su=35$
+	\item $Sd=25$
+	\item $\delta=0.03$
+	\item $r=0.07$
+	\end{itemize}
+Use risk-free probabilities to compute the price of the call.
+\end{example}
+
+\begin{solution}
+We must start with computing the risk-free probability:
+	\begin{equation*}
+	p^*=\frac{e^{(0.07-0.03)/4}-5/6}{7/6-5/6}=0.53015
+	\end{equation*}
+It follows that the price must be
+	\begin{align*}
+	c&=[3p^*+0q^*]e^{-0.07/4}\\
+	c&=1.56
+	\end{align*}
+The reason I am discounting the values is to bring them to today's currency values. All of the payoffs happened in the future, so the currencies would not be compatible to currencies today without such a conversion.
+\end{solution}
+
+The big boon to using $p^*$ in modeling the prices of derivatives is that they generalize to multiple periods, and it can be used for some very strange derivatives; however, there is a shortcoming. We cannot use risk-free probabilities to construct arbitrage opportunities. Let's see how that might work
+
+\begin{example}
+You are a speculator wishing to make some money on mispriced assets. You look up the market price on the call discussed in this section. The market price of the call is \$2. Under your binomial model, you determined that the price of the call should be \$1.56. If you model is correct, then there is arbitrage present. The market value of the call is overpriced. Describe your arbitrage opportunity!
+\end{example}
+
+\begin{solution}
+It should be obvious that the opportunity will net you $2-1.56=0.44$. This should always be clear once the opportunity is found. Since the market price is higher than the model price, we will write the market call. We will buy the replicating portfolio. From our work earlier, we know that our arbitrage portfolio is
+	\begin{itemize}
+	\item Buy $0.3e^{-0.0075}$ shares of $S$.
+	\item Sell $7.37$ in bonds.
+	\item Write the call. 
+	\item Receive the arbitrage gain of $0.44$.
+	\end{itemize}
+\end{solution}
+
+I hope it is obvious that this is only true if our model is correct? This begs the question of what we might do if the market price of the call were \$1. The result is not much different.
+
+\begin{itemize}
+\item Sell $0.3e^{-0.0075}$ shares of $S$.
+\item Buy $7.37$ in bonds.
+\item Buy the call.
+\item Receive the arbitrage gain of $0.56$.
+\end{itemize}
+
+That concludes our discussion of single period binomial models when dealing with stocks and currencies. In the next section, we will explore what happens when applying these portfolios to futures arrangements. Following that, we will deal with multiple periods. 
+
+\end{document}

@@ -1,0 +1,147 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will understand how our one period model differs when dealing with a futures arrangement.}
+
+\author{Brad Waller}
+
+%Section 3.2
+
+\title{Futures}
+
+\begin{document}
+
+\begin{abstract}
+Under a futures arrangement, you simply have an agreement to buy something at the expiration date. This changes how binomial trees are constructed for futures.
+\end{abstract}
+
+\maketitle
+
+It may seem strange that we need to dedicate a section to futures, but there is a reason to do so. First off, do futures even have dividends? No, they do not. Does that mean that $\delta=0$ in our pricing formula. Strangely, the answer to that is also no! Let's see why later in this section. First, we need to work on our model.
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+	\tikzstyle{bag} = [text width=50pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$F$}
+			child{
+				node[end, label=right:{$F_d$}]{}
+				edge from parent
+				node[above]{$d$}
+				}
+			child{
+				node[end, label=right:{$F_u$}]{}
+				edge from parent
+				node[above]{$u$}
+				};
+		\node at (2.7, -1.7) {Futures Binomial Tree};     
+	\end{tikzpicture}
+\end{center}
+
+This doesn't look that different from our asset model; however, the cartoon is misleading. The $F$ today represents the futures price. The model assumes that at settlement, you will have a payoff of $F_u-F$ or $F_d-F$. Margin accounts will play no role in these models. It follows that at inception, we are not paying anything! We are just making an agreement to pay $F$ at the end of the period. This will affect our replicating portfolios. Let's see what our derivative would look like under such a model.
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+	\tikzstyle{bag} = [text width=50pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$D=B$}
+			child{
+				node[end, label=right:{$D_d=\Delta(F_d-F)+Be^{rh}$}]{}
+				edge from parent
+				node[above]{$d$}
+				}
+			child{
+				node[end, label=right:{$D_u=\Delta(F_u-F)+Be^{rh}$}]{}
+				edge from parent
+				node[above]{$u$}
+				};
+		\node at (4.3, -1.9) {Derivative Binomial Tree};
+	\end{tikzpicture}
+\end{center}
+
+The derivative being modeled will be valued $B$ because at inception, the futures part of the arrangement costs nothing. It isn't too fruitful to do many example of portfolios under this arrangement, but there is one implication that is counterintuitive. That will be explored now. What value should we give to $p^*$, the risk-free probability of an up move? Our approach from last section won't work at all because we aren't paying anything for our futures arrangement, so we can't measure an investment's growth in two different ways. The alternative is to measure the up move by using an indicator derivative. That is, use a derivative that pays 1 in the up position and 0 in the down position. 
+
+\begin{center}
+	\tikzstyle{level 1}=[level distance=140pt, sibling distance=70pt]
+	\tikzstyle{bag} = [text width=50pt, text centered]
+	\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+	\begin{tikzpicture}[grow=right]
+		\node[bag] {$D=B$}
+			child{
+				node[end, label=right:{$0=\Delta(F_d-F)+Be^{rh}$}]{}
+				edge from parent
+				node[above]{$d$}
+				}
+			child{
+				node[end, label=right:{$1=\Delta(F_u-F)+Be^{rh}$}]{}
+				edge from parent
+				node[above]{$u$}
+				};	      
+	\end{tikzpicture}
+\end{center}
+
+We solve for the derivative's price in two different ways. First, we use the portfolio from the diagram.
+
+\begin{align*}
+1&=\Delta(F_u-F)+Be^{rh}\\
+0&=\Delta(F_d-F)+Be^{rh}\\
+1&=\Delta(F_u-F_d)\\
+\frac{1}{F_u-F_d}&=\Delta\\
+0&=\frac{F_d-F}{F_u-F_d}+Be^{rh}\\
+\frac{F-F_d}{F_u-F_d}&=Be^{rh}\\
+\frac{1-d}{u-d}e^{-rh}&=B
+\end{align*}
+
+The first two lines come from the diagram. The third is the difference of the first two. The fourth should be clear from the third. The fifth comes from substitution of $\Delta$ into the second line. The last coulple come from solving for $B$ and treating $u$ and $d$ as multiples. 
+
+Now we can compute the value of this derivative using risk-free probabilities. This is much more direct.
+
+\begin{align*}
+D&=[1p^*+0q^*]e^{-rh}\\
+D&=p^*e^{-rh}
+\end{align*}
+
+Remember, $D=B$, so we can equate the last lines of each line of reasoning.
+
+\begin{align*}
+\frac{1-d}{u-d}e^{-rh}&=p^*e^{-rh}\\
+\frac{1-d}{u-d}&=p^*
+\end{align*}
+
+Remember for our asset models, we had that 
+
+\begin{equation*}
+p^*=\frac{e^{(r-\delta)h}-d}{u-d}
+\end{equation*}
+
+This means that for our futures models, we will use the relationship
+
+\begin{equation*}
+\boxed{\delta=r}
+\end{equation*}
+
+in all our computations! This will be very important when we start our multiple period trees in the next section. Commit it to memory!
+
+When dealing with arbitrage opportunities, you will be asked to describe the arbitrage portfolio. If the modeled price is lower than the market price of the derivative, then you will purchase the replicating portfolio and sell the derivative. This will look like
+
+\begin{itemize}
+\item buy the bond for $B$,
+\item agree to buy $\Delta$ of $F$ at expiration,
+\item sell the derivative,
+\item and receive the arbitrage gain!
+\end{itemize}
+
+If the situation is reversed, then you would be selling the replicating portfolio and buying the derivative. That is,
+
+\begin{itemize}
+\item Sell the bond for $B$,
+\item agree to sell $\Delta$ of $F$ at expiration,
+\item buy the derivative,
+\item and receive the arbitrage gain!
+\end{itemize}
+
+The key difference for futures is that you are making an agreement. When dealing with assets, you were actually purchasing or selling the underlying asset at time $0$.
+\end{document}
