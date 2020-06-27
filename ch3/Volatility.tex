@@ -1,0 +1,111 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will know where the volatility term $\sigma$ comes from.}
+
+\author{Brad Waller}
+
+%Section 3.6
+
+\title{Volatility}
+
+\begin{document}
+
+\begin{abstract}
+We have used volatility throughout this chapter without really knowing what it is. Here is where we (hopefully) answer any of those lingering volatility questions.
+\end{abstract}
+
+\maketitle
+
+We have seen our binomial models in many different applications now. That whole time, we took volatility as a given. That will usually be the case in an academic setting; however, in the real world you can only assume a particular model and estimate the value of the volatility. The risk-free rate would likely be based on some government instrument while the dividend rate could be based off of a company's dividend payout history.
+
+The key to getting our hands on a notion of volatility is to try to extract factors over envenly spaced time intervals. In this discussion, we will assume that the stock follows a Jarrow-Rudd model for movement. To get our hands on the $u$ and $d$ values, we will need to take quotients of successive observations. To determine the values in the exponents of $u$ and $d$, we will need logarithms.
+
+Suppose that we make $n+1$  evenly spaced observations of some stock's price over a $T$ year period. We will let $h$ denote the value $T/n$. For our purposes, we can call the values $S(0)$, $S(h)$, $S(2h)$, ... $S((n-1)h)$, and $S(nh)=S(T)$. We take quotients of successive terms.
+
+\begin{equation*}
+\frac{S(h)}{S(0)} \hspace{30pt}\frac{S(2h)}{S(h)} \hspace{30pt} \frac{S(3h)}{S(2h)} \hspace{30pt} \dots \hspace{30pt} \frac{S(nh)}{S((n-1)h)}
+\end{equation*}
+
+There are $n$ such quotients. Each one should resemble one of our factors $u$ or $d$. Let me stress the word resemble. They will not give only two values! We knew the binomial model had limitations, and one of them rears its head here. Our final step is to apply logarithms to each quotient.
+
+\begin{equation*}
+\ln\left[\frac{S(h)}{S(0)}\right] \hspace{30pt}\ln\left[\frac{S(2h)}{S(h)}\right] \hspace{30pt} \ln\left[\frac{S(3h)}{S(2h)}\right] \hspace{30pt} \dots \hspace{30pt} \ln\left[\frac{S(nh)}{S((n-1)h)}\right]
+\end{equation*}
+
+Each of these terms should resemble the logarithm of $u$ or $d$. Specifically, they should be either 
+
+\begin{equation*}
+\ln u=(\alpha-\delta-\sigma^2/2)h+\sigma\sqrt{h} \hspace{20pt}\text{or}\hspace{20pt} \ln d=(\alpha-\delta-\sigma^2/2)h-\sigma\sqrt{h}.
+\end{equation*}
+
+The term $(\alpha-\delta-\sigma^2/2)h$ is called the deterministic part. It is always dragging the asset's price in one direction. It is not random. I am using $\alpha$ in place of $r$ since we can actually observe an asset's rate of return when we look into the past. The other part, $\pm\sigma\sqrt{h}$ is called the random part. It has variance $\sigma^2h$. The estimation of the deterministic and random parts will be done using a sample average and a sample variance, respectively. Remember that a sample variance is computed as follows:
+
+\begin{equation*}
+s_x^2=\frac{1}{n-1}\sum_{j=1}^n(x_j-\bar{x})^2
+\end{equation*}
+
+\begin{example}
+You observe a stock's price over a 4 month period, making observations twice every month at even intervals. You record the following:
+
+	\begin{center}
+	\begin{tabular}{l|ccccccccc}
+	Time (in half months) & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+	\hline
+	$S(h)$		  & $90$ & $91$ & $94$ & $92$ & $89$ & $85$ & $92$ & $90$ & $95$
+	\end{tabular}
+	\end{center}
+
+Estimate the volatility using the method described above.
+\end{example}
+
+\begin{solution}
+We must compute 8 terms. From there, we can compute our sample variance and derive the volatility.
+
+	\begin{align*}
+	x_1=\ln\frac{91}{90}	&=0.01105\\
+	x_2=\ln\frac{94}{91}	&=0.03244\\
+	x_3=\ln\frac{92}{94}	&=-0.02151\\
+	x_4=\ln\frac{89}{92}	&=-0.03315\\
+	x_5=\ln\frac{85}{89}	&=-0.04599\\
+	x_6=\ln\frac{92}{85}	&=0.07914\\
+	x_7=\ln\frac{90}{92}	&=-0.02198\\
+	x_8=\ln\frac{95}{90}	&=0.05407\\
+	\bar{x}			&=0.00676\\
+	s_x^2				&=0.00202\\
+	\hat{\sigma}^2h 		&=0.00202\\
+	\hat{\sigma} 		&=0.22
+	\end{align*}
+
+I rounded all values to five decimal places except the result. You will usually be given volatility to two places, so it makes sense to give the answer to two places as well. The value of $h$ used in the computation was $h=1/24$. That is because there are 24 half months in every year.
+\end{solution}
+
+Now you should try part of the problem!
+
+\begin{question}
+In the previous problem, assume that the stock in question pays no dividends. Use the above values to estimate the asset's rate of return over the same four month period. Select the answer that is closest to the answer.
+
+	\begin{multipleChoice}
+	\choice{$15\%$}
+	\choice{$17\%$}
+	\choice[correct]{$19\%$}
+	\choice{$21\%$}
+	\end{multipleChoice}
+\end{question}
+
+\begin{solution}
+Much of the work has been done in the example. We just need to extract the appropriate values.
+
+	\begin{align*}
+	(\hat{\alpha}-\hat{\sigma}^2/2)/24 	&=0.00676\\
+	(\hat{\alpha}-0.22^2/2) 			&=0.16224\\
+	\hat{\alpha} 					&=0.18644
+	\end{align*}
+
+The answer rounds to $0.19$ or $19\%$.
+\end{solution}
+
+This process illustrates how we can come up with the value $\sigma$. Volatility will still be important in our future models, but we seldom will estimate it.
+
+\end{document}

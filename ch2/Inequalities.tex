@@ -468,28 +468,3 @@ In addition, we could have done this exact same portfolio using put options! It 
 \end{solution}
 
 \end{document}
-
-
-\begin{question}
-You are given that the price of some three-month European call and put are $2.83$ and $4.28$, respectively. The strike of the options is $72$. In addition, the underlying asset costs $70$ and has dividend rate $2\%$. What is the implied risk-free rate?
-
-	\begin{prompt}
-	\[	
-	\text{The risk-free rate is }r=\answer{0.05}
-	\]
-	\end{prompt}
-\end{question}
-
-\begin{solution}
-We must use put-call parity.
-	\begin{align*}
-	c-p&=S(0)e^{-\delta T}-Ke^{-rT}\\
-	2.83-4.28&=70e^{-0.05}-72e^{-0.25r}\\
-	72e^{-0.25r}&=71.10\\
-	r&=0.05
-	\end{align*}
-\end{solution}
-
-The main point of this section was to show that you can compare two seemingly different portfolios to get implied information regarding values of assets. This can lead to a variety of arbitrage opportunities. In the next section, we will extend this kind of reasoning to inequalities. The principle that will guide us is this: If a portfolio has only non-negative payoffs, then the position today must also be non-negative. 
-\end{document}
-

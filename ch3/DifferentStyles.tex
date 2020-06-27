@@ -1,0 +1,370 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will learn how to compute the price of American and Asian options under a binomial tree.}
+
+\author{Brad Waller}
+
+%Section 3.5
+
+\title{Different Styles}
+
+\begin{document}
+
+\begin{abstract}
+Most of what we have done has dealt with determining the price of a European derivative. Here we explore some other possibilities.
+\end{abstract}
+
+\maketitle
+
+It should be evident that binomial models easily apply to European derivatives. In fact, it is not too difficult to program any binomial model into Excel. The real benefit to binomial modela is that they are easy to apply to other styles of derivatives as well! This will not be the case for our more sophisticated Black-Scholes model that we will see in the next chapter. Let's see how our binomial model applies to American and Asian options.
+
+Before our American option example, it is important to think about how an American option works. Remember, an American option is like a European option. The only difference is that the option can be exercised at any time before expiration. The option can only be exercised once. After exercise, the contract is gone. That is of huge importance when determining the price of the option. At every position of a payoff diagram, you must ask the question, ``is it advantageous to exercise here?'' The following example will demonstrate how we answer this question. 
+
+\begin{example}
+Use a three period Jarrow-Rudd model to construct some stock's price over a nine month period under the following assumptions:
+	\begin{itemize}
+	\item $S(0)=60$
+	\item $\delta=0.02$
+	\item $\sigma=0.3$
+	\item $r=0.08$
+	\end{itemize}
+Use the model to determine the price of a strike 72 American put option that expires in nine months.
+\end{example}
+
+\begin{solution}
+We must begin with our model. You can verify the following values.
+
+	\begin{align*}
+	u 	&=1.16620\\
+	d 	&=0.86394\\
+	p^*	&=0.50014
+	\end{align*}
+
+This gives our asset diagram.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$60$};
+   			\node (b) at ( 3,-0.5) [bag] {$51.84$};
+   			\node (c) at ( 3,0.5) [bag] {$69.97$};
+   			\node (d) at ( 6,-1) [bag] {$44.78$};
+   			\node (e) at ( 6,0) [bag] {$60.45$};
+   			\node (f) at ( 6,1) [bag] {$81.60$};
+			\node (g) at (9,-1.5) [bag] {$38.69$};
+			\node (h) at (9, -0.5) [bag] {$52.23$};
+			\node (i) at (9,0.5) [bag] {$70.50$};
+			\node (j) at (9,1.5) [bag] {$95.16$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+Now, we can construct the payoff diagram of the option. The diagram will have payoffs at each point in time. This is only part of the work, as we will need to make comparisons to establish where it is advantageous to exercise. 
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$p$};
+   			\node (b) at ( 3,-0.5) [bag] {$20.16$};
+   			\node (c) at ( 3,0.5) [bag] {$2.03$};
+   			\node (d) at ( 6,-1) [bag] {$27.22$};
+   			\node (e) at ( 6,0) [bag] {$11.55$};
+   			\node (f) at ( 6,1) [bag] {$0.00$};
+			\node (g) at (9,-1.5) [bag] {$33.31$};
+			\node (h) at (9, -0.5) [bag] {$19.77$};
+			\node (i) at (9,0.5) [bag] {$1.50$};
+			\node (j) at (9,1.5) [bag] {$0.00$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+Now we can begin our comparisons. We must work from right to left. We begin from the up-up node to the up-up-up and up-up-down nodes. 
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at (0,0) [bag] {$0.00$};
+			\node (b) at (3,0.5) [bag] {$0.00$};
+			\node (c) at (3, -0.5) [bag] {$1.50$};
+			\draw [-] (a) to node [below]{}(b);
+			\draw [-] (a) to node [below]{}(c);
+		\end{tikzpicture}
+	\end{center}
+
+It should be obvious that waiting is advantageous, but let's make the necessary computation anyway. Since the values on the right are further into the future, they must be brought back three months to account for the time value of money. 
+
+	\begin{equation*}
+	0<[0p^*+1.50q^*]e^{-0.08\cdot 0.25}=0.73
+	\end{equation*}
+
+Now we can go to the next position, up-down (or down-up, if you prefer). 
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at (0,0) [bag] {$11.55$};
+			\node (b) at (3,0.5) [bag] {$1.50$};
+			\node (c) at (3, -0.5) [bag] {$19.77$};
+			\draw [-] (a) to node [below]{}(b);
+			\draw [-] (a) to node [below]{}(c);
+		\end{tikzpicture}
+	\end{center}
+
+Nothing is obvious here. Let's make the necessary computation.
+
+	\begin{equation*}
+	11.55>[1.50p^*+19.77q^*]e^{-0.08\cdot 0.25}=10.42
+	\end{equation*}
+
+It is advantageous to exercise early! Make note of this. Now let's work with the down-down node.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at (0,0) [bag] {$27.22$};
+			\node (b) at (3,0.5) [bag] {$19.77$};
+			\node (c) at (3, -0.5) [bag] {$33.31$};
+			\draw [-] (a) to node [below]{}(b);
+			\draw [-] (a) to node [below]{}(c);
+		\end{tikzpicture}
+	\end{center}
+
+The comparison is
+
+	\begin{equation*}
+	27.22>[19.77p^*+33.31q^*]e^{-0.08\cdot 0.25}=26.01.
+	\end{equation*}
+
+Once again, it is advantageous to exercise early. Now, it will be useful for us to see what we have done in a picture.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$p$};
+   			\node (b) at ( 3,-0.5) [bag] {$20.16$};
+   			\node (c) at ( 3,0.5) [bag] {$2.03$};
+   			\node (d) at ( 6,-1) [bag] {$27.22$};
+   			\node (e) at ( 6,0) [bag] {$11.55$};
+   			\node (f) at ( 6,1) [bag] {$0.73$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+		\end{tikzpicture}
+	\end{center}
+
+We repeat the process at the up and down nodes.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at (0,0) [bag] {$2.03$};
+			\node (b) at (3,0.5) [bag] {$0.73$};
+			\node (c) at (3, -0.5) [bag] {$11.55$};
+			\draw [-] (a) to node [below]{}(b);
+			\draw [-] (a) to node [below]{}(c);
+			\node (d) at (6,0) [bag] {$20.16$};
+			\node (e) at (9,0.5) [bag] {$11.55$};
+			\node (f) at (9, -0.5) [bag] {$27.22$};
+			\draw [-] (d) to node [below]{}(e);
+			\draw [-] (d) to node [below]{}(f);
+		\end{tikzpicture}
+	\end{center}
+
+We make the necessary computations.
+
+	\begin{align*}
+	2.03 	&<[0.73p^*+11.55q^*]e^{-0.08\cdot 0.25}=6.02\\
+	20.16 	&>[11.55p^*+27.22q^*]e^{-0.08\cdot 0.25}=19.00
+	\end{align*}
+
+It is advantageous to wait in the up position and to exercise early in the down position. This gives us our last diagram to analyze.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at (0,0) [bag] {$p$};
+			\node (b) at (3,0.5) [bag] {$6.02$};
+			\node (c) at (3, -0.5) [bag] {$20.16$};
+			\draw [-] (a) to node [below]{}(b);
+			\draw [-] (a) to node [below]{}(c);
+		\end{tikzpicture}
+	\end{center}
+
+
+The price of the American put option is
+
+	\begin{equation*}
+	p=[6.02p^*+20.16q^*]e^{-0.08\cdot 0.25}=12.83
+	\end{equation*}
+
+We could go further and draw the diagram showing only the nodes where exercise is advantageous. That would look like this:
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$p$};
+   			\node (b) at ( 3,-0.5) [bag] {$20.16$};
+   			\node (c) at ( 3,0.5) [bag] {};
+   			\node (e) at ( 6,0) [bag] {$11.55$};
+   			\node (f) at ( 6,1) [bag] {};
+			\node (g) at (9,1.5) [bag] {$0$};
+			\node (h) at (9,0.5) [bag] {$1.50$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+			\draw [-] (f) to node [below]{} (g);
+			\draw [-] (f) to node [below]{} (h);
+   		\end{tikzpicture}
+	\end{center}
+
+Using this diagram, we could also determine the price of the American put. The difficulty here is that you must count all paths to each particular payoff. Fortunately, that is not so difficult with this problem!
+
+	\begin{equation*}
+	p=20.16q^*e^{-0.08\cdot 0.25}+11.55p^*q^*e^{-0.08\cdot 0.5}+1.50(p^*)^2q^*e^{-0.08\cdot 0.75}=12.83
+	\end{equation*}
+
+\end{solution}
+
+Notice that there were actually two ways of computing the price of the option. The first was very algorithmic. You could program it into a computer with ease, provided you have maximum functions. Unfortunately, you could lose site of where the positions of early exercise are. The second shows you exactly where early exercise takes place; however, it makes a new problem of counting paths. 
+
+Since you haven't done too much with American options, you likely lack intuition regarding their prices. It is worthwhile to compute the price of the European option with similar terms. In this case, you should find that the price is 11.43. This is less than the value we computed in the example. That's always a good check for an American option.
+
+The ability to price American options without sophisticated mathematical techniques is one of the benefits of having binomial models. The approach to Asian options is fairly direct: compute an average for each path based on the option you are dealing with. The average computation will {\bf not} include the initial asset value.
+
+Fortunately, the computations necessary for the Asian options are easy. They are just averages. Unfortunately, there is a unique computation for each path. In a three period binomial tree, there are 8 unique paths. That means we must make 8 average computations. In contrast, the American option only required 6 computations.
+
+The disparity becomes even more stark when going to larger trees. A tree with $n=T/h$ periods will require $n(n+1)/2+1$ computaions for an American option while a similar length Asian option will require $2^n+1$ computations! The $+1$ in each comes from the price of the derivative computation that comes after computing all of the payoffs.
+
+\begin{example}
+
+Construct a three period Cox-Ross-Rubenstein model for some asset $S$ with each step equal to two months using the following assumptions:
+
+	\begin{itemize}
+	\item $S(0)=90$
+	\item $\sigma=0.22$
+	\item $\delta=0.03$
+	\item $r=0.09$
+	\end{itemize}
+
+Use your model to estimate the price of a six month geometric average strike call option.
+
+\end{example}
+
+\begin{solution}
+Once again, we compute $u$, $d$, and $p^*$. The results are below.
+
+	\begin{align*}
+	u 	&=e^{0.22\sqrt{1/6}}=1.09397\\
+	d 	&=e^{-0.22\sqrt{1/6}}=0.91410\\
+	p^*	&=\frac{e^{(0.09-0.03)/6}-d}{u-d}=0.53344
+	\end{align*}
+
+Now that we have $u$ and $d$, we can construct our asset model.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$90.00$};
+   			\node (b) at ( 3,-0.5) [bag] {$82.27$};
+   			\node (c) at ( 3,0.5) [bag] {$98.46$};
+   			\node (d) at ( 6,-1) [bag] {$75.20$};
+   			\node (e) at ( 6,0) [bag] {$90.00$};
+   			\node (f) at ( 6,1) [bag] {$107.71$};
+			\node (g) at (9,-1.5) [bag] {$68.74$};
+			\node (h) at (9, -0.5) [bag] {$82.27$};
+			\node (i) at (9,0.5) [bag] {$98.46$};
+			\node (j) at (9,1.5) [bag] {$117.83$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+The payoff computations may now begin! We must do eight of them since this is a three period binomial tree.
+
+	\begin{itemize}
+	\item Position up-up-up (98.46-107.71-117.83): $\text{GA}=\sqrt[3]{98.46\cdot 107.71\cdot 117.83}=107.71$.
+	\item Position up-up-down (98.46-107.71-98.46): $\text{GA}=\sqrt[3]{98.46\cdot 107.71\cdot 98.46}=101.45$.
+	\item Position up-down-up (98.46-90.00-98.46): $\text{GA}=\sqrt[3]{98.46\cdot 90\cdot 98.46}=95.56$.
+	\item Position up-down-down (98.46-90.00-82.27): $\text{GA}=\sqrt[3]{98.46\cdot 90\cdot 82.27}=90.00$.
+	\item Position down-up-up (82.27-90.00-98.46): $\text{GA}=\sqrt[3]{82.27\cdot 90\cdot 98.46}=90.00$.
+	\item Position down-up-down (82.27-90.00-82.27): $\text{GA}=\sqrt[3]{82.27\cdot 90\cdot 82.27}=84.77$.
+	\item Position down-down-up (82.27-75.20-82.27): $\text{GA}=\sqrt[3]{82.27\cdot 75.20\cdot 82.27}=79.84$.
+	\item Position down-down-down (82.27-75.20-68.74): $\text{GA}=\sqrt[3]{82.27\cdot 75.20\cdot 68.74}=75.20$.
+	\end{itemize}
+
+The eight payoff computations will come from replacing $K$ in the payoff of a European call option payoff with each of the eight averages given above. They are done in the same order.
+
+	\begin{align*}
+	\text{payoff}_1 	&=\max\{117.83-107.71,0\}=10.12\\
+	\text{payoff}_2 	&=\max\{98.46-101.45,0\}=0\\
+	\text{payoff}_3 	&=\max\{98.46-95.56,0\}=2.90\\
+	\text{payoff}_4 	&=\max\{82.27-90.00,0\}=0\\
+	\text{payoff}_5 	&=\max\{98.46-90.00,0\}=8.46\\
+	\text{payoff}_6 	&=\max\{82.27-84.77,0\}=0\\
+	\text{payoff}_7 	&=\max\{82.27-79.84,0\}=2.43\\
+	\text{payoff}_8 	&=\max\{68.74-75.20,0\}=0\\
+	\end{align*}
+
+The modeled price of the option is
+
+	\begin{align*}
+	c 	&=[10.12(p^*)^3+2.90p^*q^*p^*+8.46q^*(p^*)^2+2.43(q^*)^2p^*]e^{-0.09\cdot 0.5}\\
+		&=3.18
+	\end{align*}
+
+In this last computation, I tried to illustrate the path in the ordering of the terms $p^*$ and $q^*$. For example, $p^*q^*p^*$ represents the position up-down-up. Before this example, I said that there were $2^n+1$ computations necessary for this computation. That would give 9 computations for this problem. If you go through and count them, you will see that I actually did $8+8+1=17$ (not including the binomial model). That's definitely larger than $2^3+1=9$. 
+
+Once you get good at this, you can go immediately from the average computation to the payoff computation. Combining these would cut out 8 of the lines, bringing the total down to $2^3+1$.
+\end{solution}
+
+Now that we have covered different styles of options, we are really finished with our application of our binomial models. The last bit of information we need to shore up is where our volatility comes from. Our next section will cover that topic.
+
+\end{document}

@@ -1,0 +1,260 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will know the three different models that describe the factors $u$ and $d$.}
+
+\author{Brad Waller}
+
+%Section 3.4
+
+\title{Movement Models}
+
+\begin{document}
+
+\begin{abstract}
+In our previous work the values $u$ and $d$ were arbitrary. Here, we give three named models and apply them to several examples.
+\end{abstract}
+
+\maketitle
+
+As stated in the last section, the choice of $u$ and $d$ was arbitrary. Making arbitrary choices is usually not advisable in any modeling situation. In this section, we will cover three different models for the factors $u$ and $d$. They are very similar, so they won't require much in terms of memory. In all the models, we have a term $\sigma$, called the volatility. This quantity will always be non-negative, and we will discuss its formulation in a later section. 
+
+\begin{center}
+Cox-Ross-Rubenstein
+	\begin{equation*}
+	u=e^{\sigma\sqrt{h}}	\hspace{30pt} d=e^{-\sigma\sqrt{h}}
+	\end{equation*}
+
+Forward
+	\begin{equation*}
+	u=e^{(r-\delta)h+\sigma\sqrt{h}}	\hspace{30pt} d=e^{(r-\delta)h-\sigma\sqrt{h}}
+	\end{equation*}
+
+Jarrow-Rudd
+	\begin{equation*}
+	u=e^{(r-\delta-\sigma^2/2)h+\sigma\sqrt{h}}	\hspace{30pt} d=e^{(r-\delta-\sigma^2/2)h-\sigma\sqrt{h}}
+	\end{equation*}
+\end{center}
+
+Before we use the models, let's make some observations regarding some of the values. First of all, if we are modeling futures prices then there are only two models. That is because we assume that $r=\delta$ when modeling futures, so the Cox-Ross-Rubenstein and Forward models collapse into one. Let's compute $p^*$ for the forward model.
+
+\begin{align*}
+p^*	&=\frac{e^{(r-\delta)h}-d}{u-d}\\
+	&=\frac{e^{(r-\delta)h}-e^{(r-\delta)h-\sigma\sqrt{h}}}{e^{(r-\delta)h+\sigma\sqrt{h}}-e^{(r-\delta)h-\sigma\sqrt{h}}}\\
+	&=\frac{1-e^{-\sigma\sqrt{h}}}{e^{\sigma\sqrt{h}}-e^{-\sigma\sqrt{h}}}\\
+	&=\frac{1-e^{-\sigma\sqrt{h}}}{e^{\sigma\sqrt{h}}(1-e^{-2\sigma\sqrt{h}})}\\
+	&=\frac{1-e^{-\sigma\sqrt{h}}}{e^{\sigma\sqrt{h}}(1-e^{-\sigma\sqrt{h}})(1+e^{-\sigma\sqrt{h}})}\\
+	&=\frac{1}{e^{\sigma\sqrt{h}}+1}\\
+	&\leq\frac{1}{2}
+\end{align*}
+
+This may seem like some useless pushing around of letters, but this gives some useful intuition. When calculating the risk-free probability of an up move for a forward tree, you must have that the value is less than one half! This is from the computation above and the fact that you will never run into a problem that gives you $\sigma=0$. We can try something similar for the other models, but it won't be as fruitful. Let's work through a problem!
+
+\begin{example}
+Use a three period forward tree to model the price of a strike $112$, three month European put option on an asset $S$ under the following conditions.
+	\begin{itemize}
+	\item $r=0.07$
+	\item $\delta=0.01$
+	\item $\sigma=0.25$
+	\item $S(0)=110$
+	\end{itemize}
+\end{example}
+
+\begin{solution}
+We start by determining the values $u$, $d$, and $p^*$.
+
+	\begin{align*}
+	u 	&=e^{(r-\delta)h+\sigma\sqrt{h}}\\
+		&=e^{(0.07-0.01)\cdot 1/12+0.25\sqrt{1/12}}\\
+		&=1.08022\\
+	d 	&=e^{(r-\delta)h-\sigma\sqrt{h}}\\
+		&=e^{(0.07-0.01)\cdot 1/12-0.25\sqrt{1/12}}\\
+		&=0.93504\\
+	p^*	&=\frac{e^{(r-\delta)h}-d}{u-d}\\
+		&=\frac{e^{(0.07-0.01)\cdot 1/12}-0.93504}{1.08022-0.93504}\\
+		&=0.48197
+	\end{align*}
+
+We did $p^*$ a little early, but it was an opportune time since we needed $u$ and $d$ for that value. Now, we can construct the asset model.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=70pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$110$};
+   			\node (b) at ( 3,-1) [bag] {$102.85$};
+   			\node (c) at ( 3,1) [bag] {$118.82$};
+   			\node (d) at ( 6,-2) [bag] {$96.17$};
+   			\node (e) at ( 6,0) [bag] {$111.11$};
+   			\node (f) at ( 6,2) [bag] {$128.36$};
+			\node (g) at (9,-3) [bag] {$89.92$};
+			\node (h) at (9, -1) [bag] {$103.89$};
+			\node (i) at (9,1) [bag] {$120.02$};
+			\node (j) at (9,3) [bag] {$138.65$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+The hard work has been done. Now we can build the model for the put's payoff. All of the payoffs are computed at the endpoint of each path using $\max\{112-S(0.25),0\}$.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=70pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$p$};
+   			\node (b) at ( 3,-1) [bag] {};
+   			\node (c) at ( 3,1) [bag] {};
+   			\node (d) at ( 6,-2) [bag] {};
+   			\node (e) at ( 6,0) [bag] {};
+   			\node (f) at ( 6,2) [bag] {};
+			\node (g) at (9,-3) [bag] {$22.08$};
+			\node (h) at (9, -1) [bag] {$8.11$};
+			\node (i) at (9,1) [bag] {$0$};
+			\node (j) at (9,3) [bag] {$0$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+Now we can execute our pricing formula.
+
+	\begin{align*}
+	p 	&=[0(p^*)^3+3\cdot 0(p^*)^2q^*+3\cdot 8.11 p^*(q^*)^2+22.08(q^*)^3]e^{-0.07\cdot 0.25}\\
+		&=[0+0+3.15+3.07]e^{-0.0175}\\
+		&=6.11
+	\end{align*}
+
+\end{solution}
+
+Now you should test your knowledge! Try the following problem.
+
+\begin{question}
+Determine the price of a six month, strike 41 European asset-or-nothing call option on some futures contract $F$. Use a three period, Jarrow-Rudd model with the following assumptions:
+
+	\begin{itemize}
+	\item $F(0)=40$,
+	\item $r=0.06$, and
+	\item $\sigma=0.35$.
+	\end{itemize}
+
+	\begin{multipleChoice}
+	\choice{$22.72$}
+	\choice{$23.12$}
+	\choice[correct]{$23.52$}
+	\choice{$23.92$}
+	\end{multipleChoice}
+
+\end{question}
+
+\begin{solution}
+We must always construct the model, so first we determine $u$, $d$, and $p^*$. It may seem like we don't have enough information, but we must remember that for futures $r=\delta$.
+
+	\begin{align*}
+	u 	&=e^{(r-\delta-\sigma^2/2)h+\sigma\sqrt{h}}\\
+		&=e^{(-0.35^2/2)\cdot 1/6+0.35\sqrt{1/6}}\\
+		&=1.14188\\
+	d 	&=e^{(r-\delta-\sigma^2/2)h-\sigma\sqrt{h}}\\
+		&=e^{(-0.35^2/2)\cdot 1/6-0.35\sqrt{1/6}}\\
+		&=0.85805\\
+	p^*	&=\frac{e^{(r-\delta)h}-d}{u-d}\\
+		&=\frac{1-0.85805}{1.14188-0.85805}\\
+		&=0.50012
+	\end{align*}
+
+Now we can construct our Jarrow-Rudd binomial tree using $u$ and $d$. 
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$40$};
+   			\node (b) at ( 3,-0.5) [bag] {$34.32$};
+   			\node (c) at ( 3,0.5) [bag] {$45.68$};
+   			\node (d) at ( 6,-1) [bag] {$29.45$};
+   			\node (e) at ( 6,0) [bag] {$39.19$};
+   			\node (f) at ( 6,1) [bag] {$52.16$};
+			\node (g) at (9,-1.5) [bag] {$25.27$};
+			\node (h) at (9, -0.5) [bag] {$33.63$};
+			\node (i) at (9,0.5) [bag] {$44.75$};
+			\node (j) at (9,1.5) [bag] {$59.56$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+Since our derivative is a European, asset-or-nothing call with strike 41, we can simply replace all values less than 41 with a 0. We also don't need to list any of the values before expiration. This is because they don't contribute to the payoff of the derivative. When we begin dealing with American options, these intermediary values will become important.
+
+	\begin{center}
+		\tikzstyle{bag} = [text width=30pt, text centered]
+		\tikzstyle{end} = []
+		\begin{tikzpicture}[sloped]
+   			\node (a) at ( 0,0) [bag] {$D$};
+   			\node (b) at ( 3,-0.5) [bag] {};
+   			\node (c) at ( 3,0.5) [bag] {};
+   			\node (d) at ( 6,-1) [bag] {};
+   			\node (e) at ( 6,0) [bag] {};
+   			\node (f) at ( 6,1) [bag] {};
+			\node (g) at (9,-1.5) [bag] {$0$};
+			\node (h) at (9, -0.5) [bag] {$0$};
+			\node (i) at (9,0.5) [bag] {$44.75$};
+			\node (j) at (9,1.5) [bag] {$59.56$};
+   			\draw [-] (a) to node [below]{} (b);
+   			\draw [-] (a) to node [below]{} (c);
+   			\draw [-] (c) to node [below]{} (f);
+   			\draw [-] (c) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (e);
+   			\draw [-] (b) to node [below]{} (d);
+			\draw [-] (d) to node [below]{} (g);
+			\draw [-] (d) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (h);
+			\draw [-] (e) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (i);
+			\draw [-] (f) to node [below]{} (j);
+		\end{tikzpicture}
+	\end{center}
+
+Now we apply our European derivative formula.
+
+	\begin{align*}
+	D 	&=[59.56(p^*)^3+3\cdot 44.75 (p^*)^2q^*+3\cdot 0p^*(q^*)^2+0(q^*)^3]e^{-0.5\cdot 0.06}\\
+		&=[7.45+16.79]e^{-0.03}\\
+		&=23.52
+	\end{align*}
+
+\end{solution}
+
+This concludes our discussion of our movement models. They will be used for our binomial models going forward. In our next section, we will apply them to American and Asian options.
+
+\end{document}
