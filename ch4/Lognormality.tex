@@ -1,0 +1,123 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will learn a new model for stock prices.}
+
+\author{Brad Waller}
+
+%Section 4.1
+
+\title{Lognormality}
+
+\begin{document}
+
+\begin{abstract}
+Our binomial models were effective at handling almost all derivatives; however, their discrete nature was unrealistic. Here, we will learn about a continuous model that is related to those binomial models we discussed.
+\end{abstract}
+
+\maketitle
+
+In our last chapter, we saw the binomial model in many different situations. The model was very versatile; however, the computations could grow cumbersome when there are many periods. This difficulty is diminished with the growing power of computers. If we flex some of our probability muscles, we can show that our binomial models converge to a lognormal distribution. This term may be unfamiliar, but it isn't soo hard to analyze it when we write it down:
+
+\begin{equation*}
+S(T)=S(0)e^{(r-\delta-\sigma^2/2)T+\sigma\sqrt{T}\mathcal{N}(0,1)}
+\end{equation*}
+
+That is to say, the time $T$ price of an asset given the price today is given by a random variable with a standard normal distribution in the exponent. There is nothing obvious about this Prakash Balachandran gives some of the background \href{http://math.bu.edu/people/prakashb/Math/arliegeobm.pdf}{here}. There is a slight typo at the end, but that has been corrected in the formula given above. Fortunately (or not), the proof of the convergence is not within the scope of this course.
+
+The formula given above has been simplified a bit. A more general form is given below. It assumes you know the value of the asset at time $t$.
+
+\begin{equation*}
+S(T)=S(t)e^{(r-\delta-\sigma^2/2)(T-t)+\sigma\sqrt{T-t}\mathcal{N}(0,1)}
+\end{equation*}
+
+This will be our {\bf Black-Scholes model} for stock prices. Futures prices are defined similarly with the condition $r=\delta$ used as usual.  Now that we have a model, it is useful to answer questions regarding that model. This section will cover how to compute probabilities and percentiles.
+
+\begin{example}
+Determine the risk-free probability that an asset will be greater than 75 in three months under the following assumptions:
+	\begin{itemize}
+	\item $S(0)=70$
+	\item $\delta=0.01$
+	\item $\sigma=0.41$
+	\item $r=0.11$
+	\end{itemize}
+\end{example}
+
+\begin{solution}
+The probability is given by the computations below.
+
+	\begin{align*}
+	\mathbb{P}(S(1/4)>75) 	&=\mathbb{P}(70e^{(0.11-0.01-0.41^2/2)/4+0.41\sqrt{1/4}\mathcal{N}(0,1)}>75)\\
+					&=\mathbb{P}(e^{(0.01595)/4+0.205\mathcal{N}(0,1)}>75/70)\\
+					&=\mathbb{P}(0.004+0.205\mathcal{N}(0,1)>\ln75/70)\\
+					&=\mathbb{P}(0.205\mathcal{N}(0,1)>0.065)\\
+					&=\mathbb{P}(\mathcal{N}(0,1)>0.317)\\
+					&=\mathbb{P}(\mathcal{N}(0,1)<-0.317)\\
+					&=0.37558
+	\end{align*}
+
+
+This solution really hinged on knowledge of standard normal distributions. In the second to last line I used the symmetry of the standard normal distribution, and in the final line I used an online calculator. If you are using a table, you may arrive at a slightly different answer. That is fine. I will provide you with tables when you need one!
+
+\end{solution}
+
+
+It is natural to ask, ``Why would I ever care about this probability?'' One possible answer would be that it answers the investor's question, ``What is the probability that a three month, strike 75 European call is exercised?'' It also answers the question regarding the similar put (just apply the complement rule from probability). 
+
+Another thing to note is that this is a risk-free probability. When there is more than one possible probability measure in question (i.e. a rate of return is given), the risk-free measure will always have an asterisk (like this: $\mathbb{P}^*$). 
+
+Every probability question will be similar, in principle, so let's turn our attention to percentiles.
+
+\begin{definition}
+The $100p$ {\bf percentile} of a distribution $X$ is the value $\pi_p(X)$ such that
+	\begin{equation*}
+	\mathbb{P}(X<\pi_p(X))=p.
+	\end{equation*}
+The {\bf median} is the $50^{\text{th}}$ percentile.
+\end{definition}
+
+Oftentimes, it is necessary to give a more involved definition of a percentile. We will only care about percentiles for continuous distributions, so this is unnecessary. Our percentiles are always defined and unique when we use them.
+
+\begin{example}
+Compute the median for the $S(1/4)$ in the previous example.
+\end{example}
+
+\begin{solution}
+This sounds more involved than it really is. A wonderful simplification occurs when you observe that the median will occur for $S(1/4)$ exactly when the median for the standard normal random variable happens. That is when $\mathcal{N}(0,1)=0$. 
+
+	\begin{align*}
+	\pi_{0.5}(S(1/4)) 	&=70e^{(0.11-0.01-0.41^2/2)/4+0.41\cdot 1/2\cdot 0}\\
+				&=70e^{0.004}\\
+				&=70.28
+	\end{align*}
+\end{solution}
+
+Now you can practice!
+
+\begin{question}
+What is the probability that the same stock will exceed the three month median value in six months? (Intuitively, the result should be larger than 1/2 since $(r-\delta-\sigma^2/2)>0$.)
+
+\begin{equation*}
+\mathbb{P}(S(1/2)>\pi_{0.5}(S(1/4))=\answer{0.51}
+\end{equation*}
+\end{question}
+
+\begin{solution}
+There would be computations if the second example of this section didn't have the first piece.
+
+	\begin{align*}
+	\mathbb{P}(S(1/3)>70.28) 	&=\mathbb{P}(70e^{(0.11-0.01-0.41^2/2)/2+0.41\sqrt{1/2}\mathcal{N}(0,1)}>70.28)\\
+						&=\mathbb{P}(0.41\sqrt{1/2}\mathcal{N}(0,1)>-0.004)\\
+						&=\mathbb{P}(\mathcal{N}(0,1)>-0.0137)\\
+						&=\mathbb{P}(\mathcal{N}(01)<0.0137)\\
+						&=0.50547
+	\end{align*}
+
+This rounds to $0.51$, as the answer stated.
+\end{solution}
+
+Notice that our more general model did not apply since we weren't given any information about the asset at time $1/4$. We were only comparing two numbers that could be computed using the time zero value. 
+
+That concludes our work for this section. In the next section, we will expand our analysis of our model to expectations!
+\end{document}
