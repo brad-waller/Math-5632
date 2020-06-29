@@ -1,0 +1,175 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will compute the expectation of a lognormal random variable.}
+
+\author{Brad Waller}
+
+%Section 4.2
+
+\title{Favorite Expectation}
+
+\begin{document}
+
+\begin{abstract}
+Since our European derivatives formula relies on an expectation, we will establish that expectation for a lognormal random variable. This will pay dividends in the future.
+\end{abstract}
+
+\maketitle
+
+The Black-Scholes model easily prices European derivatives using the same principle that we used with the binomial models. The price of a derivative should be 
+
+\begin{equation*}
+\text{Derivative Price}=\mathbb{E}^*[\text{payoff}]e^{-rT}.
+\end{equation*}
+
+Since our asset follows a lognormal model, we will need to determine how to compute this expectation for calls and puts. We must start with our lognormal (Black-Scholes) model for our asset.
+
+\begin{equation*}
+\mathbb{E}^*[S(T)]=\mathbb{E}^*[S(0)e^{(r-\delta-\sigma^2/2)T+\sigma\sqrt{T}\mathcal{N}(0,1)}]
+\end{equation*}
+
+In our discussion here, we will deal with something a little more general. Let $Y=Me^{a+b\mathcal{N}(0,1)}$. We will compute the expectation of $Y$. To compute this expectation, we need the density function for the standard normal random variable.
+
+\begin{equation*}
+f(z)=\frac{1}{\sqrt{2\pi}}e^{-(z^2)/2}
+\end{equation*}
+
+The expectation of $Y$ is computed by integrating $Y$ against this density function.
+
+\begin{align*}
+\mathbb{E}[Y] 	&=\int_{-\infty}^{\infty}Me^{a+bz}f(z)\mathrm{d}z\\
+			&=\int_{-\infty}^{\infty}Me^{a+bz}\frac{1}{\sqrt{2\pi}}e^{-(z^2)/2}\mathrm{d}z\\
+			&=\frac{M}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-z^2/2+bz+a}\mathrm{d}z\\
+			&=\frac{M}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-(z^2-2bz-2a)/2}\mathrm{d}z\\
+			&=\frac{M}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-[(z-b)^2-b^2-2a]/2}\mathrm{d}z\\
+			&=\frac{M}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-(z-b)^2/2}e^{a+b^2/2}\mathrm{d}z\\
+			&=Me^{a+b^2/2}\int_{-\infty}^{\infty}\frac{1}{\sqrt{2\pi}}e^{-(z-b)^2/2}\mathrm{d}z\\
+\mathbb{E}[Y] 	&=Me^{a+\frac{b^2}{2}}\\
+			&=M\text{exp}\left(a+\frac{b^2}{2}\right)
+\end{align*}
+
+You may be wondering what happened to the integral. The reason the integral disappeared is that the argument represents a normal density function. It is shifted right by $b$. Also, I wrote the favorite expectation in two ways. The first is the way that I would usually write it. The second is to really emphasise that the argument $a+b^2/2$ lives in the exponent of the exponential.
+
+How does this help with our asset question? Well, under the Black-Scholes model we have that $a=(r-\delta-\sigma^2/2)T$ and $b=\sigma\sqrt{T}$. Let's see what this gives us.
+
+\begin{align*}
+\mathbb{E}^*[S(T)] 	&=S(0)e^{a+b^2/2}\\
+				&=S(0)e^{(r-\delta-\sigma^2/2)T+\sigma^2T/2}\\
+				&=S(0)e^{(r-\delta)T}
+\end{align*}
+
+This is wonderful! Under the Black-Scholes model, we have that the asset's expectation at time $T$ is the forward price of the asset. This is all worthy of a theorem.
+
+\begin{theorem}[Favorite Expectation]
+Let $Y=Me^{a+b\mathcal{N}(0,1)}$. Then we have the expectation below.
+	\begin{equation*}
+	\mathbb{E}[Y]=Me^{a+b^2/2}
+	\end{equation*}
+Furthermore, when we have $S$ under the Black-Scholes model, then the expectation is the forward price.
+	\begin{equation*}
+	\mathbb{E}^*[S(T)]=S(0)e^{(r-\delta)T}
+	\end{equation*}
+\end{theorem}
+
+This theorem seems like it isn't saying much, but it is quite powerful. Much of what we do for the remainder of this book will rely on this fact. Let's see how we can apply this theorem to some derivatives pricing.
+
+\begin{example}
+Suppose that we have an asset with the following parameters:
+
+	\begin{itemize}
+	\item $S(0)=5$
+	\item $\delta=0.02$
+	\item $\sigma=0.28$
+	\end{itemize}
+
+In addition, the risk-free rate is $r=0.08$. Compute the price of a derivative that pays $S(3/4)^2$ in nine months.
+\end{example}
+
+\begin{solution}
+The price is given by the formula for European derivatives. We must compute the risk-free expectation of the payoff and discount at the risk-free rate.
+
+	\begin{align*}
+	S(3/4)^2 			&=[5e^{(0.08-0.02-0.28^2/2)\cdot 3/4+0.28\sqrt{3/4}\mathcal{N}(0,1)}]^2\\
+					&=[5e^{0.0156+0.28\sqrt{3/4}\mathcal{N}(0,1)}]^2\\
+					&=25e^{0.0312+0.56\sqrt{3/4}\mathcal{N}(0,1)}\\
+	\mathbb{E}^*[S(3/4)^2] 	&=\mathbb{E}^*[25e^{0.0312+0.56\sqrt{3/4}\mathcal{N}(0,1)}]\\
+					&=25e^{0.0312+(0.56\sqrt{3/4})^2/2}\\
+					&=25e^{0.1488}\\
+					&=29.01
+	\end{align*}
+
+The price of the derivative is
+
+	\begin{equation*}
+	29.01e^{-0.08\cdot 3/4}=27.32
+	\end{equation*}
+\end{solution}
+
+You will notice that in the solution, I squared the stock price before computing the expectation. This is because I didn't want to falsely state that $\mathbb{E}[X^2]=\mathbb{E}[X]^2$. If this were the case, all variances would be zero!
+
+\begin{question}
+Compute the variance of $S(3/4)$, where $S$ satisfies all the conditions given in the previous example.
+
+	\begin{equation*}
+	\text{Var}(S(3/4))=\answer{1.66}
+	\end{equation*}
+\end{question}
+
+\begin{solution}
+The variance is given by the formula $\mathbb{E}[S(3/4)^2]-\mathbb{E}[S(3/4)]^2$. Since no rate of return is given, we must use the risk-free values. The example computed the first term, and we can use the theorem for the second term.
+
+	\begin{equation*}
+	\mathbb{E}[S(3/4)]=5e^{(0.08-0.02)\cdot 3/4}=5.23
+	\end{equation*}
+
+The variance is computed below.
+
+	\begin{align*}
+	\text{Var}(S(3/4)) 	&=\mathbb{E}[S(3/4)^2]-\mathbb{E}[S(3/4)]^2\\
+				&=25e^{0.1488}-[5e^{0.045}]^2\\
+				&=1.66
+	\end{align*}
+
+\end{solution}
+
+There are some people that love to study and memorize formulae. I am not one of them; however, the following is to cater to those types. The variance of an asset price can be determined by the parameters of the asset and the risk-free rate.
+
+\begin{align*}
+\mathbb{E}^*[S(T)^2] 		&=\mathbb{E}[S(0)^2e^{(r-\delta-\sigma^2/2)2T+2\sigma\sqrt{T}\mathcal{N}(0,1)}]\\
+					&=S(0)^2e^{(r-\delta-\sigma^2/2)2T+2\sigma^2T}\\
+					&=S(0)^2e^{[2(r-\delta)+\sigma^2]T}\\
+\mathbb{E}^*[S(T)]^2 		&=S(0)^2e^{2(r-\delta)T}\\
+\text{Var}(S(T)) 			&=S(0)^2e^{2(r-\delta)T}[e^{\sigma^2T}-1]\\
+					&=[F_{0,T}]^2[e^{\sigma^2T}-1]
+\end{align*}
+
+We have a lot we can do now, and we are finally equipped to handle harder questions regarding derivatives. It may seem like this new model is making things more complicated. That is not the case. Imagine trying to model the price of the derivative in this section using a 10 step binomial tree. That would require an immense amount of labor. The Black-Scholes model gets around all of that!
+
+If you really want a challenge, try to determine the price of a derivative that pays the square of the difference of the asset price and the median price in nine months. The asset is the only one we discussed in this section. For clarity, I give the payoff below.
+
+\begin{equation*}
+[S(3/4)-\pi_{0.5}(S(3/4))]^2
+\end{equation*}
+
+\begin{solution}
+First, compute the median.
+
+	\begin{equation*}
+	\pi_{0.5}(S(3/4))=5e^{(0.08-0.02-0.28^2/2)\cdot 3/4}=5.08
+	\end{equation*}
+
+Now we can compute the derivative's value by expanding the payoff and computing expectations term-by-term.
+
+	\begin{align*}
+	[S(3/4)-\pi_{0.5}(S(3/4))]^2 			&=S(3/4)^2-10.16S(3/4)+5.08^2\\
+	\mathbb{E}^*[(S(3/4)-\pi_{0.5}(S(3/4)))^2] 	&=\mathbb{E}^*[S(3/4)]-10.16\mathbb{E}^*[S(3/4)]+5.08^2
+	\end{align*}
+
+The two expectations have already been computed. Substitute them in and make sure to discount your result at the risk-free rate.
+\end{solution}
+
+That concludes our discussion of our favorite expectation. Remember, it is one of the most important formulae in this course. It will be used in the next section when we derive the famous Black-Scholes formula (sometimes called the Black-Scholes-Merton formula).
+
+\end{document}

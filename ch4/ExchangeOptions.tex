@@ -1,0 +1,270 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Exchange options will be discussed and related to the Black-Scholes formula.}
+
+\author{Brad Waller}
+
+%Section 4.6
+
+\title{Exchange Options}
+
+\begin{document}
+
+\begin{abstract}
+Usually, we exchange a currency for a financial instrument. In the setting of this section, we will exchange one asset for another. A generalized ideal of volatility will be introduced to handle this situation.
+\end{abstract}
+
+\maketitle
+
+An exchange option uses an interesting concept: you wish to buy some quantity of asset $S$ in the future, but you will use another asset as the currency at that point of time. To measure the price of such an asset today, we need a volatility between the two assets. The reason we need such a volatility is because our normal measures of volatility are measured with respect to some currency. 
+
+You may recall in our examples following the Black-Scholes formula that when dealing with currencies we had a volatility of the exchange. Our current framework is very similar to a currency problem. The only difference is that we will usually be given a correlation coefficient that relates the two assets. That coefficient is called rho, $\rho$. 
+
+Suppose that $R$ and $S$ are two assets with volatilities $\sigma_R$ and $\sigma_S$. The volatility between the two assets in our context will be given by the value
+
+\begin{equation*}
+\sigma^2=\sigma_R^2+\sigma_S^2-2\rho\sigma_R\sigma_S
+\end{equation*}
+
+This may not make sense. It is tempting to think that the signs should all be positive. The way I think about it is that if the prices of the assets are highly correlated ($\rho$ close to 1), then the volatility between the price of these assets should be small. Similarly, when the assets are highly negatively correlated ($\rho$ close to -1), then the volatility between the price of these assets should be large. The minus sign in the formula given accomplishes this. 
+
+This explanation is probably not satisfactory for many readers. I know it wouldn't be adequate for me! Let's see why such a formula should even exist. Recall how we estimated volatility when discussing binomial models. We can do something similar here for two assets, say $R$ and $S$. We will treat $R$ as the currency and $S$ as the asset. 
+
+Let $r_0$, $r_1$, ..., $r_n$, $s_0$, $s_1$, ..., and $s_n$ be the prices of $R$ and $S$ over some period ov time. In addition, we let $t_0=s_0/r_0$, $t_1=s_1/r_1$, ..., and $t_n=s_n/r_n$. This variable represents the number of shares of $R$ necessary to purchase $S$ at a given point in time. It is the volatility of this auxiliary variable that gives us our volatility.
+
+In what follows, $s^2$ represents sample variance and $\hat{\text{Cov}}$ represents sample covariance. For simplicity, we denote the natural logarithms of the successive quotients by $x_j$, $y_j$, and $z_j$. More concisely:
+
+\begin{align*}
+x_j 	&=\ln\frac{r_j}{r_{j-1}}\\
+y_j 	&=\ln\frac{s_j}{s_{j-1}}\\
+z_j 	&=\ln\frac{t_j}{t_{j-1}}
+\end{align*} 
+
+for $j=1,2,\dots, n$. We need to make an observation regarding the $z_j$.
+
+\begin{align*}
+z_j 	&=\ln\frac{t_j}{t_{j-1}}\\
+	&=\ln\frac{s_j/r_j}{s_{j-1}/r_{j-1}}\\
+	&=\ln\frac{s_j}{s_{j-1}}-\ln\frac{r_j}{r_{j-1}}\\
+	&=y_j-x_j
+\end{align*}
+
+Then we know that
+
+\begin{align*}
+s_x^2 	&=\frac{1}{n-1}\sum_{j=1}^n(x_j-\bar{x})^2\\
+s_y^2 	&=\frac{1}{n-1}\sum_{j=1}^n(y_j-\bar{y})^2\\
+s_z^2 	&=\frac{1}{n-1}\sum_{j=1}^n(z_j-\bar{z})^2\\
+		&=\frac{1}{n-1}\sum_{j=1}^n(y_j-x_j-\bar{y}+\bar{x})^2\\
+		&=\frac{1}{n-1}\sum_{j=1}^n[(x_j-\bar{x})^2+(y_j-\bar{y})^2-2(x_j-\bar{x})(y_j-\bar{y})]\\
+		&=\frac{1}{n-1}\sum_{j=1}^n(x_j-\bar{x})^2+\frac{1}{n-1}\sum_{j=1}^n(y_j-\bar{y})^2-2\frac{1}{n-1}\sum_{j=1}^n(x_j-\bar{x})(y_j-\bar{y})\\
+		&=s_x^2+s_y^2-2\widehat{\text{Cov}}(x,y)\\
+		&=s_x^2+s_y^2-2\rho s_xs_y
+\end{align*}
+
+It's at this last stage that we can make the necessary comparison to arrive at our formula. Recall that the sample variance is equal to the volatility squared multiplied by the unit of time for each measurement.
+
+\begin{align*}
+s_x 		&=\sigma_R\sqrt{h}\\
+s_y 		&=\sigma_S\sqrt{h}\\
+s_z 		&=\sigma\sqrt{h}\\
+s_z^2 	&=\sigma^2 h\\
+		&=s_x^2+s_y^2-2\rho s_xs_y\\
+		&=\sigma_R^2 h+\sigma_S^2 h-2\rho \sigma_R\sqrt{h}\sigma_S\sqrt{h}\\
+\sigma^2 	&=\sigma_R^2+\sigma_S^2-2\rho\sigma_R\sigma_S
+\end{align*}
+
+Now that we have convinced ourselves that this formula is true, we can proceed with an example!
+
+\begin{example}
+You currently own several shares of XYZ. You wish to purchase a call option to buy 3 shares of ABC using 2 shares of XYZ in four months. Denote XYZ by $R$ and ABC by $S$. You have the following information:
+
+	\begin{itemize}
+	\item $R(0)=42$ and $S(0)=29$
+	\item $\delta_R=0.01$ and $\delta_S=0.04$\\
+	\item $\sigma_R=0.3$ and $\sigma_S=0.4$\\
+	\item $\rho=-0.5$
+	\end{itemize}
+
+Determine the price of the call option.
+\end{example}
+
+\begin{solution}
+Everything from our usual Black-Scholes formula is replaced with information regarding $R$. Also, the quantities must be reflected in our formula. It follows that our modified formulae will be
+
+	\begin{align*}
+	d_1 		&=\frac{\ln\frac{3S(0)}{2R(0)}+(\delta_R-\delta_S+\sigma^2/2)/3}{\sigma\sqrt{1/3}}\\
+	d_2 		&=d_1-\sigma\sqrt{1/3}\\
+	c 		&=3S(0)e^{-\delta_S/3}\mathcal{N}(d_1)-2R(0)e^{-\delta_R/3}\mathcal{N}(d_1)
+	\end{align*}
+
+Let's determine $\sigma$.
+
+	\begin{align*}
+	\sigma^2 	&=\sigma_R^2+\sigma_S^2-2\rho\sigma_R\sigma_S\\
+			&=0.09+0.16-2\cdot (-0.5)\cdot 0.3\cdot 0.4\\
+			&=0.37
+	\end{align*}
+
+Now we can execute the Black-Scholes model.
+
+	\begin{align*}
+	d_1 		&=\frac{\ln\frac{87}{84}+(0.01-0.04+0.37/2)/3}{\sqrt{0.37/3}}\\
+			&=0.247\\
+	d_2 		&=d_1-\sqrt{0.37/3}\\
+			&=-0.104\\
+	c 		&=87e^{-0.04/3}\mathcal{N}(0.247)-84e^{-0.01/3}\mathcal{N}(-0.104)\\
+			&=85.85\cdot 0.59755-83.72\cdot 0.45858\\
+			&=12.91
+	\end{align*}
+\end{solution}
+
+This is really not that much more difficult than a typical Black-Scholes formula problem. There are two extra steps: determine the volatility from the given information, and identify which asset is acting as the currency. Since either asset can be used to purchase or sell the other one, we also have put call duality! The put to sell XYZ using ABC as currency will be intimitely related to the call from the example. See if you can determine the relationship!
+
+We won't go into that here. We will explore a different type of option: one that pays the maximum of the two assets. We will use the same assets as in the previous example.
+
+\begin{example}
+What is the price of the derivative that pays $\max\{3S(1/3), 2R(1/3)\}$ in four months?
+\end{example}
+
+\begin{solution}
+This really requires some manipulation on maximums.
+
+	\begin{equation*}
+	\max\{a,b\}=\max\{a-b,0\}+b
+	\end{equation*}
+
+If you don't believe this, consider the two cases: $a\geq b$ and $a<b$. If $a\geq b$, we have
+
+	\begin{equation*}
+	\max\{a-b,0\}+b=a-b+b=a=\max\{a,b\}.
+	\end{equation*}
+
+If $a<b$, we have
+
+	\begin{equation*}
+	\max\{a-b,0\}+b=0+b=b=\max\{a,b\}.
+	\end{equation*}
+
+We apply this to the payoff of our derivative. The payoff is
+
+	\begin{equation*}
+	\max\{3S(1/3),2R(1/3)\}=\max\{3S(1/3)-2R(1/3),0\}+2R(1/3)
+	\end{equation*}
+
+Notice that the maximum is of the form of a call option.
+
+	\begin{equation*}
+	\max\{3S(1/3)-K,0\}
+	\end{equation*}
+
+That means part of our payoff is simply the call from the previous example. The other part of the payoff is an asset. We know how to get that payoff at time $1/3$; We buy some quantity of $R$ at time zero that will grow into one share at time $1/3$. Thus our price is
+
+	\begin{equation*}
+	c+2R(0)e^{-\delta_R/3}=12.91+84e^{-0.01/3}=96.63
+	\end{equation*}
+
+\end{solution}
+
+Now try something similar!
+
+\begin{question}
+Determine the price of a derivative that pays $\min\{3S(1/3),2R(1/3)\}$ in four months. \textit{Hint: What happens when you add a minimum and a maximum of two variables?}
+\end{question}
+
+\begin{solution}
+The price of the derivative comes from the relationship
+
+	\begin{equation*}
+	\min\{a,b\}+\max\{a,b\}=a+b.
+	\end{equation*}
+
+We can relate the payoffs of our two derivatives.
+
+	\begin{align*}
+	\min\{3S(1/3),2R(1/3)\}+\max\{3S(1/3),2R(1/3)\} 	&=3S(1/3)+2R(1/3)\\
+	\min\{3S(1/3),2R(1/3)\}					&=3S(1/3)+2R(1/3)-\max\{3S(1/3),2R(1/3)\}\\
+									&=3S(1/3)-\max\{3S(1/3)-2R(1/3),0\}
+	\end{align*}
+
+The price of the derivative comes from computing the price of the two positions. We have the second one; it is the call from earlier!
+
+	\begin{equation*}
+	3S(0)e^{-\delta_S/3}-c=85.85-12.91=72.94
+	\end{equation*}
+\end{solution}
+
+The final option we are going to discuss is called a chooser option. The option has a payoff at time $t$ that is the maximum of a related call and put. The call and the put expire at time $T$, have the same underlying asset, the same strike, and they are both European. 
+
+To compute the price of the option, we must make our computations at time $t$, since that is the time that you choose whether you want the call or the put. Let's go ahead and compute that payoff here. The arguments here will emphasize the varibles that are significant.
+
+\begin{align*}
+\max\{c(t,T,K),p(t,T,K)\} 	&=\max\{c(t,T,K)-p(t,T,K),0\}+p(t,T,K)\\
+				&=\max\{S(t)e^{-\delta(T-t)}-Ke^{-r(T-t)},0\}+p(t,T,K)\\
+				&=e^{-\delta(T-t)}\max\{S(t)-Ke^{-(r-\delta)(T-t)},0\}+p(t,T,K)
+\end{align*}
+
+The second line follows from put-call parity. The final line is the result of factoring out the constant in front of the asset. 
+
+The last line is a payoff that gives us something to work with. The price of the chooser option comes from this. The second term is straight-forward. It is a put option with strike $K$ and expiration at time $T$. The first is a little trickier. The payoff resembles that of a call option. The option has some different terms. It expires at time $t$ and has strike $Ke^{-(r-\delta)(T-t)}$. It follows that the price of the chooser option is given by 
+
+\begin{equation*}
+e^{-\delta(T-t)}c(0,t,Ke^{-(r-\delta)(T-t)})+p(0,T,K)
+\end{equation*}
+
+We will finish with an example of a chooser option.
+
+\begin{example}
+You expect some price volatility of an asset, $S$, followed by a period of stability. Therefore, you are uncertain about whether you should purchase call options or put options for the asset. A chooser option may be ideal for you. You are given the following conditions:
+
+	\begin{itemize}
+	\item $S(0)=53$\\
+	\item $\delta=0.02$\\
+	\item $\sigma=0.54$\\
+	\item $r=0.05$
+	\end{itemize}
+
+You would like the options on $S$ to expire in six months and have strike $53$. You would like to choose the maximum of the two options in two months. Determine the price of the chooser option.
+\end{example}
+
+\begin{solution}
+This requires a bit of work since we are pricing two different options. Let's start with the put option.
+
+	\begin{align*}
+	d_1 		&=\frac{\ln\frac{53}{53}+(0.05-0.02+0.54^2/2)/2}{0.54\sqrt{1/2}}\\
+			&=0.230\\
+	d_2		&=d_1-0.54\sqrt{1/2}\\
+			&=-0.152\\
+	p 		&=53e^{-0.05/2}\mathcal{N}(0.152)-53e^{-0.02/2}\mathcal{N}(-0.230)\\
+			&=7.50
+	\end{align*}
+
+Now we can determine the price of the call from the formula.
+
+	\begin{align*}
+	d_1 		&=\frac{\ln\frac{53}{53e^{-(0.05-0.02)/3}}+(0.05-0.02+0.54^2/2)/6}{0.54\sqrt{1/6}}\\
+			&=0.178\\
+	d_2 		&=d_1-0.54\sqrt{1/6}\\
+			&=-0.042\\
+	c 		&=53e^{-0.02/6}\mathcal{N}(0.178)-53e^{-(0.05-0.02)/3}e^{-0.05/6}\mathcal{N}(-0.042)\\
+			&=5.01
+	\end{align*}
+
+The price of the option is
+
+	\begin{equation*}
+	e^{-0.02/3}\cdot 5.01+7.50=12.48
+	\end{equation*}
+\end{solution}
+
+That was kind of painful, but it was all using principles we developed in this section in conjunction with parity and the Black-Scholes formula. In some writings, you will see a slightly different formula for the price of the chooser option.
+
+\begin{equation*}
+e^{-\delta(T-t)}p(0,t,Ke^{-(r-\delta)(T-t)})+c(0,T,K)
+\end{equation*}
+
+The development of this version follows the same arguments we used. The only difference is that the put-call parity relationship is used in its negative form. I don't think this is nearly as clear, so I avoided using it. If you want to add some work to your life, see that you get the same result as in the example.
+
+\end{document}

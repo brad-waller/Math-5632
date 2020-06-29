@@ -1,0 +1,171 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Knowledge of the Black-Scholes formula will be gained.}
+
+\author{Brad Waller}
+
+%Section 4.3
+
+\title{The Black-Scholes Formula}
+
+\begin{document}
+
+\begin{abstract}
+Now that we have our favorite expectation, we can derive the Black-Scholes formula. It doesn't require anything more than some elementary probability theory; however, the computations are involved.
+\end{abstract}
+
+\maketitle
+
+In the last section, we computed the prices of several derivatives. We were fortunate in that the derivatives always paid a power of the underlying asset's price. Unfortunately, that is not how call and put options operate. These derivatives have payoffs that are computed using piecewise functions. Therefore, any computation of expectation will require a piecewise function. We will proceed as we did in the last section by using a generic lognormal random variable. Then we will use the special cases given under the Black-Scholes model to derive our formula. 
+
+Before we begin the mathematical argument for the Black-Scholes formula, we will make some (strange) definitions. 
+
+\begin{definition}
+Two important quantities in our arguments will be useful. 
+	\begin{align*}
+	D_1 	&=\frac{\ln\frac{M}{K}+a}{b}+b\\
+	D_2 	&=\frac{\ln\frac{M}{K}+a}{b}
+	\end{align*}
+\end{definition}
+
+Also, recall our generic lognormal model $Y=Me^{a+b\mathcal{N}(0,1)}$ We are going to compute
+
+\begin{equation*}
+\mathbb{E}[\max\{Y-K,0\}].
+\end{equation*}
+
+This won't take too much effort beyond what we did in the last section. First, we will need to know when the lognormal variable $Y$ is greater than $K$.
+
+\begin{align*}
+\mathbb{P}(Y>K) 	&=\mathbb{P}(Me^{a+b\mathcal{N}(0,1)}>K)\\
+			&=\mathbb{P}\left(e^{a+b\mathcal{N}(0,1)}>\frac{K}{M}\right)\\
+			&=\mathbb{P}\left(a+b\mathcal{N}(0,1)>\ln\frac{K}{M}\right)\\
+			&=\mathbb{P}\left(\mathcal{N}(0,1)>\frac{\ln\frac{K}{M}-a}{b}\right)\\
+			&=\mathbb{P}(\mathcal{N}(0,1)>-D_2)
+\end{align*}
+
+This may not seem too important, but it answers the question, ``When does a call option have a non-zero payoff?'' The answer is, ``When the normal random variable in the exponent is larger than $-D_2$.'' This will give us the lower bound on our integral when we are computing the expectation that is the target of this section. 
+
+Now that we know the bounds on our integral, we may compute the desired expectation. Since some of the computations would require completing the square (as we saw in the last section), those steps are suppressed. 
+
+\begin{align*}
+\mathbb{E}[\max\{Y-K,0\}] 	&=\int_{-D_2}^\infty [Me^{a+bz}-K]\frac{1}{\sqrt{2\pi}}e^{z^2/2}\mathrm{d}z\\
+					&=\int_{-D_2}^\infty Me^{a+bz}\frac{1}{\sqrt{2\pi}}e^{z^2/2}\mathrm{d}z-\int_{-D_2}^\infty K\frac{1}{\sqrt{2\pi}}e^{z^2/2}\mathrm{d}z\\
+					&=\int_{-D_2}^\infty Me^{a+b^2/2}\frac{1}{\sqrt{2\pi}}e^{-(z-b)^2/2}\mathrm{d}z -K\mathbb{P}(\mathcal{N}(0,1)>-D_2)\\
+					&=Me^{a+b^2/2}\int_{-D_2-b}^\infty\frac{1}{\sqrt{2\pi}}e^{-u^2/2}\mathrm{d}z-K\mathbb{P}(\mathcal{N}(0,1)>-D_2)\\
+					&=Me^{a+b^2/2}\mathbb{P}(\mathcal{N}(0,1)>-D_1)-K\mathbb{P}(\mathcal{N}(0,1)>-D_2)
+\end{align*}
+
+There is something unappealing about all these negative $D_1$ and $D_2$ terms. Observe that all of the probabilities in question are survivals. These are great; however, normal tables are in terms of cumulative distributions functions. We need to write them that way. Fortunately, the standard normal random variable is symmetric. The tails all have equal probabilities. That means that we can drop the negative signs by switching the inequalities as such:
+
+\begin{equation*}
+\mathbb{E}[\max\{Y-K,0\}]=Me^{a+b^2/2}\mathbb{P}(\mathcal{N}(0,1)<D_1)-K\mathbb{P}(\mathcal{N}(0,1)<D_2)
+\end{equation*}
+
+We make one further modification. Instead of writing the probabilities as I have above, we will begin writing them as $\mathcal{N}(D_1)$ and $\mathcal{N}(D_2)$. Our expectation becomes
+
+\begin{equation*}
+\mathbb{E}[\max\{Y-K,0\}]=Me^{a+b^2/2}\mathcal{N}(D_1)-K\mathcal{N}(D_2)
+\end{equation*}
+
+Our general Black-Scholes formula is derived by taking a present value of the above.
+
+\begin{equation*}
+\text{``call'' price}=\left[Me^{a+b^2/2}\mathcal{N}(D_1)-K\mathcal{N}(D_2)\right]e^{-rT}
+\end{equation*}
+
+The quotation marks indicate that the payoff in question simply looks like that of a call. When we use our Black-Scholes model, the marks will be dropped. Under the model, we have that $a=(r-\delta-\sigma^2/2)T$, $b=\sigma\sqrt{T}$, and $M=S(0)$. For this model, we use lowercase letters $d_1$ and $d_2$ in place of $D_1$ and $D_2$, respectively. 
+
+\begin{align*}
+d_1 	&=\frac{\ln\frac{S(0)}{K}+(r-\delta-\sigma^2/2)T}{\sigma\sqrt{T}}+\sigma\sqrt{T}\\
+	&=\frac{\ln\frac{S(0)}{K}+(r-\delta+\sigma^2/2)T}{\sigma\sqrt{T}}\\
+d_2 	&=\frac{\ln\frac{S(0)}{K}+(r-\delta-\sigma^2/2)T}{\sigma\sqrt{T}}\\
+	&=d_1-\sigma\sqrt{T}\\
+c 	&=\left[S(0)e^{(r-\delta)T}\mathcal{N}(d_1)-K\mathcal{N}(d_2)\right]e^{-rT}\\
+	&=S(0)e^{-\delta T}\mathcal{N}(d_1)-Ke^{-rT}\mathcal{N}(d_2)
+\end{align*}
+
+This may seem like a lot, but if you just remember that $d_2$ comes from the probability that the call has a non-zero payoff then you can generate the values $d_1$ and $d_2$ from scratch. Additionally, the price of a call looks very similar to the right-hand side of put-call parity. In fact, if you cover up $\mathcal{N}(d_1)$ and $\mathcal{N}(d_2)$, then you have the right-hand side!
+
+It would be wonderful if this was everything, but there is actually so much more! We could determine the price of a cash-or-nothing call option. 
+
+\begin{align*}
+\mathbb{E}[1_{\{S(T)>K\}}] 	&=\int_{-d_2}^\infty \frac{1}{\sqrt{2\pi}}e^{-z^2/2}\mathrm{d}z\\
+				&=\mathcal{N}(d_2)
+\end{align*}
+
+We can also compute the price of an asset-or-nothing call option. This was accomplished earlier, and the result is
+
+\begin{equation*}
+\text{asset-or-nothing call price}=S(0)e^{-\delta T}\mathcal{N}(d_1).
+\end{equation*}
+
+If you aren't convinced, simply add $K$ cash-or-nothing call options to our call price formula. 
+
+We can come up with all sorts of similar formula for our put options, but we want to be a little more efficient. You can use parity relationships to derive all of them. Let's do this with ordinary calls and puts.
+
+\begin{align*}
+c-p 											&=S(0)e^{-\delta T}-Ke^{-rT}\\
+S(0)e^{-\delta T}\mathcal{N}(d_1)-Ke^{-rT}\mathcal{N}(d_2)-p 		&=S(0)e^{-\delta T}-Ke^{-rT}\\
+S(0)e^{-\delta T}[\mathcal{N}(d_1)-1]-Ke^{-rT}[\mathcal{N}(d_2)-1] 	&=p\\
+Ke^{-rT}[1-\mathcal{N}(d_2)]-S(0)e^{-\delta T}[1-\mathcal{N}(d_1)] 	&=p\\
+Ke^{-rT}\mathcal{N}(-d_2)-S(0)e^{-\delta T}\mathcal{N}(-d_1) 		&=p
+\end{align*}
+
+Let's wrap everything up in two theorems: the first will be more general while the second will be more expansive.
+
+\begin{theorem}[General Black-Scholes]
+Let $Y=Me^{a+b\mathcal{N}(0,1)}$, $D_1$ and $D_2$ be as in the definition. The price of a derivative that pays $\max\{Y-K,0\}$ at time $T$ is
+
+	\begin{equation*}
+	\left[Me^{a+b^2/2}\mathcal{N}(D_1)-K\mathcal{N}(D_2)\right]e^{-rT}.
+	\end{equation*}
+The price of a derivative that pays $\max\{K-Y,0\}$ at time $T$ is
+
+	\begin{equation*}
+	\left[K\mathcal{N}(-D_2)-Me^{a+b^2/2}\mathcal{N}(-D_1)\right]e^{-rT}.
+	\end{equation*}
+\end{theorem}
+
+\begin{theorem}[Black-Scholes Formulae]
+Under the Black-Scholes model, we have the following prices of our options:
+	\begin{enumerate}
+	\item Our regular options have prices
+		\begin{align*}
+		c 	&=S(0)e^{-\delta T}\mathcal{N}(d_1)-Ke^{-rT}\mathcal{N}(d_2)\\
+		p 	&=Ke^{-rT}\mathcal{N}(-d_2)-S(0)e^{-\delta T}\mathcal{N}(-d_1)
+		\end{align*}
+	\item Our cash-or-nothing options have prices
+		\begin{align*}
+		c_{C/N} 	&=e^{-rT}\mathcal{N}(d_2)\\
+		p_{C/N} 	&=e^{-rT}\mathcal{N}(-d_2)
+		\end{align*}
+	\item Our asset-or-nothing options have prices
+		\begin{align*}
+		c_{A/N} 	&=S(0)e^{-\delta T}\mathcal{N}(d_1)\\
+		p_{A/N} 	&=S(0)e^{-\delta T}\mathcal{N}(-d_1)
+		\end{align*}
+	\end{enumerate}
+In all of these formulae, $d_1$ and $d_2$ are the same.
+	\begin{align*}
+	d_1 	&=\frac{\ln\frac{S(0)}{K}+(r-\delta+\sigma^2/2)T}{\sigma\sqrt{T}}\\
+	d_2 	&=\frac{\ln\frac{S(0)}{K}+(r-\delta-\sigma^2/2)T}{\sigma\sqrt{T}}
+	\end{align*}
+\end{theorem}
+
+In the event that we are given $S(t)$, we would replace $S(0)$ with that value. In addition, all the the $T$'s that appear in the theorems would be replaced with $T-t$. That will seldom happen, so it isn't worth writing down all six of those formulae. Just know that it's a possibility. 
+
+A lot was covered in this section. The theorems are what you will need to know. Our next section will explore several examples of these theorems in action.
+
+
+
+
+
+
+
+
+
+
+\end{document}

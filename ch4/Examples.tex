@@ -1,0 +1,162 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We will see some elementary applications of the Black-Scholes formula.}
+
+\author{Brad Waller}
+
+%Section 4.4
+
+\title{Examples}
+
+\begin{document}
+
+\begin{abstract}
+Our last section derived the Black-Scholes formula. It is here that we will see some applications. They are very straight-forward.
+\end{abstract}
+
+\maketitle
+
+Now that we have the Black-Scholes formula, we should see several examples. We will cover assets, currencies, and futures in this section. They are all really the same; however, it is good to see these to remind you that they exist.
+
+\begin{example}
+Today's price of an asset is $140$. The dividend rate is $\delta=0.02$, and the volatility is $\sigma=0.43$. Determine the price of a three month, strike $150$ European call option under the Black-Scholes model if the risk-free rate is $9\%$.
+\end{example}
+
+\begin{solution}
+It is best to use the more expansive theorem of the previous section for this example. We begin with $d_1$ and $d_2$ then move on to the call formula.
+
+	\begin{align*}
+	d_1 	&=\frac{\ln\frac{S(0)}{K}+(r-\delta+\sigma^2/2)T}{\sigma\sqrt{T}}\\
+		&=\frac{\ln\frac{140}{150}+(0.09-0.02+0.43^2/2)\cdot 0.25}{0.43\sqrt{0.25}}\\
+		&=-0.132\\
+	d_2 	&=d_1-\sigma\sqrt{T}\\
+		&=-0.132-0.43/1\\
+		&=-0.347\\
+	c 	&=S(0)e^{-\delta T}\mathcal{N}(d_1)-Ke^{-rT}\mathcal{N}(d_2)\\
+		&=140e^{-0.005}\mathcal{N}(-0.132)-150e^{-0.0225}\mathcal{N}(-0.347)\\
+		&=139.30\cdot 0.44749 - 146.66 \cdot 0.36430\\
+		&=8.91
+	\end{align*}
+\end{solution}
+
+This is, essentially, how every Black-Scholes formula problem will go. You just need to identify what the problem is asking for! Why don't you try the following question.
+
+\begin{question}
+What is the risk-free probability that the previous call is profitable?
+
+The risk-free probability that the call is profitable is $\answer{0.27}$.
+\end{question}
+
+\begin{solution}
+This might seem like it is in the wrong section; however, we use many of the ideas that are tied in with the Black-Scholes formula. The call will be profitable if the payoff is greater than the future value of the price:
+
+	\begin{equation*}
+	8.91e^{0.09\cdot 0.25}=9.11.
+	\end{equation*}
+
+The payoff will be greater than this amount precisely when the stock's value is that much larger than the strike at time $1/4$. That is to say when
+	
+	\begin{equation*}
+	S(1/4)\geq 150+9.11=159.11.
+	\end{equation*}
+
+To solve this question, we only need to determine $\mathcal{N}(d_2)$ when the strike is $159.11$.
+
+	\begin{align*}
+	d_2 			&=\frac{\ln\frac{140}{159.11}+(0.09-0.02-0.43^2)\cdot 0.25}{0.43\sqrt{0.25}}\\
+				&=-0.621\\
+	\mathcal{N}(d_2) 	&=0.267
+	\end{align*}
+\end{solution}
+
+Notice the words ``risk-free'' probability used in the question. In the event that there is no language like this, you would use $\alpha$, the asset's rate of return (assuming that you have that information or can derive it). 
+
+Let's turn our attention to a futures example.
+
+\begin{example}
+You wish to make a derivative that has a payoff based on some futures index, $F$, of $\max\{100-F(1/12)^2,0\}$ at the end of one month. Currently, the futures value is $7$ and the volatility is $0.54$. The risk-free rate is $0.06$. What should the price of your derivative be under the Black-Scholes model?
+\end{example}
+
+\begin{solution}
+This problem requires the use of the more general Black-Scholes formula. The derivative pays like a put. We need to determine what $F(1/12)^2$ looks like.
+
+	\begin{align*}
+	F(1/12) 	&=7e^{(-0.54^2/2)/12+0.54\sqrt{1/12}\mathcal{N}(0,1)}\\
+	F(1/12)^2 	&=49e^{-0.0243+1.08\sqrt{1/12}\mathcal{N}(0,1)}\\
+	M 		&=49\\
+	a 		&=-0.0243\\
+	b 		&=1.08\sqrt{1/12}\\
+	K 		&=100
+	\end{align*}
+
+Now that we have made all the necessary identifications, we can proceed with the formula. The option in this example pays like a put option.
+
+	\begin{align*}
+	D_1 	&=\frac{\ln\frac{M}{K}+a}{b}+b\\
+		&=\frac{\ln\frac{49}{100}-0.0243}{1.08\sqrt{1/12}}+1.08\sqrt{1/12}\\
+		&=-2.054
+	\end{align*}
+	
+	\begin{align*}
+	D_2 	&=\frac{\ln\frac{M}{K}+a}{b}\\
+		&=-2.366\\
+	p 	&=\left[K\mathcal{N}(-D_2)-Me^{a+b^2/2}\mathcal{N}(-D_1)\right]e^{-rT}\\
+		&=\left[100\mathcal{N}(2.366)-49e^{-0.0243+(1.08\sqrt{1/12})^2/2}\mathcal{N}(2.054)\right]e^{-0.06/12}\\
+		&=\left[100\cdot 0.99109-50.21\cdot 0.98001\right]e^{-0.005}\\
+		&=49.66
+	\end{align*}
+
+\end{solution}
+
+Now that we have seen assets and futures, we can tackle currency exchanges.
+
+\begin{example}
+You are speculating in the currencies exchange between the United States and Japan. It is your belief that the dollar will fall with respect to the yen. You would like to buy $1,000,000$ yen if your belief is correct. The current price of one yen is $\$0.0093$. You would like to buy $1,000,000$ asset-or-nothing options to buy the yen at a strike of $\$0.0125$ in two months. You know that the dollar's risk-free rate is $r_d=0.03$, and the yen's risk-free rate is  $r_y=0.07$. In addition, you assume that the volatility of the exchange is $\sigma=0.38$. What is the price of the options to buy yen?
+\end{example}
+
+\begin{solution}
+This is very similar to the first example of this section. In fact, in some ways it is easier.
+
+	\begin{align*}
+	d_1 			&=\frac{\ln\frac{0.0093}{0.0125}+(0.03-0.07+0.38^2/2)/6}{0.38\sqrt{1/6}}\\
+				&=-1.872\\
+	c_{A/N} 		&=S(0)e^{-\delta T}\mathcal{N}(d_1)\\
+				&=0.0093e^{-0.07/6}\cdot 0.03060\\
+				&=0.00028\\
+	1,000,000c_{A/N} 	&=281.28
+	\end{align*}
+
+\end{solution}
+
+I stored many of the values in my calculator when doing the previous problem. This is necessary since I am multiplying the resulting value from the call calculation by $1,000,000$. I did end up rounding $d_1$ to three decimal places. You can usually get away with two decimal places since normal tables typically go to two places. I am using an online calculator in my computations. The result I get by hand is slightly different than the one I get by using Excel. In Excel, my result is $281.57$. You shouldn't worry about such small differences. I know I won't!
+
+Since we just demonstrated how to handle a Black-Scholes problem using currencies, it is only fitting that you should get a chance.
+
+\begin{question}
+Suppose that you are examining two calls. The first is in the United States, and the second is in the United Kingdom. The conditions on the first asset and call are $S_1(0)=50$, $\delta_1=0.04$, and $K_1=55$. The U.S. risk-free rate is $r_1=0.08$. The conditions on the second asset and call are $S_2(0)=110$, $\delta_2=0.02$, and $K_2=121$. The U.K. risk-free rate is $r_2=0.06$. Each option is European and expires in six months. Each asset is assumed to have the same volatility. You know that the dollar-denominated price of the first call is $2.92$. What must the pound-denominated price of the second option be?
+
+The pound-denominated price of the second option is $\answer{6.49}$.
+\end{question}
+
+\begin{solution}
+This is one of those problems where it seems like you aren't given enough information. There are two possible approaches: first try to back out the value for the volatility using some sort of software/tricks, and the second is that there must be some observation that simplifies this problem. We will the first method in the next section when we discuss implied volatility. The second is the approach we take here. Notice that under the assumptions of the problem we have that the $d_1$ and $d_2$ values are identical for each option. Let's write down each Black-Scholes formula.
+
+	\begin{align*}
+	c_1 			&=2.92\\
+				&=50e^{-0.02}\mathcal{N}(d_1)-55e^{-0.04}\mathcal{N}(d_2)\\
+	c_2 			&=110e^{-0.01}\mathcal{N}(d_1)-121e^{-0.03}\mathcal{N}(d_2)\\
+	\frac{c_2}{c_1} 	&=\frac{110e^{-0.01}\mathcal{N}(d_1)-121e^{-0.03}\mathcal{N}(d_2)}{50e^{-0.02}\mathcal{N}(d_1)-55e^{-0.04}\mathcal{N}(d_2)}\\
+				&=2.2e^{0.01}\\
+	c_2 			&=2.2e^{0.01}c_1\\
+				&=6.49
+	\end{align*}
+
+\end{solution}
+
+In case you are curious, I did use the Black-Scholes formula to check the values for the previous problem. I used a volatility of $\sigma=32$ for each option. 
+
+That concludes our section covering some basic examples of the Black-Scholes formula. Our next section will give some more involved examples. We will derive the put-call duality formula from our Black-Scholes formula. Please try this before you proceed to that section. Additionally, we will see implied volatility and gap options.
+
+\end{document}
