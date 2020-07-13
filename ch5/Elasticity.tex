@@ -1,0 +1,173 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Learn how money spent on certain options can amplify returns.}
+
+\author{Brad Waller}
+
+%Section 5.3
+
+\title{Elasticity}
+
+\begin{document}
+
+\begin{abstract}
+We explore the economic concept of elasticity and how it applies to our call and put options. This can be viewed as a first order estimate in changes to portfolio values.
+\end{abstract}
+
+\maketitle
+
+In our last section, we derived the values of delta, gamma, and theta for our call and put options. Delta gives a way of determining the approximate change in the derivative's price relative to the change in the underlying asset. We will see more of that when we cover approximations. Before that, though, we can take another perspective: what is the percentage change in our derivatives relative to percentage changes in the price of the underlying asset? In words, this is volatility. Mathematically, we have the definition below.
+
+\begin{definition}
+The {\bf elasticity} of a portfolio is denoted $\Omega_P$. It is given by the following:
+	\begin{equation*}
+	\Omega_P=\frac{\Delta_P}{P}\cdot S
+	\end{equation*}
+\end{definition}
+
+Perhaps you are not convinced that the english above translates to the term from the definition. Let's explore why this holds.
+
+\begin{align*}
+\Omega_P 		&=\frac{\%\text{change in portfolio}}{\% \text{change in }S}\\
+			&=\frac{\text{change in portfolio}/\text{original portfolio value}}{\text{change in }S/\text{original value of }S}\\
+			&=\frac{\text{change in portfolio}}{\text{change in }S}\cdot \frac{S}{P}\\
+			&=\Delta_P\cdot\frac{S}{P}
+\end{align*}
+
+The last step is the conversion from the change over a period of time to that of an instantaneous change as we would see in calculus 1. 
+
+Before we see some examples of elasticity, let's work out a couple of properties. Let $D_1$, $D_2$, ... and $D_n$ be $n$ derivatives in a portfolio with quantities $a_1$, $a_2$, ... and $a_n$, respectively. Then the value of the portfolio will be
+
+\begin{equation*}
+P=\sum_{j=1}^na_jD_j.
+\end{equation*}
+
+From this and properties of the derivative, we can easily deduce the delta, gamma, and theta values of the portfolio:
+
+\begin{align*}
+\Delta_P 	&=\sum_{j=1}^n a_j\Delta_j,\\
+\Gamma_P 	&=\sum_{j=1}^n a_j\Gamma_j,\text{ and}\\
+\Theta_P 	&=\sum_{j=1}^n a_j\Theta_j.
+\end{align*}
+
+Unfortunately, the same does not hold for elasticity. Recall from the definition, we have that the elasticity of the portfolio has the delta value in the numerator and the whole portfolio in the denominator. We will assume that the portfolio's value is not $0$ for our argument.
+
+\begin{align*}
+\Omega_P 		&=\frac{\Delta_P}{P}\cdot S\\
+			&=\frac{\sum_{j=1}^n a_j \Delta_j}{P}\cdot S\\
+			&=\left[\sum_{j=1}^n\frac{a_j \Delta_j}{P}\right]\cdot S\\
+			&=\left[\sum_{j=1}^n\frac{a_j \Delta_j}{a_j D_j}\cdot\frac{a_j D_j}{P}\right]\cdot S\\
+			&=\left[\sum_{j=1}^n \frac{\Delta_j}{D_j}\cdot S\cdot\frac{a_j D_j}{P}\right]\\
+			&=\sum_{j=1}^n a_j\Omega_j\cdot \frac{D_j}{P}\\
+			&\not=\sum_{j=1}^n a_j\Omega_j
+\end{align*}
+
+While the argument above demonstrates the lack of additivity of elasticity, I feel that the result may stick a little better if we had a concrete example.
+
+\begin{example}
+Let $S=60$, $\delta=0.03$, $\sigma=0.22$, $r=0.07$. A portfolio consists of a call and a put with identical terms. They are both European, expire in two months, and they have strike 58. Verify that the portfolio's elasticity is not the sum of the two elasticities.
+\end{example}
+
+\begin{solution}
+We need the values $c$, $p$, $\Delta_c$, and $\Delta_p$. From there, we can compute everything necessary. I will spare the details of all the computations and just give the necessary values.
+
+	\begin{align*}
+	c 		&=3.49\\
+	p 		&=1.12\\
+	\Delta_c 	&=0.6868\\
+	\Delta_p 	&=-0.3082\\
+	\Omega_c 	&=\frac{0.6868}{3.49}\cdot 60\\
+			&=11.81\\
+	\Omega_p 	&=\frac{-0.3082}{1.12}\cdot 60\\
+			&=-16.51
+	\end{align*}
+We have the preliminary values. Now, we will determine the elasticity of the portfolio.
+
+	\begin{align*}
+	P 		&=c+p\\
+			&=4.61\\
+	\Delta_P 	&=\Delta_c+\Delta_P\\
+			&=0.3786\\
+	\Omega_P 	&=\frac{0.3786}{4.61}\cdot 60\\
+			&=4.93\\
+			&\not=11.81-16.51
+	\end{align*}
+\end{solution}
+
+We can use this example a little more. That will help in our interpretation of elasticity. Suppose that the asset rose in value by $3$. That should have an effect on the call and the put from our example. Since elasticity is a quotient of percentages, we can estimate the change of the call and the put.
+
+The change in the asset's value (as a percent) is $3/60=5$. We would estimate that the change in the call's value should be
+
+\begin{equation*}
+5\cdot \Omega_c 	=59.05
+\end{equation*}
+ 
+percent. In cash value, this would be a change from $3.49$ to $1.5905\cdot 3.49=5.55$. Using the Black-Scholes value, we should have 5.81. The estimate from volatility isn't too bad! It is a little lacking since we aren't using higher order derivatives. For completeness, let's do the same computation for the put.
+
+\begin{equation*}
+5\cdot \Omega_p 	=-82.55
+\end{equation*}
+
+The put's estimated value is $0.1745\cdot 1.12=0.20$. Again, the actual Black-Scholes value is $0.45$.
+
+Let's conclude with some properties of of $\Omega_c$ and $\Omega_p$.
+
+\begin{theorem}
+For European calls and puts, we always have the following:
+	\begin{enumerate}
+	\item $\Omega_c>1$
+	\item $\Omega_p<0$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We begin with the elasticity of a call.
+	\begin{align*}
+	\Omega_c 	&=\frac{\Delta_c}{c}S\\
+			&=\frac{S\Delta_c}{c}\\
+			&>\frac{S\Delta_c-Ke^{-rT}\mathcal{N}(d_2)}{c}\\
+			&=\frac{c}{c}\\
+			&=1
+	\end{align*}
+The same argument does not readily apply to a put option. The result follows since $\Delta_p<0$.
+\end{proof}
+
+It may seem like there should be a better bound for the elasticity of a put option; however, the elasticity of a put can be very close to 0. By taking our example earlier and changing the value of the asset to a number very close to zero gives an elasticity that is also close to zero. The theorem is as good as we can get. Also, taking $S$ to be very large gives a call elasticity that is close to one.
+
+Since we did some approximation in this section, it is only fitting that we explore approximation to a greater extent. Our approximation theorems are the subject of our next section.
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,196 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Understand how a portfolio's value changes over time.}
+
+\author{Brad Waller}
+
+%Section 5.1
+
+\title{Portfolio Changes}
+
+\begin{document}
+
+\begin{abstract}
+Much of our work has been dedicated to understanding how to determine the price of a derivative now. Here, we examine how those very same derivatives change in value. There are two variables we focus on: asset value and time value.
+\end{abstract}
+
+\maketitle
+
+Now that we have the tools necessary to determine the price of our derivatives, we will begin to look at what happens to collections of these derivatives. By their very nature, derivative prices are sensitive to the value of the underlying asset. A portfolio is simply a collection of financial instruments. Our portfolios will consist of derivatives, assets, and bonds. 
+
+Let's explore what happens to a portfolio's value as the asset changes in value and time varies. Our portfolio will consist of 100 written calls, 60 shares of the underlying asset and a loan of $3,000$. The conditions determining our values will be
+
+\begin{itemize}
+\item $S(0)=70$
+\item $\delta=0.03$
+\item $\sigma=0.35$
+\item $r=0.09$
+\end{itemize} 
+
+In addition, the calls are European, have strike $68$ and expire in one month. 
+
+The first thing we should determine is the value of the portfolio. The loan represents a debt at the risk-free rate. My computations below will be more direct than usual. That is because I feel that you are more capable of filling in the pieces!
+
+\begin{align*}
+d_1 		&=\frac{\ln\frac{70}{68}+(0.09-0.03+0.35^2/2)/12}{0.35\sqrt{1/12}}\\
+		&=0.387\\
+d_2 		&=\frac{\ln\frac{70}{68}+(0.09-0.03-0.35^2/2)/12}{0.35\sqrt{1/12}}\\
+		&=0.286\\
+c 		&=70e^{-0.03/12}\mathcal{N}(0.387)-68e^{-0.09/12}\mathcal{N}(0.286)\\
+		&=4.0878
+\end{align*}
+
+Now we can compute the portfolio value. $P$ will denote the portfolio's value. The first argument is that of time, and the second is that of the asset's value.
+
+\begin{align*}
+P(0,70) 	&=-100\cdot 4.0878+60\cdot 70-3000\\
+		&=791.22
+\end{align*}
+
+If the underlying asset's value changed immediately, the portfolio's value would also experience a change. Let's examine what happens when the asset both increases or decreases by 2 in value. We'll do the increase first.
+
+\begin{align*}
+d_1 		&=\frac{\ln\frac{72}{68}+(0.09-0.03+0.35^2/2)/12}{0.35\sqrt{1/12}}\\
+		&=0.666\\
+d_2 		&=\frac{\ln\frac{72}{68}+(0.09-0.03-0.35^2/2)/12}{0.35\sqrt{1/12}}\\
+		&=0.565\\
+c 		&=72e^{-0.03/12}\mathcal{N}(0.666)-68e^{-0.09/12}\mathcal{N}(0.565)\\
+		&=5.4850
+\end{align*}
+
+Now the decrease.
+
+\begin{align*}
+d_1 		&=\frac{\ln\frac{68}{68}+(0.09-0.03+0.35^2/2)/12}{0.35\sqrt{1/12}}\\
+		&=0.100\\
+d_2 		&=\frac{\ln\frac{68}{68}+(0.09-0.03-0.35^2/2)/12}{0.35\sqrt{1/12}}\\
+		&=-0.001\\
+c 		&=68e^{-0.03/12}\mathcal{N}(0.100)-68e^{-0.09/12}\mathcal{N}(-0.001)\\
+		&=2.8986
+\end{align*}
+
+Now we can compute the portfolio values.
+
+\begin{align*}
+P(0,72) 	&=-100\cdot 5.4850+60\cdot 72-3000\\
+		&=771.5\\
+P(0,68) 	&=-100\cdot 2.8986+60\cdot 68-3000\\
+		&=790.14
+\end{align*}
+
+Perhaps instantaneous changes aren't that realistic. Let's assume that the price changes occur over the course of one quarter of a month. We will also want to measure the value of the portfolio if the asset does not change in value. Again, we will determine the price of the call under each of the three scenarios. Since one quarter of a month has moved by, the options are closer to expiration. $1/12-1/12\cdot 1/4=3/48=1/16$.
+
+The strike $72$ call:
+
+\begin{align*}
+d_1 		&=\frac{\ln\frac{72}{68}+(0.09-0.03+0.35^2/2)/16}{0.35\sqrt{1/16}}\\
+		&=0.740\\
+d_2 		&=\frac{\ln\frac{72}{68}+(0.09-0.03-0.35^2/2)/16}{0.35\sqrt{1/16}}\\
+		&=0.652\\
+c 		&=72e^{-0.03/16}\mathcal{N}(0.740)-68e^{-0.09/16}\mathcal{N}(0.652)\\
+		&=5.1234
+\end{align*}
+
+The strike $70$ call:
+
+\begin{align*}
+d_1 		&=\frac{\ln\frac{70}{68}+(0.09-0.03+0.35^2/2)/16}{0.35\sqrt{1/16}}\\
+		&=0.418\\
+d_2 		&=\frac{\ln\frac{70}{68}+(0.09-0.03-0.35^2/2)/16}{0.35\sqrt{1/16}}\\
+		&=0.330\\
+c 		&=70e^{-0.03/16}\mathcal{N}(0.418)-68e^{-0.09/16}\mathcal{N}(0.330)\\
+		&=3.6899
+\end{align*}
+
+The strike $68$ call:
+
+\begin{align*}
+d_1 		&=\frac{\ln\frac{68}{68}+(0.09-0.03+0.35^2/2)/16}{0.35\sqrt{1/16}}\\
+		&=0.087\\
+d_2 		&=\frac{\ln\frac{68}{68}+(0.09-0.03-0.35^2/2)/16}{0.35\sqrt{1/16}}\\
+		&=-0.001\\
+c 		&=68e^{-0.03/16}\mathcal{N}(0.087)-68e^{-0.09/16}\mathcal{N}(-0.001)\\
+		&=2.4933
+\end{align*}
+
+The portfolio values are given below.
+
+\begin{align*}
+P(1/48,72) 	&=-100\cdot 5.1234+60e^{0.03/48}\cdot 72-3000e^{0.09/48}\\
+		&=804.73\\
+P(1/48,70) 	&=-100\cdot 3.6899+60e^{0.03/48}\cdot 70-3000e^{0.09/48}\\
+		&=828.01\\
+P(1/48,68) 	&=-100\cdot 2.4933 +60e^{0.03/48}\cdot 68-3000e^{0.09/48}\\
+		&=827.59
+\end{align*}
+
+I don't know about you, but this does seem a bit strange! The portfolio seemed to gain in value just due to the passage of time. It turns out that this is not a coincidence! There is something called theta-decay, and it is something that we will examine later in this chapter. The idea behind it is that a typical call or put option will decrease in value as it gets closer to expiration (all other terms being held equal). In the following table you will find a variety of portfolio values as both time and asset value change. I chose to use quarter months as in the previous examples, so all of the six values we computed are present. Each quarter month represents $1/48$ of a year. 
+
+\begin{center}
+	\begin{tabular}{c|cccc}
+	Asset Value 	& Time $0$ 	& Time $1/48$ 	& Time $2/48$ 	& Time $3/48$\\
+	\hline
+	$64$		& $718.95$	& $747.47$		& $778.38$		& $810.65$\\
+	$66$		& $766.17$	& $800.75$		& $840.85$		& $890.31$\\
+	$68$		& $790.14$	& $827.59$		& $871.95$		& $929.59$\\
+	$70$		& $791.22$	& $828.01$		& $870.76$		& $923.75$\\
+	$72$		& $771.50$	& $804.73$		& $841.37$		& $881.30$\\
+	$74$		& $734.30$	& $762.27$		& $790.79$		& $816.73$
+	\end{tabular}
+\end{center}
+
+After examining this table, I am really tempted to start writing some call options! Before you or I become an options trader, it would probably be beneficial to observe options and portfolio prices in the market before engaging in such risky behavior. It is worthwhile to examine which positions are profitable. Remember, to measure profit you take the current position and subtract the value of the initial investment grown at the risk-free rate. The table below give the profit information for all times beyond time 0.
+
+\begin{center}
+	\begin{tabular}{c|ccc}
+	Asset Value 	& Time $1/48$ 	& Time $2/48$ 	& Time $3/48$\\
+	\hline
+	$64$		& $-45.23$		& $-15.81$		& $14.97$\\
+	$66$		& $8.05$		& $46.66$		& $94.63$\\
+	$68$		& $34.89$		& $77.76$		& $133.91$\\
+	$70$		& $35.31$		& $76.57$		& $128.07$\\
+	$72$		& $12.03$		& $47.18$		& $85.62$\\
+	$74$		& $-30.43$		& $-3.40$		& $21.05$
+	\end{tabular}
+\end{center}
+
+It would seem that this portfolio is almost always profitable near expiration! Why don't you determine the risk-free probability that the asset will fall in this range ($64\leq S(1/16)\leq 74$) under the Black-Scholes model.
+
+To proceed from here we will need to develop some tools from differential calculus.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

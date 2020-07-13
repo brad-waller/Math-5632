@@ -1,0 +1,274 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{We discuss ways to protect a portfolio from changes in value of the underlying asset. In addition, we utilize theta decay to improve the likelihood of profit.}
+
+\author{Brad Waller}
+
+%Section 5.5
+
+\title{Hedging}
+
+\begin{document}
+
+\begin{abstract}
+In earlier sections we looked at a portfolio to see how it evolved over time. Here, we try to protect the portfolio by adding assets to a portfolio. This has the benefit of giving profit for small changes in the value of the unerlying asset. 
+\end{abstract}
+
+\maketitle
+
+If you were interested in making an investment in an option on some asset, then the $\Delta$ of that option would dictate the direction that the investment would move in given a change in the underlying asset's value. This is probably fine if you already have a diversified portfolio; however, you may find that you are still sensitive to particular assets.
+
+We will discuss two types of hedging.
+
+\begin{definition}
+Given a desired portfolio $P$, we {\bf delta hedge} the portfolio with respect to an asset $S$ by purchasing $a=-\Delta_P$ shares of $S$ and investing $B=-P+\Delta_PS$ at the risk-free rate.
+\end{definition}
+
+\begin{remark}
+We don't have to be so strict with how we delta hedge. It isn't necessary to use the underlying asset at all. It is just the most direct way to hedge. 
+\end{remark}
+
+Let's try an example to see if it is worthwhile to hedge.
+
+\begin{example}
+You wish to have a portfolio that has 100 written European calls with strike 76 and expiration date that is one month from today. The underlying asset has the following conditions:
+	\begin{itemize}
+	\item $S(0)=80$,\\
+	\item $\delta=0.02$, and\\
+	\item $\sigma=0.27$.
+	\end{itemize}
+In addition, the risk-free rate is $r=0.07$. Compute $\Delta_P$, $\Gamma_P$, and $\Theta_P$.
+\end{example}
+
+\begin{solution}
+We just need to look up our formula for each of the Greeks. The reason we are computing $\Theta_P$ is to see if we can utilize theta decay to our advantage.
+
+	\begin{align*}
+	d_1 			&=\frac{\ln\frac{80}{76}+(0.07-0.02+0.27^2/2)\cdot 1/12}{0.27\sqrt{1/12}}\\
+				&=0.75\\
+	\mathcal{N}(d_1) 	&=0.77353\\
+	\Delta_c 		&=e^{-0.02/12}(0.77353)\\
+				&=0.77224\\
+	\end{align*}
+
+	\begin{align*}
+	\Delta_P 		&=-100\Delta_c\\
+				&=-77.224\\
+	\Gamma_c 		&=e^{-0.02/12}\cdot\frac{e^{-0.75^2/2}}{80\cdot0.27\sqrt{2\pi\cdot 1/12}}\\
+				&=0.0482\\
+	\Gamma_P 		&=-100\Gamma_c\\
+				&=-4.82\\
+	\Theta_c 		&=rc-(r-\delta)S\Delta_c-\sigma^2/2S^2\Gamma_c\\
+				&=-13.9719\\
+	\Theta_P 		&=-100\Theta_c\\
+				&=1397.19
+	\end{align*}
+\end{solution}
+
+Let's think about what this means. Our portfolio is certainly sensitive to changes in the value of the underlying asset. It is very sensitive to changes in time. Since time only moves in one direction, there will be a politive drag on our portfolio's value as time marches along.
+
+\begin{question}
+What are the quantities $a$ and $B$ necessary to delta hedge the portfolio from the example. (Give $a$ to three decimal places and the dollar amount to two decimal places.) 
+	\begin{align*}
+	a 	&=\answer{77.224}\\
+	B 	&=\answer{-5662.24}
+	\end{align*}
+\end{question}
+
+\begin{solution}
+Since we already computed $\Delta_P$, our definition tells us that $-\Delta_P$ is the quantity $a$.
+	\begin{equation*}
+	a=77.224
+	\end{equation*}
+To compute the value $B$, we need to know the value of the calls. I will provide that in the equations below; however, you will need to fill in some of the details.
+	\begin{align*}
+	B 	&=100c-77.224S\\
+		&=515.68-6177.92\\
+		&=-5662.24
+	\end{align*}
+The hedged portfolio consists of
+	\begin{itemize}
+	\item 100 written calls,\\
+	\item 77.224 shares of $S$, and\\
+	\item a risk-free debt of $5662.24$.
+	\end{itemize}
+\end{solution}
+
+Unfortunately, we have introduced a little bit of change to our theta value. That is because the risk-free debt will grow faster with time than the stock price will grow, and they are in opposite directions.
+
+\begin{align*}
+\frac{\mathrm{d}}{\mathrm{d}t}Be^{rt}\vert_{t=0}=rBe^{rt}\vert_{t=0}	 			&=rB\\
+\frac{\mathrm{d}}{\mathrm{d}t}aSe^{\delta t}\vert_{t=0}=\delta aSe^{\delta t}\vert_{t=0} 	&=\delta aS
+\end{align*}
+
+Using approximation, we see that the theta effect is diminished by the bond.
+
+\begin{align*}
+-100\Theta_c 						&=1397.21\\
+-100\Theta_c\cdot 1/24 					&=58.22\\ 
+(rB+\delta aS-100\Theta_c)\cdot 1/24 			&=46.85
+\end{align*}
+
+Now that we have a hedged portfolio, it will be useful to see if hedging did anything! Hopefully, the loss in theta value should come with some benefit. Let's compare the portfolio with $100$ written calls with the hedged portfolio. We'll see what happens in half of a month with no change in asset value and a change of $\pm 2$ to the asset value.
+
+\begin{center}
+	\begin{tabular}{c|ccc}
+				& $\epsilon=-2$ 	& $\epsilon=0$ 	& $\epsilon=2$\\
+	\hline
+	Unhedged 		& $-289.21$ 		& $-453.4$ 		& $-630.65$\\
+	$\Delta$ hedged 	& $51.50$ 		& $50.89$ 		& $28.22$
+	\end{tabular}
+\end{center}
+
+To understand this table, you must realize that the initial value of the unhedged portfolio was $-515.68$ while the delta hedged portfolio was 0. The unhedged portfolio is hurt by increases in the underlying asset's value. The hedged portfolio always increases in value! Now that we have hedged, we should take out the profit. This process is called rehedging.
+
+\begin{example}
+Rehedge the portfolio from before if the asset value rose by 2 over a half month period.
+\end{example}
+
+\begin{solution}
+There is a slick approach to this that you will see here. We will simply pretend nothing happened and hedge our portfolio of $100$ written calls under the new conditions. After these computations are complete, we will see where our old portfolio was and make the necessary adjustments. Much of this will be the same as before; just remember that now we have $S=82$ and $T-t=1/12-1/24=1/24$.
+	\begin{align*}
+	d_1 				&=\frac{\ln\frac{82}{76}+(0.07-0.02+0.27^2/2)\cdot 1/24}{0.27\sqrt{1/24}}\\
+					&=1.44\\
+	\Delta_P 			&=-100\Delta_c\\
+					&=-92.487\\
+	a 				&=92.487\\
+	B 				&=100c-92.487\cdot S\\
+					&=630.65-7583.93\\
+					&=-6953.28
+	\end{align*}
+The delta hedged portfolio consists of $100$ written calls, $92.487$ shares of the asset, and a debt of $6953.28$. That is our target portfolio. Now let's compute what we have before the rehedge. Remember, our original hedge had the calls, some shares of the asset, and some debt. The shares and debt grow in quantity. The calls do not.
+	\begin{align*}
+	77.224e^{0.02/24} 	&=77.288\\
+	5662.24e^{0.07/24} 	&=5678.78
+	\end{align*}
+To get to the rehedged position, we must buy
+	\begin{equation*}
+	92.487-77.288=15.199
+	\end{equation*}
+shares of the asset and borrow
+	\begin{equation*}
+	6953.28-5678.78=1274.50
+	\end{equation*}
+at the risk-free rate. Notice that this activity does not cancel itself out completely.
+	\begin{equation*}
+	-15.199\cdot 82+1274.50=28.18
+	\end{equation*}
+It apears that we haven't perfectly balanced everything, but the reality is that we have moved from our old portfolio to a hedged position. The amount we borrowed was in excess of that necessary to buy the new shares. That remainder of the debt goes into our pocket, and the $28.18$ of debt is in the portfolio. The reason that this value isn't precisely $28.22$ is because of rounding error.
+\end{solution}
+
+It is probably clear that rehedging might not be a fun process. There are a lot of calculations. In case you are rehedgning adverse, you could go one step further and try to control your portfolio's change in delta value. This can be done by making the portfolio's gamma value 0.
+
+\begin{definition}
+Given a desired portfolio $P$, we {\bf gamma hedge} the portfolio with respect to an asset $S$ by solving the following set of equations:
+	\begin{align*}
+	P+aS+bD+B 		&=0,\\
+	\Delta_P+a+b\Delta_D 	&=0,\text{ and}\\
+	\Gamma_P+b\Gamma_D 	&=0.
+	\end{align*}
+Here, $D$ represents a derivative or collection of derivatives. 
+\end{definition}
+
+\begin{remark}
+This definition is similar to the one we had for delta hedging; however, the setup is less explicit. For delta hedging we could have simply used the first two equations and dropped off the derivative in the gamma hedging definition, and we would have the same result. Please check this.
+
+Since there are so many derivatives, gamma hedging has a lot of flexibility. We are free to pick any collection of derivatives we like. In our work, the derivative will always be prescribed.
+\end{remark}
+
+\begin{example}
+Gamma hedge the portfolio consisting of $100$ written calls using the underlying asset and the complimentary put option.
+\end{example}
+
+\begin{solution}
+The third equation may make things seem more difficult, but if we recall that a put option with similar terms has an identical gamma value. That means that we must purchase $100$ put options to ensure that gamma of the portfolio is $0$. Under the initial conditions of our problem, we have that
+	\begin{align*}
+	p 					&=0.8479\\
+	\Delta_p 				&=-0.22609\\
+	-100\Delta_c+100\Delta_p 	&=-99.833\\
+	a 					&=99.833\\
+ 	B 					&=100c-100p-99.833\cdot S\\
+						&=515.68-84.79-7986.64\\
+						&=-7555.75
+	\end{align*}
+The gamma hedged portfolio consists of
+	\begin{itemize}
+	\item $100$ written calls,
+	\item $100$ purchased puts,
+	\item $99.833$ shares of the underlying asset, and
+	\item a debt of $7555.75$.
+	\end{itemize}
+\end{solution}
+
+We should probably see what happens to the portfolio over a half month under this portfolio. For sake of comparison, we will display the delta hedged and unhedged portfolios as well.
+
+\begin{center}
+	\begin{tabular}{c|ccc}
+				& $\epsilon=-2$ 	& $\epsilon=0$ 	& $\epsilon=2$\\
+	\hline
+	Unhedged 		& $-289.21$ 		& $-453.4$ 		& $-630.65$\\
+	$\Delta$ hedged 	& $51.50$ 		& $50.89$ 		& $28.22$\\
+	$\Gamma$ hedged 	& $0.01$ 		& $0.01$ 		& $0.01$
+	\end{tabular}
+\end{center}
+
+Wow, gamma hedging really did protect the portfolio from changing in value! We have a spectacular profit of $0.01$. The problem with this sort of hedging is that we lost almost all of our theta sensitivity through the purchase of the puts. In the gamma hedged portfolio, we have that
+
+\begin{align*}
+-100\Theta_c 						&=1397.21\\
+100\Theta_p							&=-1028.04\\ 
+(rB+\delta aS-100\Theta_c)\cdot 1/24 			&=0.0003
+\end{align*}
+
+That is quite interesting! It really makes me wonder if there is some connection to the Black-Scholes equation lurking here, as the result is likely $0$ if we hadn't rounded anywhere. I will leave you to ponder that on your own. Perhaps we should have used a different put or call option to hedge our position. That may have resulted in a different theta value. Again, I have not explored that yet, but please feel free to explore this on your own. Using Excel or some other software may make your life easier in such an exploit.
+
+What we have shown is that this particular gamma hedged portfolio will remain very inactive with regards to small changes in asset value and time changes. That's nice to protect our position; however, it may not be optimal if we are hoping to gain a profit. The delta hedged portfolio was better at that.
+
+The drawbacks to the delta hedged portfolio are that they require more monitoring, and rebalancing a portfolio may incur fees that eat into profits. 
+
+One final note: perhaps we should have done the delta hedging with $100$ written puts. The theta decay would have been amplified since we would need to short sell the underlying asset and purchase bonds with the proceeds. This will result in a larger theta value in the hedged portfolio! After running through the computations, you should find that the adjusted theta value is $46.85$. This cannot be a coincidence. Let's see why.
+
+If you think about what we have done with our delta hedge for the portfolio of calls, it becomes apparent that hedging is just a manipulation of the Black-Scholes formula.
+
+\begin{align*}
+c 			&=S\Delta_c-Ke^{-rT}\mathcal{N}(d_2)\\
+0 			&=100S\Delta_c-100Ke^{-rT}\mathcal{N}(d_2)-100c
+\end{align*}
+
+The same could be said regarding delta hedging put options.
+
+\begin{align*}
+p 			&=Ke^{-rT}\mathcal{N}(-d_2)+S\Delta_p\\
+0 			&=100Ke^{-rT}\mathcal{N}(-d_2)+100S\Delta_p-100p
+\end{align*}
+
+We can use put-call parity to compare the theta values of each portfolio.
+
+\begin{align*}
+c-p 								&=Se^{-\delta T}-Ke^{-rT}\\
+c-p 								&=S(\Delta_c-\Delta_p)-K[\mathcal{N}(d_2)+\mathcal{N}(-d_2)]e^{-rT}\\
+S\Delta_p-p 							&=S\Delta_c-c-K[\mathcal{N}(d_2)+\mathcal{N}(-d_2)]e^{-rT}\\
+Ke^{-rT}\mathcal{N}(-d_2)+S\Delta_p-p 		&=S\Delta_c-c-Ke^{-rT}\mathcal{N}(d_2)\\
+100Ke^{-rT}\mathcal{N}(-d_2)+100S\Delta_p-100p 	&=100S\Delta_c-100Ke^{-rT}\mathcal{N}(d_2)-100c
+\end{align*}
+
+These manipulations may look impressive; however, they are just saying that zero equals zero. The important part of this argument is that these portfolios are equal regardless of the change in value of underlying asset or time. Because of this the derivatives with respect to asset value or time are equal too. Specifically, the theta value of each portfolio must be the same. It follows that hedging written calls or written puts with the same terms will give the same advantages with respect to theta decay.
+
+We can apply similar reasoning to our gamma hedged portfolio since the call and put options had identical terms. Our hedged portfolio can arise from put-call parity.
+
+\begin{align*}
+c-p 	&=Se^{-\delta T}-Ke^{-rT}\\
+0 	&=Se^{-\delta T}-Ke^{-rT}-c+p\\
+0	&=100Se^{-\delta T}-100Ke^{-rT}-100c+100p
+\end{align*}
+
+Our hedged profit of $0.01$ should have probably been $0$. The portfolio perfectly balanced out. If you have the time, try to perform a gamma hedge using a put with a different strike. The results should be different since put-call parity no longer holds.
+\end{document}
+
+
+
+
+
+

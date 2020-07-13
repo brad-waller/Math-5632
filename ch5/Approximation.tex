@@ -1,0 +1,200 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{This section covers the delta-gamma and delta-gamma-theta approximations.}
+
+\author{Brad Waller}
+
+%Section 5.4
+
+\title{Approximation}
+
+\begin{document}
+
+\begin{abstract}
+In the first section of this chapter, it was clear that it can be difficult to compute the value of a portfolio over time. This section covers approximations that will simplify our work. These theorems are considered second order estimates.
+\end{abstract}
+
+\maketitle
+
+In our last section, we used elasticity to estimate changes. In reality, this was just a first order approximation that you might have done in calculus. In the estimate for the change in the call's value, we had the following:
+
+\begin{equation*}
+(1+\text{percent change in }S/100\cdot \Omega_c)c=\text{approximate value of }c
+\end{equation*}
+
+We can manipulate the left hand side to see that this is just a linear approximation. Just to be clear, a linear approximation usually looks like
+
+\begin{equation*}
+y=f(a)+f'(a)(x-a).
+\end{equation*}
+
+Let's make the necessary manipulations.
+
+\begin{align*}
+(1+\text{percent change in }S/100\cdot \Omega_c)c 	&=c+\text{percent change in }S/100\cdot \Omega_c\cdot c\\
+									&=c+\text{percent change in }S/100\cdot \Delta_c\cdot S\\
+									&=c+\frac{\text{change in value of }S}{S}\cdot\Delta_c\cdot S\\
+									&=c+\text{change in value of }S\cdot\Delta_c\\
+									&=c+\Delta_c\epsilon\\
+									&=c(S)+\frac{\mathrm{d}c}{\mathrm{d}S}\epsilon
+\end{align*}
+
+In our current notation, $c$ represents the value $f(a)$, $\Delta_c$ represents the first derivative of our option with respect to $S$, and $\epsilon$ is the difference of the new value of $S$ from the old value of $S$. I would use $\Delta S$, but I think that notation is really confusing in our context!
+
+Now that we have established that the content of the previous section was just a first order approximation, we may as well go to second order approximations.
+
+\begin{theorem}[Delta-Gamma Approximation]
+Suppose that we are given a derivative $D$ with underlying asset $S$. Then we can approximate the derivative's value given an immediate change in the asset's value of $\epsilon$ using the formula
+	\begin{equation*}
+	D(S+\epsilon)\approx D(S)+\Delta_D\epsilon+\Gamma_D\frac{\epsilon^2}{2}.
+	\end{equation*}
+\end{theorem}
+
+Normally, a statement like this would be supported with a proof. Fortunately, that isn't necessary here. This is just a second order Taylor approximation from Calculus using the notation of financial mathematics. Let's see how this formula applies to things we have already computed! We had the following table in an earlier section. Recall that this was a specific portfolio consisting of 100 written calls, 60 shares of the asset, and a debt of $3000$. The conditions were that $S(0)=70$, $\delta=0.03$, $\sigma=0.35$, and $r=0.09$. The call was European, had strike 68, and it expired in one month. 
+
+\begin{center}
+	\begin{tabular}{c|cccc}
+	Asset Value 	& Time $0$ 	& Time $1/48$ 	& Time $2/48$ 	& Time $3/48$\\
+	\hline
+	$64$		& $718.95$	& $747.47$		& $778.38$		& $810.65$\\
+	$66$		& $766.17$	& $800.75$		& $840.85$		& $890.31$\\
+	$68$		& $790.14$	& $827.59$		& $871.95$		& $929.59$\\
+	$70$		& $791.22$	& $828.01$		& $870.76$		& $923.75$\\
+	$72$		& $771.50$	& $804.73$		& $841.37$		& $881.30$\\
+	$74$		& $734.30$	& $762.27$		& $790.79$		& $816.73$
+	\end{tabular}
+\end{center}
+
+To use this particular form of approximation, we can only use the entry corresponding to time 0 and an asset value of $70$ as our base point. We also need $\Delta$ and $\Gamma$ of our portfolio. Those aren't too hard to compute! I will just give the values for the call, and I will use them in my computation of the portfolio's Greek values.
+
+\begin{align*}
+\Delta_c 		&=0.6490\\
+\Gamma_c 		&=0.0522\\
+\Delta_P 		&=-100\Delta_c+60\\
+			&=-4.9\\
+\Gamma_P 		&=-100\Gamma_c+0\\
+			&=-5.22
+\end{align*}
+
+Some of those computations may not be clear. The justification is this: $\Delta_S=1$ and $\Gamma_S=0$. That is because we are differentiating $S$ with respect to itself! Let's approximate the first column from our table above using the base point $P(70)=791.22$.
+
+\begin{align*}
+P(64) 		&\approx P(70)+\Delta_P\cdot (-6)+\Gamma_P\cdot\frac{(-6)^2}{2}\\
+		&=726.66\\
+P(66) 		&\approx P(70)+\Delta_P\cdot (-4)+\Gamma_P\cdot\frac{(-4)^2}{2}\\
+		&=769.06\\
+P(68) 		&\approx P(70)+\Delta_P\cdot (-2)+\Gamma_P\cdot\frac{(-2)^2}{2}\\
+		&=790.58\\
+P(72) 		&\approx P(70)+\Delta_P\cdot 2+\Gamma_P\cdot\frac{2^2}{2}\\
+		&=770.98\\
+P(74) 		&\approx P(70)+\Delta_P\cdot 4+\Gamma_P\cdot\frac{4^2}{2}\\
+		&=729.86
+\end{align*}
+
+Let's put all this into a table so we can better see the two together.
+
+\begin{center}
+	\begin{tabular}{c|cc}
+	Asset Value 	& Portfolio Value 	&Portfolio Approximation\\
+	\hline
+	$64$		& $718.95$		& $726.66$		\\
+	$66$		& $766.17$		& $769.06$		\\
+	$68$		& $790.14$		& $790.58$		\\
+	$70$		& $791.22$		& $791.22$		\\
+	$72$		& $771.50$		& $770.98$		\\
+	$74$		& $734.30$		& $729.86$		
+	\end{tabular}
+\end{center}
+
+The important thing to notice is that the approximation is better when small changes are made and worse when large changes are made. There should be something nagging you now. This theorem seems rather limited for two reasons: the first is that the values could be better in our approximation, and the second should have to do with time. Usually time passes between changes in stock prices. We should have a way to account for this. That is the topic of our next theorem.
+
+\begin{theorem}[Delta-Gamma-Theta Approximation]
+Suppose that we are given a derivative $D$ with underlying asset $S$. Then we can approximate the derivative's value given a change in the asset's value of $\epsilon$ and change in time $h$ using the formula
+	\begin{equation*}
+	D(S+\epsilon, t+h)\approx D(S, t)+\Delta_D\epsilon+\Gamma_D\frac{\epsilon^2}{2} +\Theta_Dh.
+	\end{equation*}
+\end{theorem}
+
+Many sources will attribute this approximation to some sort of multidimensional Taylor's theorem; however, that is glossing over some important details. For example, what happens to the higher order terms for time and what about the mixed terms? We will not do anything like that. This approximation theorem is a result of the It\^{o}-Doeblin formula found \href{http://www.almoststochastic.com/2013/05/a-note-on-ito-doeblin-formula.html}{here} and written below.
+
+\begin{equation*}
+\mathrm{d}f(t, \mathcal{Z}(t))=f_t(S(t), t)\mathrm{d}t+f_S(S(t), t)\mathrm{d}S+\frac{1}{2}f_{SS}(S(t), t)[\mathrm{d}S]^2
+\end{equation*}
+
+The equality above is giving us the change of the function. In our context, the function is the price of a derivative. We are saying that the new value is approximately equal to the old value plus the differential. The reason the higher order time terms and the cross terms cancel out is because of some results regarding quadratic variation. We won't dive into that here. Let's use the approximation theorem to derive approximations of our table from earlier. The first row of computations will be displayed below, and the rest will be filled into the table.
+
+\begin{align*}
+P(64, 1/48) 	&\approx  P(70)+\Delta_P\cdot (-6)+\Gamma_P\cdot\frac{(-6)^2}{2}+\Theta_P\cdot 1/48\\
+		&=764.20\\
+P(64, 2/48) 	&\approx  P(70)+\Delta_P\cdot (-6)+\Gamma_P\cdot\frac{(-6)^2}{2}+\Theta_P\cdot 2/48\\
+		&=801.74\\
+P(64, 3/48) 	&\approx  P(70)+\Delta_P\cdot (-6)+\Gamma_P\cdot\frac{(-6)^2}{2}+\Theta_P\cdot 3/48\\
+		&=839.29\\
+\end{align*}
+
+Let's add all the values to a table with the true portfolio values juxtaposed with their approximations.
+
+\begin{center}
+	\begin{tabular}{c|cc|cc}
+	Asset Value 	& Time $0$   	& Approx.	& Time $1/48$ 	& Approx. 	\\
+	\hline
+	$64$		& $718.95$	& $726.66$	& $747.47$		& $764.20$	\\
+	$66$		& $766.17$	& $769.06$	& $800.75$		& $806.60$	\\
+	$68$		& $790.14$	& $790.58$	& $827.59$		& $828.12$	\\
+	$70$		& $791.22$	& $791.22$	& $828.01$		& $828.76$	\\
+	$72$		& $771.50$	& $770.98$	& $804.73$		& $808.52$	\\
+	$74$		& $734.30$	& $729.86$	& $762.27$		& $767.40$	
+	\end{tabular}
+
+	\begin{tabular}{c|cc|cc}
+	Asset Value 	& Time $2/48$ 	& Approx. 	& Time $3/48$ 	& Approx.	\\
+	\hline
+	$64$		& $778.38$		& $801.74$	& $810.65$		& $839.29$	\\
+	$66$		& $840.85$		& $844.14$	& $890.31$		& $881.69$	\\
+	$68$		& $871.95$		& $865.66$	& $929.59$		& $903.21$	\\
+	$70$		& $870.76$		& $866.30$	& $923.75$		& $903.85$	\\
+	$72$		& $841.37$		& $846.06$	& $881.30$		& $883.61$	\\
+	$74$		& $790.79$		& $804.94$	& $816.73$		& $842.49$
+	\end{tabular}
+\end{center}
+
+As we can see, this process is not too complicated. Our initial portfolio value and three different Greeks provided us with everything in the table. The time zero approximations come from Delta-Gamma approximation since $h=0$. As you can tell, some of the best approximations come from 
+
+This concludes our section covering approximation. In the next section, we will discuss hedging strategies. 
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

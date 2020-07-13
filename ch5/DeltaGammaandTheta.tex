@@ -1,0 +1,332 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Learn about the framework for estimating changes in a portfolio's value.}
+
+\author{Brad Waller}
+
+%Section 5.2
+
+\title{Delta, Gamma, and Theta}
+
+\begin{document}
+
+\begin{abstract}
+Our last section demonstrated how a portfolio changes in value with respect to changes to time and asset value. Here we learn about the tools that will be used to estimate those changes. At face value, they are as simple as taking partial derivatives. The only difficulty lies in recollection of the chain rule and the fundamental theorem of calculus.
+\end{abstract}
+
+\maketitle
+
+In our previous section, we discussed how a portfolio changes with respect to changes in value of the underlying asset and changes in time. We treated these as independent variables, and that will continue in this section. Here, we are going to examine the instantaneous rate of change with respect to these variables.
+
+Instantaneous change with respect to the asset is called the delta. If we differentiate the portfolio's value with respect to $S$, then we have the change desired. The instantaneous change is denoted
+\begin{equation*}
+\Delta_P=\frac{\mathrm{d}P}{\mathrm{d}S}.
+\end{equation*}
+We could go one step further and differentiate again to arrive at the gamma value. That is denoted
+\begin{equation*}
+\Gamma_P=\frac{\mathrm{d}^2P}{\mathrm{d}S^2}.
+\end{equation*}
+
+We also examined what happened with respect to changes in time. While changes in asset value aren't guaranteed, changes in time are inevitable. The instantaneous change is called theta, and it is denoted
+\begin{equation*}
+\Theta_P=\frac{\mathrm{d}P}{\mathrm{d}t}.
+\end{equation*}
+
+I want to emphasize that this derivative is with respect to the time that varies. That is $t$, not $T$. 
+
+These values are some of what are called the Greeks. There are a few more that we will see later, but they aren't as useful in what we do in this class. Let's see how one might compute some of these values. We'll begin by computing the delta value of a call option. This may sound easy, but remember that the price of a call option is a mess.
+\begin{equation*}
+c=Se^{-\delta (T-t)}\mathcal{N}(d_1)-Ke^{-r(T-t)}\mathcal{N}(d_2)
+\end{equation*}
+
+I wrote the more general formula since it has $t$ in it, and we will need that later. I also didn't write the argument in $S$ since it will go away when we differentiate with respect to $S$. One might mistakenly differentiate with respect to $S$ and arrive at
+\begin{align*}
+\Delta_c 	&=\frac{\mathrm{d}}{\mathrm{d}S}\left[Se^{-\delta (T-t)}\mathcal{N}(d_1)-Ke^{-r(T-t)}\mathcal{N}(d_2)\right]\\
+		&=e^{-\delta(T-t)}\mathcal{N}(d_1)-0\\
+		&=e^{-\delta(T-t)}\mathcal{N}(d_1)
+\end{align*}
+
+The nice part about this is that the result is correct. The unfortunate part is that we cheated! We didn't use the fundamental theorem of calculus. Remember that $\mathcal{N}(d_1)$ is actually defined by an integral. Also, $d_1$ is a function of $S$! We really cheated. Let's try to compute the value of $\Delta_c$ correctly. Before we make that computation, let's try to compute the derivative of $\mathcal{N}(d_1)$ and $\mathcal{N}(d_2)$.
+
+\begin{align*}
+\mathcal{N}(d_1) 						&=\int_{-\infty}^{d_1}\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\mathrm{d}z\\
+\frac{\mathrm{d}}{\mathrm{d}S}\mathcal{N}(d_1)	&=\frac{1}{\sqrt{2\pi}}e^{-d_1^2/2}\frac{\mathrm{d}}{\mathrm{d}S}d_1\\
+								&=\frac{1}{\sqrt{2\pi}}e^{-d_1^2/2}\frac{1}{S\sigma\sqrt{T-t}}
+\end{align*}
+
+Similarly, it can be shown that
+\begin{equation*}
+\frac{\mathrm{d}}{\mathrm{d}S}\mathcal{N}(d_2) 	=\frac{1}{\sqrt{2\pi}}e^{-d_2^2/2}\frac{1}{S\sigma\sqrt{T-t}}
+\end{equation*}
+
+\begin{align*}
+\Delta_c 	&=\frac{\mathrm{d}}{\mathrm{d}S}\left[Se^{-\delta (T-t)}\mathcal{N}(d_1)-Ke^{-r(T-t)}\mathcal{N}(d_2)\right]\\
+		&=e^{-\delta(T-t)}\mathcal{N}(d_1)+Se^{-\delta(T-t)}\frac{1}{\sqrt{2\pi}}e^{-d_1^2/2}\frac{1}{S\sigma\sqrt{T-t}}-Ke^{-r(T-t)}\frac{1}{\sqrt{2\pi}}e^{-d_2^2/2}\frac{1}{S\sigma\sqrt{T-t}}\\
+		&=e^{-\delta(T-t)}\mathcal{N}(d_1)+\frac{1}{S\sigma\sqrt{2\pi(T-t)}}\left(Se^{-\delta(T-t)}e^{-d_1^2/2}-Ke^{-r(T-t)}e^{-d_2^2/2}\right)
+\end{align*}
+
+For the earlier formula to be correct, something must happen in the parenthetical expression in the last line! Before we can show that, it may be useful to further simplify that expression. For convenience (and to save my poor fingers), we will make the following identifications:
+\begin{align*}
+a 	&=\left[\ln\frac{S}{K}+(r-\delta)(T-t)\right]\\
+b 	&=\left(\frac{\sigma^2}{2}\right)(T-t)\\
+c 	&=\sigma\sqrt{T-t}
+\end{align*}
+
+Now we can simplify our expressions.
+
+\begin{align*}
+d_1 			&=\frac{\ln\frac{S}{K}+(r-\delta+\sigma^2/2)(T-t)}{\sigma\sqrt{T-t}}\\
+			&=\frac{a+b}{c}\\
+d_1^2 		&=\frac{a^2+2ab+b^2}{c^2}\\
+d_2 			&=\frac{\ln\frac{S}{K}+(r-\delta-\sigma^2/2)(T-t)}{\sigma\sqrt{T-t}}\\
+			&=\frac{a-b}{c}\\
+d_2^2 		&=\frac{a^2-2ab+b^2}{c^2}\\
+e^{-d_1^2/2} 	&=e^{-(a^2+b^2)/2c^2}e^{-ab/c^2}\\
+e^{-d_2^2/2}	&=e^{-(a^2+b^2/2c^2}e^{ab/c^2}
+\end{align*}
+
+It is the differences that we care about here. We can factor out any like terms as we did earlier. Notice that there is a relationship between $b$ and $c^2$. In particular,
+\begin{equation*}
+\frac{b}{c^2}=\frac{1}{2}.
+\end{equation*}
+
+Believe it or not, that is exactly what we wanted!
+\begin{align*}
+e^{-ab/c^2} 	&=e^{-a/2}\\
+			&=\sqrt{\frac{K}{S}}e^{-(r-\delta)(T-t)/2}\\
+e^{ab/c^2}	 	&=e^{a/2}\\
+			&=\sqrt{\frac{S}{K}}e^{(r-\delta)(T-t)/2}
+\end{align*}
+
+Now, we can show that the parenthetical statement from earlier is actually 0!
+
+\begin{align*}
+\left(Se^{-\delta(T-t)}e^{-d_1^2/2}-Ke^{-r(T-t)}e^{-d_2^2/2}\right)	=&e^{-(a^2+b^2)/2c^2}\left(Se^{-\delta(T-t)}\sqrt{\frac{K}{S}}e^{-(r-\delta)(T-t)/2}\right.\\
+											&-\left.Ke^{-r(T-t)}\sqrt{\frac{S}{K}}e^{(r-\delta)(T-t)/2}\right)\\
+											=&e^{-(a^2+b^2)/2c^2}(\sqrt{SK}e^{-(r+\delta)/2}-\sqrt{SK}e^{-(r+\delta)/2})\\
+											=&0
+\end{align*}
+
+That really is remarkable and unexpected. We have shown how to compute the value of $\Delta_c$. We could go through all of this again to compute the delta value of the corresponding put, but that is really too much. Let's use put-call parity and the additivity of the derivative to determine $\Delta_p$.
+
+\begin{align*}
+c-p 								&=Se^{-\delta (T-t)}-Ke^{-r(T-t)}\\
+\Delta_c-\Delta_p 						&=\frac{\mathrm{d}}{\mathrm{d}S}\left[Se^{-\delta(T-t)}-Ke^{-r(T-t)}\right]\\
+								&=e^{-\delta(T-t)}\\
+\Delta_c-e^{-\delta(T-t)}					&=\Delta_p\\
+e^{-\delta(T-t)}\mathcal{N}(d_1)-e^{-\delta(T-t)}	&=\Delta_p\\
+-e^{-\delta(T-t)}\mathcal{N}(-d_1) 			&=\Delta_p
+\end{align*}
+
+That was a lot easier! Let's go a bit further and differentiate the equation again.
+
+\begin{align*}
+c-p 								&=Se^{-\delta (T-t)}-Ke^{-r(T-t)}\\
+\Delta_c-\Delta_p 						&=\frac{\mathrm{d}}{\mathrm{d}S}\left[Se^{-\delta(T-t)}-Ke^{-r(T-t)}\right]\\
+								&=e^{-\delta(T-t)}\\
+\Gamma_c-\Gamma_p 					&=\frac{\mathrm{d}}{\mathrm{d}S}e^{-\delta(T-t)}\\
+								&=0\\
+\Gamma_c 							&=\Gamma_p
+\end{align*}
+
+Let's go ahead and determine what this value is. We can do this rather easily after all the work we have put in.
+
+\begin{align*}
+\Gamma_c 			&=\frac{\mathrm{d}}{\mathrm{d}S}e^{-\delta(T-t)}\mathcal{N}(d_1)\\
+				&=e^{-\delta(T-t)}\frac{1}{\sqrt{2\pi}}e^{-d_1^2/2}\frac{1}{S\sigma\sqrt{T-t}}\\
+				&=e^{-\delta(T-t)}\frac{e^{-d_1^2/2}}{S\sigma\sqrt{2\pi(T-t)}}
+\end{align*}
+
+Let's package up all the work we have done into a theorem.
+
+\begin{theorem}[Delta, Gamma, and Theta]
+For a European call and put options, we have the following formula for their delta and gamma values.
+	\begin{enumerate}
+	\item $\Delta_c=e^{-\delta(T-t)}\mathcal{N}(d_1)$
+	\item $\Delta_p=-e^{-\delta(T-t)}\mathcal{N}(-d_1)$
+	\item $\Gamma_c=e^{-\delta(T-t)}\frac{e^{-d_1^2/2}}{S\sigma\sqrt{2\pi(T-t)}}=\Gamma_p$
+	\item $\Theta_c=rc+(\delta-r)S\Delta_c-\frac{\sigma^2S^2}{2}\Gamma_c$
+	\item $\Theta_p=\Theta_c+rKe^{-r(T-t)}-\delta Se^{-\delta(T-t)}$
+	\end{enumerate}
+\end{theorem}
+
+Notice that I didn't actually prove the last two formulae. That will be done at in a moment. The formula for $\Theta_p$ follows from the formula for $\Theta_c$ and the use of put-call parity. I will leave that formulation to you. It is much easier than the development of $\Theta_c$.
+
+You will probably find writing $t$ in each of the formula just as annoying as I do. Just remember, we will almost always be computing delta and gamma when $t=0$. There are some important observations that need to be made.
+
+\begin{itemize}
+\item $0<\Delta_c<1$,\\
+\item $-1<\Delta_p<0$, and\\
+\item $\Gamma_c$ and $\Gamma_p$ are positive.
+\end{itemize}
+
+These almost all follow from properties of exponential functions. The caveat here is that $\delta\geq 0$. I've never heard of negative dividends, and I think it would be in poor taste for a company to say that owners must pay the company dividends! In strange times, some governments have resorted to negative interest rates. Switzerland and Japan in 2020 are two such countries. In a currency problem, it is possible to have some of the above inequalities violated. In normal conditions, this shouldn't happen.
+
+Now let's prove the formula for $\Theta_c$. Be warned that I swore never to do this when I was a student of financial economics. It was only when I was writing this section that I decided to really sit down and do it myself.
+
+In the proof, we will use the values of $a$, $b$, and $c$ from earlier in this section. Let's begin.
+
+\begin{proof}
+Remember our objective
+	\begin{equation*}
+	\Theta_c=rc+(\delta-r)S\Delta_c-\frac{\sigma^2S^2}{2}\Gamma_c.
+	\end{equation*}
+
+We start by differentiation of the Black-Scholes formula for the price of a call option.
+	\begin{align*}
+	c 		&=Se^{-\delta(T-t)}\mathcal{N}(d_1)-Ke^{-r(T-t)}\mathcal{N}(d_2)\\
+	\Theta_c 	&=\frac{\mathrm{d}}{\mathrm{d}t}\left[Se^{-\delta(T-t)}\mathcal{N}(d_1)-Ke^{-r(T-t)}\mathcal{N}(d_2)\right]\\
+			&=\delta Se^{-\delta(T-t)}\mathcal{N}(d_1)+Se^{-\delta(T-t)}\mathcal{N}'(d_1)\frac{\mathrm{d}d_1}{\mathrm{d}t}-rKe^{-r(T-t)}\mathcal{N}(d_2)-Ke^{-r(T-t)}\mathcal{N}'(d_2)\frac{\mathrm{d}d_2}{\mathrm{d}t}\\
+			&=\delta S\Delta_c+Se^{-\delta(T-t)}\mathcal{N}'(d_1)\frac{\mathrm{d}d_1}{\mathrm{d}t}-rKe^{-r(T-t)}\mathcal{N}(d_2)-Ke^{-r(T-t)}\mathcal{N}'(d_2)\frac{\mathrm{d}d_2}{\mathrm{d}t}\\
+			&=(\delta-r) S\Delta_c+rS\Delta_c+Se^{-\delta(T-t)}\mathcal{N}'(d_1)\frac{\mathrm{d}d_1}{\mathrm{d}t}-rKe^{-r(T-t)}\mathcal{N}(d_2)-Ke^{-r(T-t)}\mathcal{N}'(d_2)\frac{\mathrm{d}d_2}{\mathrm{d}t}\\
+			&=(\delta-r) S\Delta_c+rS\Delta_c-rKe^{-r(T-t)}\mathcal{N}(d_2)+Se^{-\delta(T-t)}\mathcal{N}'(d_1)\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}\mathcal{N}'(d_2)\frac{\mathrm{d}d_2}{\mathrm{d}t}\\
+			&=(\delta-r) S\Delta_c+rc+Se^{-\delta(T-t)}\mathcal{N}'(d_1)\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}\mathcal{N}'(d_2)\frac{\mathrm{d}d_2}{\mathrm{d}t}			
+	\end{align*}
+
+We are almost done! We have two out of the three terms from the claimed formula (just in a different order). It's hard to believe that the remaining terms all combine into one nice compact form, but they do. It is here that we use $a$, $b$ and $c$. Let's focus on the remaining piece.
+
+	\begin{align}
+	Se^{-\delta(T-t)}\mathcal{N}'(d_1)\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}\mathcal{N}'(d_2)\frac{\mathrm{d}d_2}{\mathrm{d}t} 	&=Se^{-\delta(T-t)}\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}e^{-d_2^2/2}{\sqrt{2\pi}}\frac{\mathrm{d}d_2}{\mathrm{d}t}\\
+																							&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}\left[Se^{-\delta(T-t)}\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}e^{4ab/2c^2}\frac{\mathrm{d}d_2}{\mathrm{d}t}\right]
+	\end{align}
+
+This last factorization works since we have
+
+	\begin{align*}
+	d_1^2 		&=\frac{a^2+2ab+b^2}{c^2}\\
+	d_2^2 		&=\frac{a^2-2ab+b^2}{c^2}\\
+	e^{-d_2^2/2}	&=e^{-d_1^2/2}e^{4ab/2c^2}
+	\end{align*}
+
+Recall that $b/c^2=1/2$. We continue from line (2) above.
+
+	\begin{align*}
+	\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}\left[Se^{-\delta(T-t)}\frac{\mathrm{d}d_1}{\mathrm{d}t}\right. 	&\\
+	\left.-Ke^{-r(T-t)}e^{4ab/2c^2}\frac{\mathrm{d}d_2}{\mathrm{d}t}\right] 					&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}\left[Se^{-\delta(T-t)}\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}e^{a}\frac{\mathrm{d}d_2}{\mathrm{d}t}\right]\\
+																	&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}\left[Se^{-\delta(T-t)}\frac{\mathrm{d}d_1}{\mathrm{d}t}-Ke^{-r(T-t)}e^{\ln\frac{S}{K}+(r-\delta)(T-t)}\frac{\mathrm{d}d_2}{\mathrm{d}t}\right]\\
+																	&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}\left[Se^{-\delta(T-t)}\frac{\mathrm{d}d_1}{\mathrm{d}t}-Se^{-\delta(T-t)}\frac{\mathrm{d}d_2}{\mathrm{d}t}\right]\\
+																	&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}Se^{-\delta(T-t)}\frac{\mathrm{d}}{\mathrm{d}t}\left[d_1-d_2\right]\\
+																	&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}Se^{-\delta(T-t)}\frac{\mathrm{d}}{\mathrm{d}t}[\sigma\sqrt{T-t}]\\
+																	&=\frac{e^{-d_1^2/2}}{\sqrt{2\pi}}Se^{-\delta(T-t)}\left(-\frac{\sigma}{2\sqrt{T-t}}\right)\\
+																	&=-e^{-\delta(T-t)}\frac{e^{-d_1^2/2}}{S\sigma\sqrt{2\pi(T-t)}}\frac{\sigma^2S^2}{2}\\
+																	&=-\Gamma_c\frac{\sigma^2S^2}{2}
+	\end{align*}
+We have shown the last of the three parts, and the proof is complete.
+\end{proof}
+
+I know what you're thinking. Do I have to know this? You won't see anything like this on an exam. I just wanted to show you how to properly compute $\Theta$. It is so cumbersome because $t$ appears in every expression in our formula, so there is a chain rule or product rule at every step along the way. Fortunately, our auxillary variables saved the day. 
+
+The reason I wrote the formula the way I did was that it is much more reminiscent of the way you might do it if you knew the Black-Scholes Equation. That equation states the following:
+
+\begin{equation*}
+rD=\Theta_D+(r-\delta)S\Delta_D+\frac{\sigma^2S^2}{2}\Gamma_D
+\end{equation*}
+
+for any derivative, $D$. The proof of this equation is not within the scope of our studies. Some details may be found \href{https://www.math.cuhk.edu.hk/~rchan/teaching/math4210/chap08.pdf}{here}. Unfortunately, some background reading may be necessary to fully understand what the author is doing.
+
+In the last section, we examined a portfolio that had $100$ written calls. Let's examine how delta, gamma, and theta evolve for that call here. I will give a table for each Greek value. Since we aren't as worried with initial conditions, I will allow $S$ to vary at time 0 (this was not allowed for the profit table). 
+
+\begin{center}
+	\begin{tabular}{c|cccc}
+	Call Price	& Time 	& Time 		& Time 		& Time\\
+		 	& $0$ 		& $1/48$ 		& $2/48$ 		& $3/48$\\
+	\hline
+	$64$		& $1.21$	& $0.89$		& $0.55$		& $0.20$\\
+	$66$		& $1.94$	& $1.56$		& $1.13$		& $0.60$\\
+	$68$		& $2.90$	& $2.49$		& $2.02$		& $1.41$\\
+	$70$		& $4.09$	& $3.69$		& $3.23$		& $2.67$\\
+	$72$		& $5.48$	& $5.12$		& $4.73$		& $4.30$\\
+	$74$		& $7.06$	& $6.75$		& $6.43$		& $6.15$
+	\end{tabular}
+
+\vspace{25pt}
+
+	\begin{tabular}{c|cccc}
+	Delta 		& Time 	& Time 		& Time 		& Time\\
+		 	& $0$ 		& $1/48$ 		& $2/48$ 		& $3/48$\\
+	\hline
+	$64$		& $0.3078$	& $0.2717$		& $0.2181$		& $0.1250$\\
+	$66$		& $0.4215$	& $0.3988$		& $0.3638$		& $0.2941$\\
+	$68$		& $0.5385$	& $0.5335$		& $0.5275$		& $0.5196$\\
+	$70$		& $0.6490$	& $0.6607$		& $0.6823$		& $0.7332$\\
+	$72$		& $0.7453$	& $0.7689$		& $0.8070$		& $0.8807$\\
+	$74$		& $0.8235$	& $0.8522$		& $0.8940$		& $0.9570$
+	\end{tabular}
+
+\vspace{25pt}
+
+	\begin{tabular}{c|cccc}
+	Gamma	& Time 	& Time 		& Time 		& Time\\
+			& $0$ 		& $1/48$ 		& $2/48$ 		& $3/48$\\
+	\hline
+	$64$		& $0.0543$	& $0.0592$		& $0.0644$		& $0.0637$\\
+	$66$		& $0.0585$	& $0.0668$		& $0.0796$		& $0.1033$\\
+	$68$		& $0.0576$	& $0.0667$		& $0.0818$		& $0.1159$\\
+	$70$		& $0.0522$	& $0.0596$		& $0.0711$		& $0.0928$\\
+	$72$		& $0.0438$	& $0.0481$		& $0.0530$		& $0.0545$\\
+	$74$		& $0.0343$	& $0.0353$		& $0.0343$		& $0.0241$
+	\end{tabular}
+
+\vspace{25pt}
+	\begin{tabular}{c|cccc}
+	Theta		& Time 	& Time 		& Time 		& Time\\
+		 	& $0$ 		& $1/48$ 		& $2/48$ 		& $3/48$\\
+	\hline
+	$64$		& $-14.70$	& $-15.82$		& $-16.94$		& $-16.44$\\
+	$66$		& $-17.10$	& $-19.26$		& $-22.58$		& $-28.67$\\
+	$68$		& $-18.25$	& $-20.84$		& $-25.14$		& $-34.82$\\
+	$70$		& $-18.02$	& $-20.33$		& $-23.91$		& $-30.69$\\
+	$72$		& $-16.63$	& $-18.13$		& $-19.89$		& $-20.72$\\
+	$74$		& $-14.53$	& $-15.02$		& $-14.89$		& $-11.78$
+	\end{tabular}
+\end{center}
+
+Notice that the call values decrease as you move from left to right. This is a result of the negative values of theta. This is what is called theta decay. Also, notice that the call values increase as you move down the table. This is because the delta value is positive. One final thing, as you move down the table, the increase in call value is also increasing! This is the result of a positive gamma value. 
+
+The theta table may suggest something that is not true: theta values are always negative. The reality is that they are often negative. To see that they can be positive, we can check by example.
+
+\begin{example}
+Let $S=50$, $r=0.07$, $\delta=0.03$, $\sigma=0.35$. Suppose that you have a three month, strike 10 European call option. Then $\Theta_c=0.80$.
+
+Let $S=50$, $r=0.07$, $\delta=0.03$, $\sigma=0.35$. Suppose that you have a three month, strike 70 European put option. Then $\Theta_p=1.84$. 
+\end{example}
+
+There was nothing special about the values I chose in the example. The only part that is significant is that the options are deeply in-the-money. That is, if you could exercise the option today, the payoff would be large. 
+
+We will revisit many of these concepts in our section on approximation. Before that we will take a slightly different perspective: percentage change. 
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
