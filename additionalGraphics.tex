@@ -21,8 +21,43 @@
         anchor=south},
       every axis x label/.style={at=(current axis.right of origin),anchor=west},
     ]
-    \foreach \u in {.1,.2,...,4}{
-    \addplot[ultra thick,blue!50!white,variable=\t,domain=-3:3,samples=100] (
+    \foreach \u in {.1,.2,...,3}{
+    \addplot[line width=6pt,blue!50!white,variable=\t,domain=-3:-2,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+    \addplot[line width=6pt,blue!50!green!50!white,variable=\t,domain=2:3,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });       
+    \addplot[ultra thick,red!50!white,variable=\t,domain=-2:-1,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+    \addplot[ultra thick,green!50!white,variable=\t,domain=1:2,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+    \addplot[ultra thick,black!50!white,variable=\t,domain=0:1,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+    \addplot[ultra thick,black!50!white,variable=\t,domain=-1:0,smooth] (
             {
               sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
             },
@@ -30,7 +65,8 @@
               .18-.14*\u-.08*\t
             });
             }
-            
+    \addplot[fill=blue,fill opacity=1,domain=.8:1,mark=none] coordinates { (.8,.2) (1,.2) };
+
 \end{axis}
 \end{tikzpicture}
 \end{document}
