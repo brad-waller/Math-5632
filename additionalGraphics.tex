@@ -12,7 +12,7 @@
       xmin=-0.1,
       xmax=1,
       ymin=-0.1,
-      ymax=.5,
+      ymax=.39,
       clip=true,
       %unit vector ratio*=1 1 1,
       axis lines=center,
@@ -56,15 +56,18 @@
     
     \addplot[draw=regionColor,fill=regionColor,fill opacity=1,domain=-1:1,mark=none,smooth] ({sqrt(1+140*x^2)-.84},{x+.08}) \closedcycle;
     \node at (axis cs: .9,.1) {$R$};
-    
-    \node[circle,fill,inner sep=2pt] at (axis cs:.3,.04) {};
-    \node[below right] at (axis cs:.3,.04) {$x_1$};
 
+    \addplot[line width=1pt,
+        black,
+        variable=\t,domain=-2:3,smooth] (
+            {
+              sqrt(.36-.96*0-.6*\t+.9*0*\t+.69*0^2+.4*\t^2)
+            },
+            {
+              .18-.14*0-.08*\t
+            });
     \node[circle,fill,inner sep=2pt] at (axis cs:.4,.1) {};
-    \node[below right] at (axis cs:.4,.1) {$x_2$};
-
-    \node[circle,fill,inner sep=2pt] at (axis cs:.6,.18) {};
-    \node[below right] at (axis cs:.6,.18) {$x_3$};
+    \node[below left] at (axis cs:.4,.1) {$x$};
 
 
   \end{axis}
@@ -88,14 +91,14 @@
       xmin=-0.1,
       xmax=1,
       ymin=-0.1,
-      ymax=.5,
+      ymax=.39,
       clip=true,
       %unit vector ratio*=1 1 1,
       axis lines=center,
       %grid = major,
       %ytick={-21,-18,...,21},
       %xtick={-21,-18,...,21},
-      %ticks=none,
+      ticks=none,
       xlabel=$\sigma$,
       ylabel=${E[R]}$,
       y tick label style={anchor=west},
