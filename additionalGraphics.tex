@@ -19,7 +19,7 @@
       %grid = major,
       %ytick={-21,-18,...,21},
       %xtick={-21,-18,...,21},
-      %ticks=none,
+      ticks=none,
       xlabel=$\sigma$,
       ylabel=${E[R]}$,
       y tick label style={anchor=west},
@@ -69,7 +69,13 @@
     \node[circle,fill,inner sep=2pt] at (axis cs:.4,.1) {};
     \node[below left] at (axis cs:.4,.1) {$x$};
 
+    \node[circle,fill,inner sep=2pt] at (axis cs:.46,.155) {};
+    \node[above] at (axis cs:.46,.155) {$m$};
 
+    \addplot[domain=0:1] {((.155-.068)/.46)*(x-.46)+.157};
+
+    \node at (axis cs:0,.068) {--};
+    \node[left] at (axis cs:0,.068) {$R_f$};
   \end{axis}
 \end{tikzpicture}
 
