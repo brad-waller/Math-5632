@@ -169,7 +169,7 @@ Now that we have seen how arbitrage works, let's see those two assumptions.
 \begin{ass}\label{ass6} There will be no fees or taxes unless specified in a problem.
 \end{ass}
 
-In the argument to determine the price of a forward contract, we will assume that there are no transaction costs associated with purchases or sales. The idea is to think of a way to end up in the identical payoff position as the buyer in a forward contract. This is not too difficult to do. When you look at the graph of the payoff, you see that there is an axis corresponding to the asset price. In Figure \ref{Fig10}, we had a line with slope 1. In fact, the graph is of the function $S(T)-25$ (for the buyer). In general, this will look like $S(T)-K$. The goal is to come up with a portfolio (collection of assets) that has payoff $S(T)-K$. 
+In the argument to determine the price of a forward contract, we will assume that there are no transaction costs associated with purchases or sales. The idea is to think of a way to end up in the identical payoff position as the buyer in a forward contract. This is not too difficult to do. When you look at the graph of the payoff, you see that there is an axis corresponding to the asset price. In the buyer's payoff, we had a line with slope 1. In fact, the graph is of the function $S(T)-25$ (for the buyer). In general, this will look like $S(T)-K$. The goal is to come up with a portfolio (collection of assets) that also has payoff $S(T)-K$. 
 
 The first position is to enter into a situation where we will end up with one share of the underlying asset at time $T$. The next position is to end up with $-K$ at time $T$. If we borrow money today that is due at time $T$, we will have a negative cash position at time $T$. These two together give us the desired portfolio. Let's use graphs to visualize.
 
@@ -250,7 +250,7 @@ You enter into a forward contract to purchase 100 shares of ABC in three months 
 \end{question}
 
 \begin{solution}
-	This is a direct calculation using the formula provided by Theorem \ref{thm1}. 
+	This is a direct calculation using the formula provided by the Forward Contract Price Thoerem. 
 	\begin{equation*}
 	100[74e^{-0.03/4}-75e^{-0.09/4}]=11.57
 	\end{equation*}

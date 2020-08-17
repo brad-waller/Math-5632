@@ -1,0 +1,318 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+\outcome{Learn how to compute the expected return and variance of a portfolio.}
+
+\author{Brad Waller}
+
+%Section 6.1
+
+\title{Minimum Variance}
+
+\begin{document}
+
+\begin{abstract}
+In our previous work, we have dealt with portfolios. Here, we begin studying the returns of portfolios. It will be advantageous to use annual effective rates in this section, so we will do so.
+\end{abstract}
+
+\maketitle
+
+Portfolios are collections of assets. Let $X_1$, $X_2$, ... and $X_n$ be such a collection with quantities $q_1$, $q_2$, ... and $q_n$, respectively. The return of asset $X_j$ will be the quantity
+
+\begin{equation*}
+R_j(t)=\frac{q_j(t+1)X_j(t+1)-q_j(t)X_j(t)}{q_j(t)X_j(t)}=\frac{[q_j(t+1)/q_j(t)]X_j(t+1)-X_j(t)}{X_j(t)}.
+\end{equation*}
+
+Unfortunately, we don't know $R_j(t)$ at time $t$. That is why we study the quantities $\mathbb{E}[R_j]$ and $\text{Var}(R_j)$, where $R_j$ is simply the return today (or at time $0$). To study properties of these terms, we will need to know the weight of the portfolio in each asset. The weight of the portfolio invested in $X_j$ is the quantity
+
+\begin{equation*}
+\alpha_j(t)=\frac{q_j(t)X_j(t)}{\sum_{j=1}^nq_j(t)X_j(t)}.
+\end{equation*}
+
+We now have the tools to compute the return of the portfolio $P=\sum_{j=1}^nq_jX_j$. The return of $P$ is
+
+\begin{align*}
+R_j(0) 	&=\frac{P(1)-P(0)}{P(0)}\\
+		&=\frac{\sum_{j=1}^nq_j(1)X_j(1)-\sum_{j=1}^nq_j(0)X_j(0)}{P(0)}\\
+		&=\frac{\sum_{j=1}^n[q_j(1)X_j(1)-q_j(0)X_j(0)]}{P(0)}\\
+		&=\frac{\sum_{j=1}^nq_j(0)X_j(0)[q_j(1)X_j(1)-q_j(0)X_j(0)]/q_j(0)X_j(0)}{P(0)}\\
+		&=\frac{\sum_{j=1}^nq_jX_j(0)R_j(0)}{P(0)}\\
+		&=\sum_{j=1}^n\frac{q_j(0)X_j(0)}{P(0)}R_j\\
+		&=\sum_{j=1}^n\alpha_j(0)R_j(0)
+\end{align*}
+
+I hope it's clear that there was nothing special about this argument at time $0$. It will always work for time $t$ computations. The choice of annual effective rates was to make this argument work. Try and see if you can replicate it for continuously compounded rates. I doubt you can! The implication of this result is that returns are well-behaved with regard to expectation. Since we almost exclusively deal with these returns today, we will suppress the time variable.
+
+\begin{equation*}
+\mathbb{E}[R_j]=\sum_{j=1}^n\alpha_j\mathbb{E}[R_j]
+\end{equation*}
+
+Unfortunately, things don't work out as nicely when dealing with variance. This is because we never assumed anything about independence. 
+
+\begin{equation*}
+\text{Var}(R_p)=\sum_{j=1}^n\alpha_j\text{Var}(R_j)+2\sum_{1\leq i< j\leq n}\text{Cov}(R_i, R_j)
+\end{equation*}
+
+In our study of portfolio theory, it will be very important to study diagrams of the sort given below. The image is that of all possible combinations of volatility and expected returns for a group of assets. The curve through $X_1$ and $X_2$ consists of all combinations of portfolios with only $X_1$ and $X_2$ as members. 
+
+\begin{tikzpicture}
+  \begin{axis}[
+      xmin=-0.1,
+      xmax=1,
+      ymin=-0.1,
+      ymax=.39,
+      clip=true,
+      %unit vector ratio*=1 1 1,
+      axis lines=center,
+      %grid = major,
+      %ytick={-21,-18,...,21},
+      %xtick={-21,-18,...,21},
+      ticks=none,
+      xlabel=$\sigma$,
+      ylabel=${E[R]}$,
+      y tick label style={anchor=west},
+      every axis y label/.style={at=(current axis.above origin),
+        anchor=south},
+      every axis x label/.style={at=(current axis.right of origin),anchor=west},
+      axis on top,
+    ]
+    \foreach \u in {.55,.6,...,2}{
+      \addplot[line width=1pt,
+        regionColor,
+        variable=\t,domain=-3:2,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+            
+    }
+
+   \foreach \u in {-.1,-.05,...,1}{
+      \addplot[line width=1pt,
+        regionColor,
+        variable=\t,domain=-2:3,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+            
+    }
+    
+    \addplot[draw=regionColor,fill=regionColor,fill opacity=1,domain=-1:1,mark=none,smooth] ({sqrt(1+140*x^2)-.84},{x+.08}) \closedcycle;
+    \node at (axis cs: .9,.1) {$R$};
+
+    \addplot[line width=1pt,
+        black,
+        variable=\t,domain=-2:3,smooth] (
+            {
+              sqrt(.36-.96*0-.6*\t+.9*0*\t+.69*0^2+.4*\t^2)
+            },
+            {
+              .18-.14*0-.08*\t
+            });
+    \node[circle,fill,inner sep=2pt] at (axis cs:.4,.1) {};
+    \node[below left] at (axis cs:.4,.1) {$X_1$};
+
+    \node[circle,fill,inner sep=2pt] at (axis cs:.46,.155) {};
+    \node[above] at (axis cs:.46,.155) {$X_2$};
+
+    %\addplot[domain=0:1] {((.155-.068)/.46)*(x-.46)+.157};
+
+    \node at (axis cs:0,.068) {--};
+    %\node[left] at (axis cs:0,.068) {$R_f$};
+  \end{axis}
+\end{tikzpicture}
+
+Of particular interest will be the upper boundary of the region and the leftmost point.
+
+\begin{definition}
+The region graphed is called the {\bf feasible region}. The{\bf frontier funds} are those that lie on the boundary. The upper half of that boudary are the {\bf efficient portfolios}. 
+\end{definition}
+
+For any vertical slice with the region, you have posible returns for a particular level of risk. I think it should be clear that you would want to be on the upper intersection of the vertical slice and the feasible region. In fact, this is where all investors would want to be. In a later discussion, we will focus on the efficient portfolios. 
+
+Before such a discussion, let's determine one such portfolio. We concern ourselves with the portfolio with minimum variance.
+
+\begin{example}
+Suppose that $\text{Var}(R_1)=0.06$, $\text{Var}(R_2)=0.24$, and $\text{Cov}(R_1, R_2)=-0.06$. Determine the portfolio consisting of proportions of $X_1$ and $X_2$ with minimum variance.
+\end{example}
+
+\begin{solution}
+	\begin{align*}
+	R_p 			&=\beta R_1+(1-\beta)R_2\\
+	\text{Var}(R_p)	&=\beta^2\text{Var}(R_1)+(1-\beta)^2\text{Var}(R_2)+2\beta(1-\beta)\text{Cov}(R_1, R_2)\\
+				&=0.06\beta^2+0.24(1-\beta)^2+2\beta(1-\beta)(-0.06)\\
+				&=0.06\beta^2+0.24-0.48\beta+0.24\beta^2-0.12\beta+0.12\beta^2\\
+				&=[0.06+0.24+0.12]\beta^2+[-0.48-0.12]\beta+0.24\\
+				&=0.42\beta^2-0.6\beta+0.24
+	\end{align*}
+
+Our variance is a quadratic in $\beta$ with positive leading coefficient. That means that it has a minimum at the vertex. That corresponds to the value
+
+	\begin{align*}
+	\beta	&=-\frac{b}{2a}\\
+		&=-\frac{-0.6}{0.84}\\
+		&=\frac{5}{7}
+	\end{align*}
+
+Our portfolio with minimum variance has weight $5/7$ in asset $X_1$ and $2/7$ in asset $X_2$. In other words, the portfolio of minimum variance could have an investment valued at $\$500$ in $X_1$ and $\$200$ in $X_2$. 
+\end{solution}
+
+\begin{question}
+What is the minimum variance?
+
+	\begin{multipleChoice}
+	\choice{$0.000$}
+	\choice{$0.013$}
+	\choice[correct]{$0.026$}
+	\choice{$0.039$}
+	\end{multipleChoice}
+
+\end{question}
+
+\begin{solution}
+This was really an algebra problem. Simply plug in $5/7$ for $\beta$ in the variance quadratic.
+
+	\begin{align*}
+	0.42\beta^2-0.6\beta+0.24\vert_{\beta=5/7}	&=0.42[5/7]^2-0.6[5/7]+0.24\\
+									&=9/350\\
+									&=0.0257
+	\end{align*}
+\end{solution}
+
+It might be worthwhile to add some expectation information to the example.
+
+\begin{example}
+Suppose that the expected returns from the previous example were $\mathbb{E}[R_1]=0.04$ and $\mathbb{E}[R_2]=0.2$. What is the expected return of the portfolio with minimum variance?
+\end{example}
+
+\begin{solution}
+Again, we are just plugging in our value of $\beta$.
+
+	\begin{align*}
+	\mathbb{E}[R_p] 	&=\beta\mathbb{E}[R_1]+(1-\beta\mathbb{E}[R_2]\\
+				&=0.04\beta+0.2(1-\beta)\\
+				&=0.2-0.16\beta
+	\end{align*}
+After evaluation at $\beta=5/7$ we have
+	\begin{equation*}
+	\mathbb{E}[R_p]=0.2-0.16[5/7]=3/35=0.0857
+	\end{equation*}
+\end{solution}
+
+The return is greater than that of asset $X_1$, and the variance of the portfolio is less than that of both assets on their own. This really is a diversified portfolio!
+
+There are two special cases that are interesting to explore when dealing with two assets.
+
+\begin{equation*}
+\text{Corr}(R_1,R_2)=\pm 1.
+\end{equation*}
+
+Let's cover the positive case. The negative case will be left to the reader.
+
+\begin{example}
+Suppose that we have that the correlation of the returns on two assets is $1$. Then
+	\begin{align*}
+	1				&=\text{Corr}(R_1, R_2)\\
+				 	&=\frac{\text{Cov}(R_1, R_2)}{\sqrt{\text{Var}(R_1)}{\sqrt{\text{Var}(R_2)}}}\\
+					&=\frac{\text{Cov}(R_1, R_2)}{\sigma_1\sigma_2}\\
+	\sigma_1\sigma_2 		&=\text{Cov}(R_1, R_2).
+	\end{align*}
+We can proceed with our variance computation.
+
+	\begin{align*}
+	\text{Var}(R_p) 	&=\beta^2\text{Var}(R_1)+(1-\beta)^2\text{Var}(R_2)+2\beta(1-\beta)\sigma_1\sigma_2\\
+				&=\beta^2\sigma_1^2+(1-\beta)^2\sigma_2^2+2\beta(1-\beta)\sigma_1\sigma_2\\
+				&=[\beta\sigma_1+(1-\beta)\sigma_2]^2\\
+	\sigma_p 		&=|\beta\sigma_1+(1-\beta)\sigma_2|
+	\end{align*}
+We can construct a portfolio with zero variance provided that $\sigma_1\not=\sigma_2$
+
+	\begin{align*}
+ 	\beta\sigma_1+(1-\beta)\sigma_2 	&=0\\
+	\beta(\sigma_1-\sigma_2)+\sigma_2 	&=0\\
+	\beta(\sigma_1-\sigma_2) 			&=-\sigma_2\\
+	\beta 						&=-\frac{\sigma_2}{\sigma_1-\sigma_2}
+	\end{align*}
+
+When $\sigma_1>\sigma_2$, $\beta<0$. To achieve a portfolio with zero variance, we would need to short sell the asset $X_1$. Our portfolio would have a negative proportion in the first asset. By doing this, we would actually have a proportion in asset $X_2$ greater than 1!. The opposite holds if $\sigma_1<\sigma_2$. 
+\end{example}
+
+The next diagram is a picture of the situation when you have a correlation of $-1$. Make sure that what you derived agrees with this cartoon!
+
+\begin{tikzpicture}
+  \begin{axis}[
+      xmin=-0.1,
+      xmax=1,
+      ymin=-0.1,
+      ymax=1,
+      clip=true,
+      %unit vector ratio*=1 1 1,
+      axis lines=center,
+      %grid = major,
+      %ytick={-21,-18,...,21},
+      %xtick={-21,-18,...,21},
+      ticks=none,
+      xlabel=$\sigma$,
+      ylabel=${E[R]}$,
+      y tick label style={anchor=west},
+      every axis y label/.style={at=(current axis.above origin),
+        anchor=south},
+      every axis x label/.style={at=(current axis.right of origin),anchor=west},
+      axis on top,
+    ]
+    
+	\node[circle,fill,inner sep=2pt] at (axis cs:.4,.2) {};
+    	\node[below left] at (axis cs:.4, .2) {$X_1$};
+
+    	\node[circle,fill,inner sep=2pt] at (axis cs:.8,.8) {};
+    	\node[above] at (axis cs:.8, .8) {$X_2$};
+
+    	\addplot[domain=0:1] {.375*x+0.5};
+	\addplot[domain=0:1] {-.75*x+0.5};
+
+	%\node at (axis cs:0,.068) {--};
+	\node[left] at (axis cs:0,.5) {$P$};
+  
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
