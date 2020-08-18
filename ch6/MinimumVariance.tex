@@ -144,18 +144,18 @@ Suppose that $\text{Var}(R_1)=0.06$, $\text{Var}(R_2)=0.24$, and $\text{Cov}(R_1
 
 \begin{solution}
 	\begin{align*}
-	R_p 			&=\beta R_1+(1-\beta)R_2\\
-	\text{Var}(R_p)	&=\beta^2\text{Var}(R_1)+(1-\beta)^2\text{Var}(R_2)+2\beta(1-\beta)\text{Cov}(R_1, R_2)\\
-				&=0.06\beta^2+0.24(1-\beta)^2+2\beta(1-\beta)(-0.06)\\
-				&=0.06\beta^2+0.24-0.48\beta+0.24\beta^2-0.12\beta+0.12\beta^2\\
-				&=[0.06+0.24+0.12]\beta^2+[-0.48-0.12]\beta+0.24\\
-				&=0.42\beta^2-0.6\beta+0.24
+	R_p 			&=\alpha R_1+(1-\alpha)R_2\\
+	\text{Var}(R_p)	&=\alpha^2\text{Var}(R_1)+(1-\alpha)^2\text{Var}(R_2)+2\alpha(1-\alpha)\text{Cov}(R_1, R_2)\\
+				&=0.06\alpha^2+0.24(1-\alpha)^2+2\alpha(1-\alpha)(-0.06)\\
+				&=0.06\alpha^2+0.24-0.48\alpha+0.24\alpha^2-0.12\alpha+0.12\alpha^2\\
+				&=[0.06+0.24+0.12]\alpha^2+[-0.48-0.12]\alpha+0.24\\
+				&=0.42\alpha^2-0.6\alpha+0.24
 	\end{align*}
 
-Our variance is a quadratic in $\beta$ with positive leading coefficient. That means that it has a minimum at the vertex. That corresponds to the value
+Our variance is a quadratic in $\alpha$ with positive leading coefficient. That means that it has a minimum at the vertex. That corresponds to the value
 
 	\begin{align*}
-	\beta	&=-\frac{b}{2a}\\
+	\alpha	&=-\frac{b}{2a}\\
 		&=-\frac{-0.6}{0.84}\\
 		&=\frac{5}{7}
 	\end{align*}
@@ -176,10 +176,10 @@ What is the minimum variance?
 \end{question}
 
 \begin{solution}
-This was really an algebra problem. Simply plug in $5/7$ for $\beta$ in the variance quadratic.
+This was really an algebra problem. Simply plug in $5/7$ for $\alpha$ in the variance quadratic.
 
 	\begin{align*}
-	0.42\beta^2-0.6\beta+0.24\vert_{\beta=5/7}	&=0.42[5/7]^2-0.6[5/7]+0.24\\
+	0.42\alpha^2-0.6\alpha+0.24\vert_{\alpha=5/7}	&=0.42[5/7]^2-0.6[5/7]+0.24\\
 									&=9/350\\
 									&=0.0257
 	\end{align*}
@@ -192,14 +192,14 @@ Suppose that the expected returns from the previous example were $\mathbb{E}[R_1
 \end{example}
 
 \begin{solution}
-Again, we are just plugging in our value of $\beta$.
+Again, we are just plugging in our value of $\alpha$.
 
 	\begin{align*}
-	\mathbb{E}[R_p] 	&=\beta\mathbb{E}[R_1]+(1-\beta\mathbb{E}[R_2]\\
-				&=0.04\beta+0.2(1-\beta)\\
-				&=0.2-0.16\beta
+	\mathbb{E}[R_p] 	&=\alpha\mathbb{E}[R_1]+(1-\alpha)\mathbb{E}[R_2]\\
+				&=0.04\alpha+0.2(1-\alpha)\\
+				&=0.2-0.16\alpha
 	\end{align*}
-After evaluation at $\beta=5/7$ we have
+After evaluation at $\alpha=5/7$ we have
 	\begin{equation*}
 	\mathbb{E}[R_p]=0.2-0.16[5/7]=3/35=0.0857
 	\end{equation*}
@@ -226,21 +226,21 @@ Suppose that we have that the correlation of the returns on two assets is $1$. T
 We can proceed with our variance computation.
 
 	\begin{align*}
-	\text{Var}(R_p) 	&=\beta^2\text{Var}(R_1)+(1-\beta)^2\text{Var}(R_2)+2\beta(1-\beta)\sigma_1\sigma_2\\
-				&=\beta^2\sigma_1^2+(1-\beta)^2\sigma_2^2+2\beta(1-\beta)\sigma_1\sigma_2\\
-				&=[\beta\sigma_1+(1-\beta)\sigma_2]^2\\
-	\sigma_p 		&=|\beta\sigma_1+(1-\beta)\sigma_2|
+	\text{Var}(R_p) 	&=\alpha^2\text{Var}(R_1)+(1-\alpha)^2\text{Var}(R_2)+2\alpha(1-\alpha)\sigma_1\sigma_2\\
+				&=\alpha^2\sigma_1^2+(1-\alpha)^2\sigma_2^2+2\alpha(1-\alpha)\sigma_1\sigma_2\\
+				&=[\alpha\sigma_1+(1-\alpha)\sigma_2]^2\\
+	\sigma_p 		&=|\alpha\sigma_1+(1-\alpha)\sigma_2|
 	\end{align*}
 We can construct a portfolio with zero variance provided that $\sigma_1\not=\sigma_2$
 
 	\begin{align*}
- 	\beta\sigma_1+(1-\beta)\sigma_2 	&=0\\
-	\beta(\sigma_1-\sigma_2)+\sigma_2 	&=0\\
-	\beta(\sigma_1-\sigma_2) 			&=-\sigma_2\\
-	\beta 						&=-\frac{\sigma_2}{\sigma_1-\sigma_2}
+ 	\alpha\sigma_1+(1-\alpha)\sigma_2 	&=0\\
+	\alpha(\sigma_1-\sigma_2)+\sigma_2 	&=0\\
+	\alpha(\sigma_1-\sigma_2) 		&=-\sigma_2\\
+	\alpha						&=-\frac{\sigma_2}{\sigma_1-\sigma_2}
 	\end{align*}
 
-When $\sigma_1>\sigma_2$, $\beta<0$. To achieve a portfolio with zero variance, we would need to short sell the asset $X_1$. Our portfolio would have a negative proportion in the first asset. By doing this, we would actually have a proportion in asset $X_2$ greater than 1!. The opposite holds if $\sigma_1<\sigma_2$. 
+When $\sigma_1>\sigma_2$, $\alpha<0$. To achieve a portfolio with zero variance, we would need to short sell the asset $X_1$. Our portfolio would have a negative proportion in the first asset. By doing this, we would actually have a proportion in asset $X_2$ greater than 1!. The opposite holds if $\sigma_1<\sigma_2$. 
 \end{example}
 
 The next diagram is a picture of the situation when you have a correlation of $-1$. Make sure that what you derived agrees with this cartoon!
