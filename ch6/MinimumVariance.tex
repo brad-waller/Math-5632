@@ -56,6 +56,7 @@ Unfortunately, things don't work out as nicely when dealing with variance. This 
 
 In our study of portfolio theory, it will be very important to study diagrams of the sort given below. The image is that of all possible combinations of volatility and expected returns for a group of assets. The curve through $X_1$ and $X_2$ consists of all combinations of portfolios with only $X_1$ and $X_2$ as members. 
 
+\begin{center}
 \begin{tikzpicture}
   \begin{axis}[
       xmin=-0.1,
@@ -127,11 +128,12 @@ In our study of portfolio theory, it will be very important to study diagrams of
     %\node[left] at (axis cs:0,.068) {$R_f$};
   \end{axis}
 \end{tikzpicture}
+\end{center}
 
 Of particular interest will be the upper boundary of the region and the leftmost point.
 
 \begin{definition}
-The region graphed is called the {\bf feasible region}. The{\bf frontier funds} are those that lie on the boundary. The upper half of that boudary are the {\bf efficient portfolios}. 
+The region graphed is called the {\bf feasible region}. The {\bf frontier funds} are those that lie on the boundary. The upper half of that boudary are the {\bf efficient portfolios}. 
 \end{definition}
 
 For any vertical slice with the region, you have posible returns for a particular level of risk. I think it should be clear that you would want to be on the upper intersection of the vertical slice and the feasible region. In fact, this is where all investors would want to be. In a later discussion, we will focus on the efficient portfolios. 
@@ -245,6 +247,7 @@ When $\sigma_1>\sigma_2$, $\alpha<0$. To achieve a portfolio with zero variance,
 
 The next diagram is a picture of the situation when you have a correlation of $-1$. Make sure that what you derived agrees with this cartoon!
 
+\begin{center}
 \begin{tikzpicture}
   \begin{axis}[
       xmin=-0.1,
@@ -273,14 +276,127 @@ The next diagram is a picture of the situation when you have a correlation of $-
     	\node[circle,fill,inner sep=2pt] at (axis cs:.8,.8) {};
     	\node[above] at (axis cs:.8, .8) {$X_2$};
 
-    	\addplot[domain=0:1] {.375*x+0.5};
-	\addplot[domain=0:1] {-.75*x+0.5};
-
+    	%\addplot[domain=0:1] {.375*x+0.5};
+	%\addplot[domain=0:1] {-.75*x+0.5};
+	\draw [->,>=latex](0,0.4) -- (0.9, 0.85);
+	\draw [->, >=latex](0,0.4) -- (0.9, -0.05);
 	%\node at (axis cs:0,.068) {--};
-	\node[left] at (axis cs:0,.5) {$P$};
+	\node[left] at (axis cs:0,.4) {$P$};
   
   \end{axis}
 \end{tikzpicture}
+\end{center}
+
+Let's try something a little more complicated. We will consider a portfolio consisting of three distinct risky assets. The computations become a bit more tedious.
+
+\begin{example}
+Let $X_1$, $X_2$, and $X_3$ be three risky assets that satisfy the following conditions:
+	\begin{align*}
+	\mathbb{E}[R_1] 		&=0.04,\\
+	\text{Var}(R_1) 		&=0.09,\\
+	\mathbb{E}[R_2] 		&=0.10,\\
+	\text{Var}(R_2) 		&=0.16,\\
+	\mathbb{E}[R_3] 		&=0.18,\\
+	\text{Var}(R_3) 		&=0.36,\\
+	\text{Cov}(R_1, R_2) 	&=0.03,\\
+	\text{Cov}(R_1, R_3) 	&=-0.12, \text{ and}\\
+	\text{Cov}(R_2, R_3) 	&=0.06.
+	\end{align*}
+Let's determine the parametric region of the portfolios using these three assets. Afterwards, an image of the region will be given.
+\end{example}
+
+\begin{solution}
+Let $P$ be a portfolio consisting of weight $u$ in asset $X_1$, weight $v$ in asset $X_2$, and weight $1-u-v$ in asset $X_3$. Then we have
+
+	\begin{align*}
+	\mathbb{E}[R_p] 		&=u\mathbb{E}[R_1]+v\mathbb{E}[R_2]+(1-u-v)\mathbb{E}[R_3]\\
+					&=0.18-0.14u-0.08v.
+	\end{align*}
+
+Now for the difficult computation, the variance.
+
+	\begin{align*}
+	\text{Var}(R_p) 	=&u^2\text{Var}(R_1)+v^2\text{Var}(R_2)+\\
+				&(1-u-v)^2\text{Var}(R_3)+2uv\text{Cov}(R_1,R_2)+\\
+				&2u(1-u-v)\text{Cov}(R_1, R_3)+2v(1-u-v)\text{Cov}(R_2, R_3)\\
+				=&u^2[0.09+0.36-2\cdot(-0.12)]+v^2[0.16+0.36-2\cdot(0.06)]\\
+				&+uv[2\cdot(0.36)+2\cdot0.03-2\cdot(-0.12)-2\cdot(0.06)]+\\
+				&u[-2\cdot(0.36)+2\cdot(-0.12)]+v[-2\cdot(0.36)+2\cdot(0.06)]+0.36\\
+				=&0.69u^2+0.4v^2+0.9uv-0.96u-0.6v+0.36
+	\end{align*}
+
+That means that our region is defined by the two parameter set
+\[
+(\sqrt{0.69u^2+0.4v^2+0.9uv-0.96u-0.6v+0.36}, 0.18-0.14u-0.18v).
+\]
+This is not something that is easy to graph. An approximation is given below.
+
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+      xmin=-0.1,
+      xmax=1,
+      ymin=-0.1,
+      ymax=.39,
+      clip=true,
+      %unit vector ratio*=1 1 1,
+      axis lines=center,
+      %grid = major,
+      %ytick={-21,-18,...,21},
+      %xtick={-21,-18,...,21},
+      ticks=none,
+      xlabel=$\sigma$,
+      ylabel=${E[R]}$,
+      y tick label style={anchor=west},
+      every axis y label/.style={at=(current axis.above origin),
+        anchor=south},
+      every axis x label/.style={at=(current axis.right of origin),anchor=west},
+      axis on top,
+    ]
+    \foreach \u in {.55,.6,...,2}{
+      \addplot[line width=1pt,
+        regionColor,
+        variable=\t,domain=-3:2,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+            
+    }
+
+   \foreach \u in {-.1,-.05,...,1}{
+      \addplot[line width=1pt,
+        regionColor,
+        variable=\t,domain=-2:3,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+            
+    }
+    
+    \addplot[draw=regionColor,fill=regionColor,fill opacity=1,domain=-1:1,mark=none,smooth] ({sqrt(1+140*x^2)-.84},{x+.08}) \closedcycle;
+    \node at (axis cs: .9,.1) {$R$};
+    
+    \node[circle,fill,inner sep=2pt] at (axis cs:.3,.04) {};
+    \node[below right] at (axis cs:.3,.04) {$X_1$};
+
+    \node[circle,fill,inner sep=2pt] at (axis cs:.4,.1) {};
+    \node[below right] at (axis cs:.4,.1) {$X_2$};
+
+    \node[circle,fill,inner sep=2pt] at (axis cs:.6,.18) {};
+    \node[below right] at (axis cs:.6,.18) {$X_3$};
+
+
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\end{solution}
 
 \end{document}
 
