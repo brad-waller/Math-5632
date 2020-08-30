@@ -1,0 +1,245 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+%\colorlet{regionColor}{black!30!white}
+
+\outcome{We will discover how to construct the Capital Asset Pricing Model!}
+
+\author{Brad Waller}
+
+%Section 6.3
+
+\title{The Capital Asset Pricing Model}
+
+\begin{document}
+
+\begin{abstract}
+Using our market portfolio from the previous section, we will discover how expected rates of return are related to the market portfolio. 
+\end{abstract}
+
+\maketitle
+
+Our last section dealt with the consequences of the inclusion of a risk-free rate in our portfolio theory. Investorw would all gravitate towards one portfolio: the market portfolio. There are still other portfolios in existance; the market portfolio might be hard to put together for the average investor. There is a relationship between expected returns of those portfolios and that of the market portfolio. The following image should help in constructing such a relationship.
+
+
+\begin{center}
+\begin{tikzpicture}
+  \begin{axis}[
+      xmin=-0.1,
+      xmax=1,
+      ymin=-0.1,
+      ymax=.39,
+      clip=true,
+      %unit vector ratio*=1 1 1,
+      axis lines=center,
+      %grid = major,
+      %ytick={-21,-18,...,21},
+      %xtick={-21,-18,...,21},
+      ticks=none,
+      xlabel=$\sigma$,
+      ylabel=${E[R]}$,
+      y tick label style={anchor=west},
+      every axis y label/.style={at=(current axis.above origin),
+        anchor=south},
+      every axis x label/.style={at=(current axis.right of origin),anchor=west},
+      axis on top,
+    ]
+    \foreach \u in {.55,.6,...,2}{
+      \addplot[line width=1pt,
+        regionColor,
+        variable=\t,domain=-3:2,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+            
+    }
+
+   \foreach \u in {-.1,-.05,...,1}{
+      \addplot[line width=1pt,
+        regionColor,
+        variable=\t,domain=-2:3,smooth] (
+            {
+              sqrt(.36-.96*\u-.6*\t+.9*\u*\t+.69*\u^2+.4*\t^2)
+            },
+            {
+              .18-.14*\u-.08*\t
+            });
+            
+   }
+    
+    \addplot[draw=regionColor,fill=regionColor,fill opacity=1,domain=-1:1,mark=none,smooth] ({sqrt(1+140*x^2)-.84},{x+.08}) \closedcycle;
+   
+    \addplot[line width=1pt,
+        black,
+        variable=\t,domain=-2:3,smooth] (
+            {
+              sqrt(.36-.96*0-.6*\t+.9*0*\t+.69*0^2+.4*\t^2)
+            },
+            {
+              .18-.14*0-.08*\t
+            });
+    \node[circle,fill,inner sep=2pt] at (axis cs:.4,.1) {};
+    \node[below left] at (axis cs:.4,.1) {$X$};
+
+    \node[circle,fill,inner sep=2pt] at (axis cs:.46,.155) {};
+    \node[above] at (axis cs:.46,.155) {$M$};
+
+    \addplot[domain=0:1] {((.155-.068)/.46)*(x-.46)+.157};
+
+    \node at (axis cs:0,.068) {--};
+    \node[left] at (axis cs:0,.068) {$R_f$};
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+
+The tangent line in the diagram is both tangent to the boundary of the feasible region (without the introduction of the risk-free rate), and it is tangent to the curve consisting of portfolios that are mixtures of the market portfolio and some asset/portfolio denoted $X$. That means that we know the slope of the tangent line to the curve connecting $X$ to $M$. It is the Sharpe ratio of the market portfolio!
+
+For our purposes, we will parameterize this curve using $\alpha$. An arbitrary portfolio, $Q$, on this curve will have weight $\alpha$ in the market portfolio and weight $1-\alpha$ in $X$. In other words:
+
+\[
+Q=\alpha M+(1-\alpha)X
+\]
+
+and
+
+\[
+R_q=\alpha R_M+(1-\alpha)R_X.
+\]
+
+Using this information, we know that points $Q$ on our curve must come from their expected return and variance.
+
+\begin{align*}
+\mathbb{E}[R_q] 		&=\alpha\mathbb{E}[R_M]+(1-\alpha)\mathbb{E}[R_X]\\
+\text{Var}(R_q) 		&=\alpha^2\text{Var}(R_M)+(1-\alpha)^2\text{Var}(R_X)+2\alpha(1-\alpha)\text{Cov}(R_M, R_X)\\
+\sigma_q 			&=\sqrt{\text{Var}(R_q)}
+\end{align*}
+
+The point $Q$ will be at $(\sigma_q, \mathbb{E}[R_q])$, which are both functions of $\alpha$. If we want to compute the slope of the tangent line at $M$ to the curve connecting $X$ to $M$, we must compute the following derivative:
+
+\[
+\frac{\mathrm{d}\mathbb{E}[R_q]}{\mathrm{d}\sigma_q}.
+\]
+
+Unfortunately, this is very difficult. Fortunately, we were able to parameterize this curve in terms of $\alpha$.
+
+\begin{align*}
+\frac{\mathrm{d}\mathbb{E}[R_q]}{\mathrm{d}\sigma_q} 	&=\frac{\mathrm{d}\mathbb{E}[R_q]/\mathrm{d}\alpha}{\mathrm{d}\sigma_q/\mathrm{d}\alpha}\\
+									&=\frac{\mathbb{E}[R_M]-\mathbb{E}[R_X]}{[2\alpha\text{Var}(R_M)-2(1-\alpha)\text{Var}(R_X)+(2-4\alpha)\text{Cov}(R_M, R_X)]/2\sigma_q}\\
+									&=\frac{(\mathbb{E}[R_M]-\mathbb{E}[R_X])\sigma_q}{\alpha\text{Var}(R_M)-(1-\alpha)\text{Var}(R_X)+(1-2\alpha)\text{Cov}(R_M, R_X)}
+\end{align*}
+ 
+We evaluate this first derivative when $\alpha=1$ because that corresponds to the point $M$ on the curve connecting $X$ to $M$. This yields the following:
+
+\[
+\frac{(\mathbb{E}[R_M]-\mathbb{E}[R_X])\sigma_M}{\text{Var}(R_M)-\text{Cov}(R_M, R_X)}.
+\]
+
+$\sigma_q$ became $\sigma_M$ upon making the substitution $\alpha=1$. As we observed earlier, we actually know the value of this first derivative. It is the Sharpe ratio of the market portfolio:
+
+\[
+\phi_M=\frac{\mathbb{E}[R_M]-R_f}{\sigma_M}.
+\]
+
+The Capital Asset Pricing Model follows by equating these two formulae. 
+
+\begin{align*}
+\frac{(\mathbb{E}[R_M]-\mathbb{E}[R_X])\sigma_M}{\text{Var}(R_M)-\text{Cov}(R_M, R_X)} 	&=\frac{\mathbb{E}[R_M]-R_f}{\sigma_M}\\
+\mathbb{E}[R_M]-\mathbb{E}[R_X] 										&=(\mathbb{E}[R_M]-R_f)\left[\frac{\text{Var}(R_M)-\text{Cov}(R_M, R_X)}{\sigma_M^2}\right]\\
+\mathbb{E}[R_M]-\mathbb{E}[R_X] 										&=(\mathbb{E}[R_M]-R_f)(1-\text{Cov}(R_M, R_X)/\sigma_M^2)
+\end{align*}
+
+We will make the assignment 
+
+\[
+\beta_X=\frac{\text{Cov}(R_M, R_X)}{\sigma_M^2}.
+\]
+
+Now we may continue our argument.
+
+\begin{align*}
+\mathbb{E}[R_M]-\mathbb{E}[R_X] 										&=(\mathbb{E}[R_M]-R_f)(1-\beta_X)\\
+\mathbb{E}[R_M]-\mathbb{E}[R_X] 										&=\mathbb{E}[R_M]-\mathbb{E}[R_M]\beta_X-R_f+R_f\beta_X\\
+-\mathbb{E}[R_X] 													&=-\mathbb{E}[R_M]\beta_X-R_f+R_f\beta_X\\
+\mathbb{E}[R_X] 													&=R_f+\beta_X(\mathbb{E}[R_M]-R_f)
+\end{align*}
+
+\begin{theorem}[The Capital Asset Pricing Model]
+Let $X$ be a risky asset (or portfolio) and $M$ represent the market portfolio. Then we can relate the expected returns for each through the equation
+\[
+\mathbb{E}[R_X]=R_f+\beta_X(\mathbb{E}[R_M]-R_f)
+\]
+where 
+\[
+\beta_X=\frac{\text{Cov}(R_M, R_X)}{\sigma_M^2}.
+\]
+\end{theorem}
+
+Since $\beta$ has numerator based on covariance and a denominator that is constant, we can infer a nice property of $\beta$. Let $P$ be a portfolio consisting of $X_1$, $X_2$, ... and $X_n$, with weights $\alpha_1$, $\alpha_2$, ... and $\alpha_n$, respectively. Then we have
+
+\[
+\beta_p=\sum_{j=1}^n \alpha_j\beta_j.
+\]
+
+Let's use this information.
+
+\begin{question}
+Suppose that you have two investments, $X_1$ and $X_2$ with weights $\alpha_1=2/3$ and $\alpha_2=1/3$. You know that $\beta_1=2.1$, $\beta_2=-0.6$, $\mathbb{E}[R_M]=0.09$ and $R_f=0.02$. What is the expected return of your portfolio?
+\[
+\mathbb{E}[R_p]=\answer{0.104}
+\]
+\end{question}
+\begin{solution}
+We must start by computing the $\beta$ value of the portfolio.
+	\begin{align*}
+	\beta_p 	&=\frac{2}{3}\beta_1+\frac{1}{3}\beta_2\\
+			&=1.2
+	\end{align*}
+
+Now we apply the Capital Asset Pricing Model.
+	\begin{align*}
+	\mathbb{E}[R_X] 	&=R_f+\beta_p(\mathbb{E}[R_M]-R_f)\\
+				&=0.02+1.2(0.09-0.02)\\
+				&=0.104
+	\end{align*}
+	
+\end{solution}
+
+One lingering question may be: ``Why would I invest in an asset with a negative $\beta$?'' The answer has to do with hedging. Sometimes the market will perform poorly. An asset that has a return negatively correlated with the market will often perform well during these times. That is why the question had such an asset!
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
