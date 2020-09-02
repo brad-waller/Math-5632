@@ -78,7 +78,7 @@ Suppose that you short sell 100 shares of ZYX. You have the following informatio
 	\begin{itemize}
 	\item $S(0)=50$,
 	\item $\delta=0.03$,
-	\item $p=0.8$
+	\item $p=0.8$,
 	\item $m=0.01$, and
 	\item $r=0.07$.
 	\end{itemize}
@@ -90,7 +90,7 @@ What is the payoff of the short sale for the following values of $S(0.5)$: 35, 5
 \end{example}
 
 \begin{solution}
-The computations have the same structure; the only difference is the value used for $S(T)$. They all start with the initial investment of $qmS(0)=100\cdot 0.8\cdot 50=4000$. This is the money that will sit in the margin account for six months. The amount you receive from the short sale will be $qS(0)=5000$. The computation for the payoff will follow the format given in the following equation.
+The computations have the same structure; the only difference is the value used for $S(T)$. They all start with the initial investment of $qpS(0)=100\cdot 0.8\cdot 50=4000$. This is the money that will sit in the margin account for six months. The amount you receive from the short sale will be $qS(0)=5000$. The computation for the payoff will follow the format given in the following equation.
 	\begin{equation*}
 	q[S(0)e^{rT}+pS(0)e^{mT}-S(T)e^{\delta T}]
 	\end{equation*}

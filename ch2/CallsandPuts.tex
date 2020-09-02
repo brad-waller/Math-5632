@@ -266,11 +266,11 @@ It follows that the profit of the whole position is the sum of the parts:\\
 
 We won't always have the benefit of knowing the short sale's profit. Let's see the second approach. Recall that the short sale requires 80\% collateral. Our setup would look something like this where the payoff is in the first set of parenthesis and the profit is the negative at the end of the equation.
 	\begin{equation*}
-	100\left(S(0)e^{0.07\cdot 0.5}+0.8S(0)e^{0.01\cdot 0.5}-S(0.5)e^{0.03\cdot 0.5}+[S(0.5)-50]e^{0.03\cdot 0.5}\right)-4469.52e^{0.07\cdot 0.5}
+	100\left(S(0)e^{0.07\cdot 0.5}+0.8S(0)e^{0.01\cdot 0.5}-S(0.5)e^{0.03\cdot 0.5}+[S(0.5)-50]e^{0.03\cdot 0.5}\right)-469.52e^{0.07\cdot 0.5}
 	\end{equation*}
 Now, before doing too much, notice that we could change the equation as follows:
 	\begin{equation*}
-	100\left(S(0)e^{0.07\cdot 0.5}+0.8S(0)e^{0.01\cdot 0.5}-50e^{0.03\cdot 0.5}\right)-4469.52e^{0.07\cdot 0.5}
+	100\left(S(0)e^{0.07\cdot 0.5}+0.8S(0)e^{0.01\cdot 0.5}-50e^{0.03\cdot 0.5}\right)-469.52e^{0.07\cdot 0.5}
 	\end{equation*}
 It's as though we altered the short-sale payoff by changing $S(0.5)$ to 50. That is the benfit of having the call options. The reason this is permitted is because the quantity of call options is the same as the quantity of shares at the time of the buyback. The value of the last equation is $-\$506.14$. We can attribute the difference to some rounding error. The benefit of the second approach is that it allows you to view the portfolio as a modified short sale. That can save you time when dealing with complex portfolios.
 
