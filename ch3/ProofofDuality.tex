@@ -1,0 +1,209 @@
+\documentclass{ximera}
+
+\input{../preamble.tex}
+
+%\colorlet{regionColor}{black!30!white}
+
+\outcome{We learn that some binomial models satisfy duality while one does not.}
+
+\author{Brad Waller}
+
+\title{Proof of Duality}
+
+\begin{document}
+
+\begin{abstract}
+We gave a formula for the duality relationship with no justification earlier in the book. Here, we provide some of that justification. More will be given when we go over the Black-Scholes formula.
+\end{abstract}
+
+\maketitle
+
+Earlier in this text, we learned about a special relationship between two opposing options: the first was a call option in the first currency, and the second was a put option in another currency. The relationship states the following:
+
+\begin{equation*}
+C(S,K)=SKP(1/S, 1/K)
+\end{equation*}
+
+Using our binomial models, we can show that this relationship holds. A proof of duality will be provided under the the Cox-Ross-Rubenstein model. A slight modification of this method can be used to show that the result also holds for the Forward model. That will be left to the reader. An example where duality does not hold will be given for the Jarrow-Rudd model.
+
+To begin, we need some foundations. For simplicity of notation, we will call our home risk-free rate $r$ and the opposing currency's risk-free rate $\delta$. This will save from the necessity of using subscripts more than is necessary. Also, we will need to draw some diagrams. It will be helpful to draw one for a simple payoff of each of the options in question. First, we draw the call, and it will be followed immediately by the one for the put.
+
+\begin{center}
+	\tikzstyle{bag}=[text width=70pt, text centered]
+	\tikzstyle{end}=[]
+	\begin{tikzpicture}[sloped]
+		\node (a) at (0,0) [bag] {$S$};
+		\node (b) at (3,1) [bag] {$Su$};
+		\node (c) at (3,-1) [bag] {$Sd$};
+		\node (d) at (6,0) [bag] {$C$};
+		\node (e) at (9,1) [bag] {$C_u$};
+		\node (f) at (9,-1) [bag] {$C_d$};
+		\draw [-] (a) to node {}(b);
+		\draw [-] (a) to node {}(c);
+		\draw [-] (d) to node {}(e);
+		\draw [-] (d) to node {}(f);
+	\end{tikzpicture}
+\end{center}
+
+\begin{center}
+	\tikzstyle{bag}=[text width=70pt, text centered]
+	\tikzstyle{end}=[]
+	\begin{tikzpicture}[sloped]
+		\node (a) at (0,0) [bag] {$(1/S)$};
+		\node (b) at (3,1) [bag] {$(1/S)u_1$};
+		\node (c) at (3,-1) [bag] {$(1/S)d_1$};
+		\node (d) at (6,0) [bag] {$P$};
+		\node (e) at (9,1) [bag] {$P_u$};
+		\node (f) at (9,-1) [bag] {$P_d$};
+		\draw [-] (a) to node {}(b);
+		\draw [-] (a) to node {}(c);
+		\draw [-] (d) to node {}(e);
+		\draw [-] (d) to node {}(f);
+	\end{tikzpicture}
+\end{center}
+
+We will need to know the values of $u$, $d$, and $p^*$ associated to the top model and the values of $u_1$, $d_1$, and $p_1^*$ associated to the bottom model. That is where our argument begins. Recall, we are working with a Cox-Ross-Rubenstein model.
+
+\begin{align*}
+	u 		&=e^{\sigma\sqrt{h}}\\
+	d 		&=e^{-\sigma\sqrt{h}}\\
+	p^* 		&=\frac{e^{(r-\delta)h}-d}{u-d}\\
+	u_1 		&=e^{\sigma\sqrt{h}}\\
+	d_1 		&=e^{-\sigma\sqrt{h}}\\
+	p_1^*	&=\frac{e^{(\delta-r)h}-d_1}{u_1-d_1}
+\end{align*}
+
+As we saw with our discussion of duality before, it may be advantageous to think about what happens in opposite positions. That is to say, if the upper model goes up, perhaps we should make comparisons to the lower model going down. As luck would have it, this line of thinking will be fruitful. For this, we will need $q_1^*$, but that is easy.
+
+\begin{equation*}
+q_1^*=\frac{u_1-e^{(\delta-r)h}}{u_1-d_1}
+\end{equation*}
+
+Now, we wish to relate $p^*$ and $q_1^*$. Let's start with $p^*$.
+
+\begin{align*}
+p^* 		&=\frac{e^{(r-\delta)h}-d}{u-d}\\
+		&=\frac{1-de^{(\delta-r)h}}{u-d}e^{(r-\delta)h}\\
+		&=\frac{u-e^{(\delta-r)h}}{u-d}\cdot de^{(r-\delta)h}\\
+		&=q_1^*de^{(r-\delta)h}
+\end{align*}
+
+In a similar fashion, we could show that
+
+\begin{equation*}
+q^* =p_1^*ue^{(r-\delta)h},
+\end{equation*}
+
+but we will leave that as an exercise to the reader. One of the most important steps of the proof follows. It involves comparing the payoff in position $u^jd^{n-j}$ in an $n$-period binomial tree for the call with the payoff in position $u_1^{n-j}d_1^{j}$ in an $n$-period binomial tree for the put. The payoff for each follows. The $1$ in the argument represents an indicator for the event in curly braces. That is, a function that is $1$ when the event is satisfied and $0$ otherwise.
+
+\begin{align*}
+\text{Call Payoff} 	&=[Su^jd^{n-j}-K]1_{\{S(T)>K\}}\\
+\text{Put Payoff} 	&=\left[\frac{1}{K}-\frac{1}{S}u_1^{n-j}d_1^j\right]1_{\{1/K>1/S(T)\}}\\
+			&=\frac{1}{SK}[S-Ku_1^{n-j}d_1^j]1_{\{1/K>1/S(T)\}}\\
+			&=\frac{u_1^{n-j}d_1^j}{SK}[Su_1^{j-n}d_1^{-j}-K]1_{\{1/K>1/S(T)\}}\\
+			&=\frac{u^{n-j}d^j}{SK}[Su^jd^{n-j}-K]1_{\{1/K>1/S(T)\}}\\
+			&=\frac{u^{n-j}d^j}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}
+\end{align*}
+
+We can see that these values are closely related. It is when we connect the values using the risk-free probabilities that we get to the punch line of this proof. In the above, $S(T)=Su^jd^{n-j}$. Now, let's compute the value or price of these particular positions in our payoff diagrams. 
+
+\begin{align*}
+\text{Call Position Value} 	&=\binom{n}{j}(p^*)^j(q^*)^{n-j}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-rT}\\
+\text{Put Position Value} 	&=\binom{n}{n-j}(p_1^*)^{n-j}(q_1^*)^{j}\frac{u^{n-j}d^j}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-\delta T}\\
+				&=\binom{n}{j}(p_1^*u)^{n-j}(q_1^*d)^{j}\frac{1}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-\delta T}\\
+				&=\binom{n}{j}(p_1^*ue^{(r-\delta)h})^{n-j}(q_1^*de^{(r-\delta)h})^j\frac{e^{(\delta-r)T}}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-\delta T}\\
+				&=\binom{n}{j}(q^*)^{n-j}(p^*)^j\frac{1}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-rT}\\
+\text{Call Position Value} 	&=SK\times\text{Put Position Value}
+\end{align*}
+
+The hard work has now been completed. All we have to do is sum up all the positions, and we have the result.
+
+\begin{align*}
+\text{Call Price} 	&=\sum_{j=0}^n\binom{n}{j}(p^*)^j(q^*)^{n-j}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-rT}\\
+			&=SK\sum_{j=0}^n\binom{n}{j}(q^*)^{n-j}(p^*)^j\frac{1}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-rT}\\
+			&=SK\sum_{j=1}^n\binom{n}{n-j}(p_1^*)^{n-j}(q_1^*)^{j}\frac{u^{n-j}d^j}{SK}[Su^jd^{n-j}-K]1_{\{S(T)>K\}}e^{-\delta T}\\
+			&=SK\times \text{Put Price}
+\end{align*}
+
+We have Put-Call Duality for the Cox-Ross-Rubenstein model. As stated before, it is up to the reader to verify that this argument can be modified to the Forward binomial model. Next, we will see that the result does not hold for the Jarrow-Rudd model. 
+
+\begin{example}
+Let $S=8$, $\delta=0.02$, $\sigma=0.4$, and $r=0.05$. Show that duality does not hold under a one period binomial Jarror-Rudd model by checking the value of a strike 8, European call option that expires in three months and its opposing put.
+\end{example}
+
+\begin{solution}
+We will do everything for the call option, and then we will translate all of this into the language of the opposing put option. 
+
+	\begin{align*}
+	u 	&=e^{(0.05-0.02-0.4^2/2)/4+0.4\sqrt{1/4}}\\
+		&=1.20623\\
+	d 	&=e^{(0.05-0.02-0.4^2/2)/4-0.4\sqrt{1}{4}}\\
+		&=0.80856\\
+	p^* 	&=\frac{e^{(0.05-0.02)/4}-d}{u-d}\\
+		&=0.50033
+	\end{align*}
+
+	\begin{center}
+		\tikzstyle{bag}=[text width=70pt, text centered]
+		\tikzstyle{end}=[]
+		\begin{tikzpicture}[sloped]
+			\node (a) at (0,0) [bag] {$8$};
+			\node (b) at (3,1) [bag] {$9.65$};
+			\node (c) at (3,-1) [bag] {$6.47$};
+			\node (d) at (6,0) [bag] {$C$};
+			\node (e) at (9,1) [bag] {$1.65$};
+			\node (f) at (9,-1) [bag] {$0$};
+			\draw [-] (a) to node {}(b);
+			\draw [-] (a) to node {}(c);
+			\draw [-] (d) to node {}(e);
+			\draw [-] (d) to node {}(f);
+		\end{tikzpicture}
+	\end{center}
+The price of the call option is
+	\begin{equation*}
+	C=[1.65p^*+0q^*]e^{-0.05/4}=0.815.
+	\end{equation*}
+
+For the put option, the roles of $r$ and $\delta$ are switched. Also, the values of $S$ and $K$ are inverted.
+
+	\begin{align*}
+	u 	&=e^{(0.02-0.05-0.4^2/2)/4+0.4\sqrt{1/4}}\\
+		&=1.18827\\
+	d 	&=e^{(0.02-0.05-0.4^2/2)/4-0.4\sqrt{1/4}}\\
+		&=0.79652\\
+	p^* 	&=\frac{e^{(0.02-0.05)/4}-d}{u-d}\\
+		&=0.50033
+	\end{align*}
+
+	\begin{center}
+		\tikzstyle{bag}=[text width=70pt, text centered]
+		\tikzstyle{end}=[]
+		\begin{tikzpicture}[sloped]
+			\node (a) at (0,0) [bag] {$0.125$};
+			\node (b) at (3,1) [bag] {$0.1485$};
+			\node (c) at (3,-1) [bag] {$0.0996$};
+			\node (d) at (6,0) [bag] {$P$};
+			\node (e) at (9,1) [bag] {$0$};
+			\node (f) at (9,-1) [bag] {$0.0254$};
+			\draw [-] (a) to node {}(b);
+			\draw [-] (a) to node {}(c);
+			\draw [-] (d) to node {}(e);
+			\draw [-] (d) to node {}(f);
+		\end{tikzpicture}
+	\end{center}
+The price of the put option is
+	\begin{equation*}
+	P=[0p^*+0.0254q^*]e^{-0.02/4}=0.0126.
+	\end{equation*}
+
+We compare the results.
+	\begin{equation*}
+	C(S,K)=0.815\not=0.808=SKP(1/S, 1/K)
+	\end{equation*}
+
+\end{solution}
+
+It may be tempting to say that this is rounding error, but as we could see the probabilities were the same in this problem. Since the up and down factors were not related nicely here, there was no chance at equality.
+
+
+\end{document}
