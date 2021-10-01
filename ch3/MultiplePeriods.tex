@@ -207,8 +207,8 @@ Now we compute the price.
 There was a little rounding that I did in each calculation, but since it was to the nearest penny I can rest easy knowing that the answer will only be off by at most one penny. If I were multiplying the result by 1,000,000, I would have been a bit more cautious. Also, you might have noticed that we don't need to add the middle terms. We could simply double them since they always appear twice. Our European price formula can now be rewritten as you can see below. 
 
 \begin{align*}
-\text{European Derivative Price}	&=[D_{uu}(p^*)^2+2D_{ud}p^*q^*+D_{dd}]e^{-rT}\\
-					&=\left[\sum_{j=0}^2 \binom{2}{j}Du^jd^{2-j}(p^*)^j(q^*)^{2-j}\right]e^{-rT}
+\text{European Derivative Price}	&=[D_{uu}(p^*)^2+2D_{ud}p^*q^*+D_{dd}(q^*)^2]e^{-rT}\\
+					&=\left[\sum_{j=0}^2 \binom{2}{j}D_{u^jd^{2-j}}(p^*)^j(q^*)^{2-j}\right]e^{-rT}
 \end{align*}
 
 The second formula gets a little abusive with notation. It uses $u$ and $d$ as though they are factors; however, they are only there to keep track of position. Also, term before the derivative payoff is called a binomial coefficient. It is a way to count paths in our binomial tree. The value of such a term is given in the equation below. 
@@ -217,10 +217,10 @@ The second formula gets a little abusive with notation. It uses $u$ and $d$ as t
 \binom{n}{m}=\frac{n!}{m!(n-m)!}
 \end{equation*}
 
-In the sum we wrote earlier, we had $\binom{2}{0}$, $\binom{2}{1}$, and $\binom{2}{2}$. The values are $1$, $2$, and $1$, respectively.Now that we have our binomial coefficients, we can write a compact formula for larger trees. Let's say that we are dealing with a tree that has $n$ steps. Then the following formula will hold.
+In the sum we wrote earlier, we had $\binom{2}{0}$, $\binom{2}{1}$, and $\binom{2}{2}$. The values are $1$, $2$, and $1$, respectively. Now that we have our binomial coefficients, we can write a compact formula for larger trees. Let's say that we are dealing with a tree that has $n$ steps. Then the following formula will hold.
 
 \begin{equation*}
-\text{European Derivative Price}=\left[\sum_{j=0}^n \binom{n}{j}Du^jd^{n-j}(p^*)^j(q^*)^{n-j}\right]e^{-rT}
+\text{European Derivative Price}=\left[\sum_{j=0}^n \binom{n}{j}D_{u^jd^{n-j}}(p^*)^j(q^*)^{n-j}\right]e^{-rT}
 \end{equation*}
 
 It is likely that you will never need to use this formula beyond three or four steps, so you will become familiar with those particular binomial coefficients. You can also get these coefficients by drawing \href{https://en.wikipedia.org/wiki/Pascal's_triangle}{Pascal's triangle}.

@@ -30,22 +30,22 @@ Unfortunately, we don't know $R_j(t)$ at time $t$. That is why we study the quan
 \alpha_j(t)=\frac{q_j(t)X_j(t)}{\sum_{j=1}^nq_j(t)X_j(t)}.
 \end{equation*}
 
-We now have the tools to compute the return of the portfolio $P=\sum_{j=1}^nq_jX_j$. The return of $P$ is
+We now have the tools to compute the return of the portfolio $P=\sum_{j=1}^nq_jX_j$. The return of $P$ at time $t$ is
 
 \begin{align*}
-R_j(0) 	&=\frac{P(1)-P(0)}{P(0)}\\
-		&=\frac{\sum_{j=1}^nq_j(1)X_j(1)-\sum_{j=1}^nq_j(0)X_j(0)}{P(0)}\\
-		&=\frac{\sum_{j=1}^n[q_j(1)X_j(1)-q_j(0)X_j(0)]}{P(0)}\\
-		&=\frac{\sum_{j=1}^nq_j(0)X_j(0)[q_j(1)X_j(1)-q_j(0)X_j(0)]/q_j(0)X_j(0)}{P(0)}\\
-		&=\frac{\sum_{j=1}^nq_jX_j(0)R_j(0)}{P(0)}\\
-		&=\sum_{j=1}^n\frac{q_j(0)X_j(0)}{P(0)}R_j\\
-		&=\sum_{j=1}^n\alpha_j(0)R_j(0)
+R_p(t) 	&=\frac{P(t+1)-P(t)}{P(t)}\\
+		&=\frac{\sum_{j=1}^nq_j(t+1)X_j(t+1)-\sum_{j=1}^nq_j(t)X_j(t)}{P(t)}\\
+		&=\frac{\sum_{j=1}^n[q_j(t+1)X_j(t+1)-q_j(t)X_j(t)]}{P(t)}\\
+		&=\frac{\sum_{j=1}^nq_j(t)X_j(t)[q_j(t+1)X_j(t+1)-q_j(t)X_j(t)]/q_j(t)X_j(t)}{P(t)}\\
+		&=\frac{\sum_{j=1}^nq_j(t)X_j(t)R_j(t)}{P(t)}\\
+		&=\sum_{j=1}^n\frac{q_j(t)X_j(t)}{P(t)}R_j\\
+		&=\sum_{j=1}^n\alpha_j(t)R_j(t).
 \end{align*}
 
-I hope it's clear that there was nothing special about this argument at time $0$. It will always work for time $t$ computations. The choice of annual effective rates was to make this argument work. Try and see if you can replicate it for continuously compounded rates. I doubt you can! The implication of this result is that returns are well-behaved with regard to expectation. Since we almost exclusively deal with these returns today, we will suppress the time variable.
+In other words, a portfolio's return is always the weighted average of the return of the components, where the weight comes from a very natural place. The choice of annual effective rates was to make this argument work. Try and see if you can replicate it for continuously compounded rates. I doubt you can! The implication of this result is that returns are well-behaved with regard to expectation. Since we almost exclusively deal with these returns today, we will suppress the time variable.
 
 \begin{equation*}
-\mathbb{E}[R_j]=\sum_{j=1}^n\alpha_j\mathbb{E}[R_j]
+\mathbb{E}[R_p]=\sum_{j=1}^n\alpha_j\mathbb{E}[R_j]
 \end{equation*}
 
 Unfortunately, things don't work out as nicely when dealing with variance. This is because we never assumed anything about independence. 
